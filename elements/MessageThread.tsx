@@ -4,6 +4,7 @@ import Image from 'next/image';
 
 
 const Container = styled.div`
+    width: 100%;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -25,16 +26,21 @@ const ThreadContainer = styled.div`
 `
 
 const TextContainer = styled.div`
+    width: 100%;
     display: flex;
     flex-direction: column;
-    flex: 1;
     margin-left: 8px;
+    overflow: hidden;
+    display: inline-block;
 `
 
 const Text = styled.span`
+    flex: 1;
     margin-top: 4px;
-    overflow: hidden;
     text-overflow: ellipsis;
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
 `
 
 const Name = styled.span`
@@ -50,6 +56,7 @@ const UnreadCount = styled.div`
     border-radius: 50%;
     background-color: #0045D1;
     color: white;
+    min-width: 22px;
     width: 22px;
     height: 22px;
     display: flex;
@@ -89,9 +96,13 @@ type Props = {
 const MessageThread : React.FC<Props> = ({name, time, text, unReadCount}) => {
 
     return (
-        <Container>
+        <Container
+            onClick={() => alert('click')}
+        >
             <ThreadContainer>
-                <Image src='/assets/icons/person.png' width={44} height={44} />
+                <div style={{minWidth: 44}}>
+                    <Image src='/assets/icons/person.png' width={44} height={44} />
+                </div>
                 <TextContainer>
                     <Container>
                         <Name>{name}</Name>

@@ -14,6 +14,7 @@ import {
     REGISTER,
 } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
+import fileTransferSlice from './fileTranferSlice';
 
 // const rootReducer = () => ({
 //     firebase: firebaseReducer,
@@ -30,6 +31,7 @@ const rootReducer = combineReducers({
         { key: 'firestoreState', storage, stateReconciler: hardSet },
         firestoreReducer
     ),
+    fileTransfer: fileTransferSlice
 })
 
 const persistConfig = {
@@ -46,6 +48,7 @@ export const store = configureStore({
         getDefaultMiddleware({
             serializableCheck: {
                 ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+                ignoredPaths: ['firebase', 'firestore'],
             },
         }),
 })

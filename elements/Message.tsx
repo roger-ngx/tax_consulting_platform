@@ -1,13 +1,14 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
+import dayjs, { Dayjs }  from 'dayjs'
 
 const Container = styled.div`
     display: flex;
     ${
         props => props.isMine ? 
-        css`flex-direction: row`
-        :
         css`flex-direction: row-reverse`
+        :
+        css`flex-direction: row`
     }
 `
 
@@ -43,7 +44,7 @@ const TextTime = styled.span`
 
 type Props = {
     text: string;
-    time: string;
+    time: Dayjs;
     isMine: boolean;
 }
 
@@ -54,7 +55,7 @@ const Message: React.FC<Props> = ({text, time, isMine}) => {
             <MessageContainer isMine={isMine}>
                 <Text>{text}</Text> 
             </MessageContainer>
-            <TextTime isMine={isMine}>{time}</TextTime>
+            <TextTime isMine={isMine}>{time && time.format('HH:mm')}</TextTime>
         </Container>
     )
 }

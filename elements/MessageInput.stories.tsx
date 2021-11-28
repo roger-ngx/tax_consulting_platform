@@ -10,4 +10,4 @@ export default {
 const Template : ComponentStory<typeof MessageInput> = (args) => <MessageInput {...args} />
 
 export const SendButton = Template.bind({});
-SendButton.args = {active: true};
+SendButton.args = {};
