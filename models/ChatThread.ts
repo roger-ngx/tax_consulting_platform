@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 
 interface Thread{
+    id: string;
     updatedAt: {seconds: number};
     lastMessage: string;
     srcUserId: string;
@@ -11,6 +12,10 @@ export default class ChatThread{
 
     constructor(private thread:Thread){
 
+    }
+
+    get id(){
+        return this.thread.id;
     }
 
     get time(){

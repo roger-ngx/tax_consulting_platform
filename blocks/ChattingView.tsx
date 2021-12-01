@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
 import { useFirestoreConnect } from 'react-redux-firebase';
@@ -9,7 +9,8 @@ import MessageThread from '../elements/MessageThread';
 import MessageInput from '../elements/MessageInput';
 import Avatar from '../elements/Avatar';
 import Messages from './Messages';
-import { MESSAGE_TYPE } from '../models/Message';
+import { MESSAGE_TYPE, Message } from '../models/Message';
+import ChatThread from '../models/ChatThread';
 
 const Container = styled.div`
     flex: 1;
@@ -57,7 +58,7 @@ const ThreadList = () => {
         limit: 10
     }])
 
-    const chats = useSelector(({firestore}) => firestore.ordered.chats);
+    const chats = map(useSelector(({firestore}) => firestore.ordered.chats), chat => new ChatThread(chat));
 
     return (
         <ThreadsView>
@@ -65,10 +66,11 @@ const ThreadList = () => {
                 map(chats, chat => (
                     <div style={{width: '100%'}}>
                         <MessageThread
+                            id={chat.id}
                             name='Jessi'
-                            time='pm 10:00'
-                            text='Could you explain about your self please.'
-                            unReadCount={1}
+                            time={chat.time}
+                            text={chat.lastMessage}
+                            unReadCount={chat.unReadCount}
                         />
                     </div>
                 ))
@@ -79,69 +81,35 @@ const ThreadList = () => {
 
 const MessageList = ({chatId}) => {
 
+    if(!chatId) return null;
+
+    console.log('chatId', chatId);
+
     useFirestoreConnect([{
         collection: 'chats',
         doc: chatId,
         subcollections: [{
-            collection: 'messages'
+            collection: 'messages',
+            orderBy: ['createdAt', 'asc'],
         }],
-        orderBy: ['updatedAt', 'desc'],
         storeAs: 'messages',
-        limit: 10
     }])
 
-    const chat = useSelector(({firestore}) => firestore.ordered.chats);
-
-    console.log(chat);
+    const messages = map(useSelector(({firestore}) => firestore.ordered.messages), message => new Message(message));
 
     return (
         <>
             <Messages
                 isMine={false}
-                messages={[
-                    {
-                        time: dayjs('2021-10-22'),
-                        text: 'Hello guy',
-                        type: MESSAGE_TYPE.TEXT
-                    },
-                    {
-                        time: dayjs('2021-10-22'),
-                        text: 'Welcome to my consulting service.',
-                        type: MESSAGE_TYPE.TEXT
-                    },
-                    {
-                        time: dayjs('2021-10-22'),
-                        text: 'How can I help you ?',
-                        type: MESSAGE_TYPE.TEXT
-                    }
-                ]}
-            />
-
-            <Messages
-                isMine={true}
-                messages={[
-                    {
-                        time: dayjs('2021-10-22'),
-                        text: 'Hello guy',
-                        type: MESSAGE_TYPE.TEXT
-                    },
-                    {
-                        time: dayjs('2021-10-22'),
-                        text: 'Welcome to my consulting service.',
-                        type: MESSAGE_TYPE.TEXT
-                    },
-                    {
-                        time: dayjs('2021-10-22'),
-                        text: 'How can I help you ?',
-                        type: MESSAGE_TYPE.TEXT
-                    }
-                ]}
+                messages={messages}
             />
         </>
     )
 }
 
 const ChattingView = () => {
+
+    const currentChatId = useSelector(state => state.messages.currentThreadId);
 
     return (
         <Container>
@@ -154,7 +122,7 @@ const ChattingView = () => {
                     />
                 </ChatViewHeader>
                 <ChatViewBody>
-                    <MessageList chatId='thanhthuowng'/>
+                    <MessageList chatId={currentChatId}/>
                 </ChatViewBody>
                 <ChatViewFooter>
                     <MessageInput />

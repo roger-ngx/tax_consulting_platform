@@ -1,11 +1,41 @@
-import { Dayjs }  from 'dayjs'
+import dayjs  from 'dayjs'
 
 export enum MESSAGE_TYPE {
-    TEXT, IMAGE, FILE
+    TEXT='text',
+    IMAGE='image',
+    FILE='file'
 }
 
-export interface IMessage {
-    text: string;
-    time: Dayjs;
-    type: MESSAGE_TYPE
+interface IMessage{
+    id: string;
+    message: string;
+    createdAt: {seconds: number};
+    srcUserId: string;
+    type: MESSAGE_TYPE;
+}
+
+export class Message{
+    constructor(private message: IMessage){
+
+    }
+
+    get id(){
+        return this.message.id;
+    }
+
+    get time(){
+        return this.message.createdAt && dayjs(this.message.createdAt.seconds * 1000).format('HH:mm a')
+    }
+
+    get text(){
+        return this.message.message;
+    }
+
+    get srcUserId(){
+        return this.message.srcUserId;
+    }
+
+    get type(){
+        return this.message.type;
+    }
 }

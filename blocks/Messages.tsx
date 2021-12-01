@@ -3,8 +3,8 @@ import styled, { css } from 'styled-components';
 import { map } from 'lodash';
 
 import Avatar from '../elements/Avatar';
-import Message from '../elements/Message';
-import { IMessage } from '../models/Message';
+import MessageView from '../elements/Message';
+import { Message } from '../models/Message';
 
 const Container = styled.div`
     display: flex;
@@ -24,7 +24,7 @@ const MessagesContainer = styled.div`
 `
 
 type Props = {
-    messages: IMessage[];
+    messages: Message[];
     isMine: boolean;
 }
 
@@ -38,7 +38,7 @@ const Messages: React.FC<Props> = ({messages, isMine}) => {
             }
             <MessagesContainer isMine={isMine}>
                 {
-                    map(messages, (message: IMessage) => <div style={{marginBottom: 4}}><Message text={message.text} time={message.time} isMine={isMine}/></div>)
+                    map(messages, (message: Message) => <div style={{marginBottom: 4}}><MessageView text={message.text} time={message.time} isMine={isMine}/></div>)
                 }
             </MessagesContainer>
         </Container>

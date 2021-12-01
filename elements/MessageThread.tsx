@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
+import { useDispatch } from 'react-redux';
+import { setCurrentThreadId } from '../stores/messageSlide';
 
 
 const Container = styled.div`
@@ -86,6 +88,7 @@ const DeleteButton = styled.button`
 `
 
 type Props = {
+    id: string;
     name: string;
     time: string;
     text: string;
@@ -93,11 +96,15 @@ type Props = {
 }
 
 
-const MessageThread : React.FC<Props> = ({name, time, text, unReadCount}) => {
+const MessageThread : React.FC<Props> = ({id, name, time, text, unReadCount}) => {
+
+    const dispatch = useDispatch();
+
+    const onSelectThread = () => dispatch(setCurrentThreadId(id));
 
     return (
         <Container
-            onClick={() => alert('click')}
+            onClick={onSelectThread}
         >
             <ThreadContainer>
                 <div style={{minWidth: 44}}>

@@ -1,12 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export interface MessageState {
-    currentDesUserId: string
+    currentDesUserId: string,
+    currentThreadId: string
 }
 
 
 const initialState : MessageState = {
-    currentDesUserId: ''
+    currentDesUserId: '',
+    currentThreadId: ''
 }
 
 export const messageSlice = createSlice({
@@ -15,10 +17,13 @@ export const messageSlice = createSlice({
     reducers: {
         setCurrentDesUserId: (state :MessageState, action: PayloadAction<string>) => {
             state.currentDesUserId = action.payload;
+        },
+        setCurrentThreadId: (state :MessageState, action: PayloadAction<string>) => {
+            state.currentThreadId = action.payload;
         }
     }
 })
 
-export const { setCurrentDesUserId } = messageSlice.actions;
+export const { setCurrentDesUserId, setCurrentThreadId } = messageSlice.actions;
 
 export default messageSlice.reducer;

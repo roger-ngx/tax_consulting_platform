@@ -55,7 +55,7 @@ const Message: React.FC<Props> = ({text, time, isMine}) => {
             <MessageContainer isMine={isMine}>
                 <Text>{text}</Text> 
             </MessageContainer>
-            <TextTime isMine={isMine}>{time && time.format('HH:mm')}</TextTime>
+            <TextTime isMine={isMine}>{time}</TextTime>
         </Container>
     )
 }
