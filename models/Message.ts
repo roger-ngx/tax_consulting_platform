@@ -12,6 +12,8 @@ interface IMessage{
     createdAt: {seconds: number};
     srcUserId: string;
     type: MESSAGE_TYPE;
+    name?: string;
+    size?: number;
 }
 
 export class Message{
@@ -37,5 +39,13 @@ export class Message{
 
     get type(){
         return this.message.type;
+    }
+
+    get name(){
+        return this.message.name;
+    }
+
+    get size(){
+        return this.message.size + 'Mb';
     }
 }

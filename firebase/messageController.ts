@@ -1,8 +1,11 @@
 import firebase from './firebaseInit';
+import dayjs from 'dayjs';
 import { FileUpload, setFileStatus } from '../stores/fileTranferSlice';
+import { Dispatch } from 'redux';
+import { merge } from 'lodash';
 
 
-export const addMessage = async ({srcUserId, desUserId, message, type='text'} : {srcUserId: string, desUserId: string, message: string, type?: string}) => {
+export const addMessage = async ({srcUserId, desUserId, message, type='text', name, size} : {srcUserId: string, desUserId: string, message: string, type?: string, name?: string, size: number}) => {
     try{
         const docId = srcUserId.localeCompare(desUserId) === -1 ? (srcUserId + desUserId) : (desUserId + srcUserId);
 
@@ -24,13 +27,16 @@ export const addMessage = async ({srcUserId, desUserId, message, type='text'} : 
 
         batch.set(
             firebase.firestore().collection('chats').doc(docId).collection('messages').doc(),
-            {
-                message,
-                type,
-                srcUserId,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                unRead: true
-            }
+            merge(
+                {
+                    message,
+                    type,
+                    srcUserId,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    unRead: true
+                },
+                type==='file' ? {name, size} : {}
+            )
         )
 
         await batch.commit();
@@ -41,26 +47,33 @@ export const addMessage = async ({srcUserId, desUserId, message, type='text'} : 
 
 
 
-export const uploadFile = ({file, srcUserId, desUserId, dispatch}) => {
+export const uploadFile = ({file, srcUserId, desUserId, dispatch}: {file: File, srcUserId: string, desUserId: string, dispatch: Dispatch}) => {
 
     try{
         const fileUpdateStatus : FileUpload = {
             name: '',
             status: '',
             percentage: 0,
-            downloadUrl: ''
+            downloadUrl: '',
+            size: (file.size / 10000000).toFixed(1),
+            localPath: '',
+            createdAt: dayjs().toDate(),
+            type: file.type
         };
+
+        const location = file.type.includes('image') ? `images/${dayjs().unix()}${file.name}` : `files/${dayjs().unix()}${file.name}`;
     
         var storageRef = firebase.storage().ref();
-        const uploadTask = storageRef.child('images/rivers.jpg').put(file);
+        const uploadTask = storageRef.child(location).put(file);
     
-        fileUpdateStatus.name = '';
+        fileUpdateStatus.name = location;
+        fileUpdateStatus.localPath = URL.createObjectURL(file);
     
         // Register three observers:
         // 1. 'state_changed' observer, called any time the state changes
         // 2. Error observer, called on failure
         // 3. Completion observer, called on successful completion
-        uploadTask.on('state_changed', 
+        uploadTask.on('state_changed',
             (snapshot) => {
                 // Observe state change events such as progress, pause, and resume
                 // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
@@ -98,7 +111,7 @@ export const uploadFile = ({file, srcUserId, desUserId, dispatch}) => {
     
                     dispatch(setFileStatus({...fileUpdateStatus}));
 
-                    addMessage({srcUserId, desUserId, message: downloadURL, type: 'file'})
+                    addMessage({srcUserId, desUserId, message: downloadURL, name: file.name, size: (file.size / 10000000).toFixed(1), type: file.type})
                 });
             }
         );

@@ -79,7 +79,7 @@ const MessageInput = () => {
             />
             <label htmlFor='icon-button-file'>
                 <FileInput
-                    accept='images/*'
+                    accept="image/png,image/jpg,.pdf,.doc"
                     id='icon-button-file'
                     type='file'
                     onChange={onFileChange}

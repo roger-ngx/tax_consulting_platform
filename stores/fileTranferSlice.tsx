@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction, findNonSerializableValue } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { findIndex } from 'lodash';
 
 export interface FileTransferState {
@@ -10,6 +10,10 @@ export interface FileUpload {
     status: string;
     percentage: number;
     downloadUrl: string;
+    size: string;
+    localPath: string;
+    createdAt: Date;
+    type: string;
 }
 
 const initialState : FileTransferState = {

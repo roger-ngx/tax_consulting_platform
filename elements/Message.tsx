@@ -16,6 +16,7 @@ const MessageContainer = styled.div`
     border-radius: 32px;
     padding: 8px 16px;
     align-self: flex-start;
+    max-width: 60%;
 
     ${
         props => props.isMine ? 
@@ -44,7 +45,7 @@ const TextTime = styled.span`
 
 type Props = {
     text: string;
-    time: Dayjs;
+    time: string;
     isMine: boolean;
 }
 

@@ -38,7 +38,15 @@ const Messages: React.FC<Props> = ({messages, isMine}) => {
             }
             <MessagesContainer isMine={isMine}>
                 {
-                    map(messages, (message: Message) => <div style={{marginBottom: 4}}><MessageView text={message.text} time={message.time} isMine={isMine}/></div>)
+                    map(messages, (message: Message) => (
+                        <div style={{marginBottom: 4}}>
+                            <MessageView
+                                text={message.text}
+                                time={message.time}
+                                isMine={isMine}
+                            />
+                        </div>
+                    ))
                 }
             </MessagesContainer>
         </Container>

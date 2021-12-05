@@ -3,14 +3,19 @@ import styled from 'styled-components';
 import dayjs from 'dayjs';
 import { useFirestoreConnect } from 'react-redux-firebase';
 import { useSelector } from 'react-redux'
-import { map } from 'lodash';
+import { map, includes, filter } from 'lodash';
+import Image from 'next/image';
 
+import MessageView from '../elements/Message';
 import MessageThread from '../elements/MessageThread';
 import MessageInput from '../elements/MessageInput';
 import Avatar from '../elements/Avatar';
 import Messages from './Messages';
 import { MESSAGE_TYPE, Message } from '../models/Message';
 import ChatThread from '../models/ChatThread';
+import ImageUpload from '../elements/ImageUpload';
+import { FileUpload } from '../stores/fileTranferSlice';
+import FileUploadView from '../elements/FileUpload';
 
 const Container = styled.div`
     flex: 1;
@@ -97,12 +102,62 @@ const MessageList = ({chatId}) => {
 
     const messages = map(useSelector(({firestore}) => firestore.ordered.messages), message => new Message(message));
 
+    const uploads: FileUpload[] = filter(useSelector(state => state.fileTransfer.uploadFiles), file => file.status === 'running');
+
     return (
         <>
-            <Messages
-                isMine={false}
-                messages={messages}
-            />
+            {
+                map(messages, (message: Message) => (
+                    <div style={{marginBottom: 4}}>
+                        {
+                            message.type === 'text' &&
+                            <MessageView
+                                text={message.text}
+                                time={message.time}
+                                isMine={message.srcUserId==='thanh'}
+                            />
+                        }
+                        {
+                            includes(message.type, 'image') &&
+                            <ImageUpload
+                                src={message.text}
+                                size={80}
+                            />
+                        }
+
+                        {
+                            includes(message.type, 'application') &&
+                            <FileUploadView
+                                name={message!.name}
+                                size={message!.size}
+                                downloadUrl={message.text}
+                            />
+                        }
+                    </div>
+                ))
+            }
+            {
+                map(uploads, file => {
+                    if(file.type.includes('image')){
+                        return (
+                            <ImageUpload
+                                src={file.localPath}
+                                progress={file.percentage}
+                            />
+                        )
+                    }
+
+                    if(file.type.includes('application')){
+                        return (
+                            <FileUploadView
+                                name={file.name}
+                                size={file.size}
+                                progress={file.percentage}
+                            />
+                        )
+                    }
+                })
+            }
         </>
     )
 }
