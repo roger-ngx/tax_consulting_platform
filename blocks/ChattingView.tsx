@@ -22,6 +22,7 @@ const Container = styled.div`
     display: flex;
     flex-direction: row;
     border: solid 1px #C7C7C7;
+    height: 100%;
 `
 
 const ThreadsView = styled.div`
@@ -36,6 +37,8 @@ const ChatView = styled.div`
     display: flex;
     flex-direction: column;
     flex: 3;
+    height: calc(100vh - 74px);
+    overflow: scroll;
 `
 
 const ChatViewHeader = styled.div`
@@ -47,6 +50,8 @@ const ChatViewBody = styled.div`
     border-top: solid 1px #C7C7C7;
     border-bottom: solid 1px #C7C7C7;
     padding: 8px;
+    height: 100%;
+    overflow: scroll;
 `
 
 const ChatViewFooter = styled.div`
@@ -122,6 +127,7 @@ const MessageList = ({chatId}) => {
                             <ImageUpload
                                 src={message.text}
                                 size={80}
+                                time={message.time}
                             />
                         }
 
@@ -131,6 +137,7 @@ const MessageList = ({chatId}) => {
                                 name={message!.name}
                                 size={message!.size}
                                 downloadUrl={message.text}
+                                time={message.time}
                             />
                         }
                     </div>

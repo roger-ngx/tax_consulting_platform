@@ -9,7 +9,8 @@ import { saveAs } from 'file-saver';
 const HorizontalContainer = styled('div')({
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    maxWidth: '80%'
 })
 
 const Container = styled('div')({
@@ -23,14 +24,22 @@ const Container = styled('div')({
     marginRight: 16
 })
 
+const Time = styled('span')({
+    alignSelf: 'flex-end',
+    color: '#888',
+    fontSize: 12,
+    whiteSpace: 'nowrap'
+})
+
 interface Props {
     name: string;
     size: string;
     progress?: number;
     downloadUrl?: string|undefined;
+    time: string;
 }
 
-const FileUpload: React.FC<Props> = ({name, size, progress, downloadUrl}) => {
+const FileUpload: React.FC<Props> = ({name, size, progress, time, downloadUrl}) => {
 
     const downloadFile = () => {
         saveAs(downloadUrl);
@@ -65,8 +74,11 @@ const FileUpload: React.FC<Props> = ({name, size, progress, downloadUrl}) => {
                 </IconButton>
             </Container>
             {
-                progress!=undefined && progress>=0 &&
-                <CircularProgress variant="determinate" value={progress}/>
+                (progress!=undefined && progress>=0) &&
+                <CircularProgress variant="determinate" value={progress} size={16}/>
+            }
+            {
+                time && <Time>{time}</Time>
             }
         </HorizontalContainer>
     )

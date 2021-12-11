@@ -1,14 +1,22 @@
 import '../styles/globals.css'
-import type { AppProps } from 'next/app';
 import { Provider } from 'react-redux';
 import { ReactReduxFirebaseProvider } from 'react-redux-firebase'
 import { createFirestoreInstance } from 'redux-firestore';
 import { PersistGate } from 'redux-persist/integration/react'
+import styled from 'styled-components';
 
+import NavigationBar from '../blocks/NavigationBar';
 import firebase from '../firebase/firebaseInit';
 import {persistor, store} from '../stores/store';
 
-function MyApp({ Component, pageProps }: AppProps) {
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 0 10%;
+  height: 100vh;
+`
+
+function MyApp({ Component, pageProps }) {
 
   // react-redux-firebase config
   const rrfConfig = {
@@ -27,7 +35,12 @@ function MyApp({ Component, pageProps }: AppProps) {
     <Provider store={store}>
       <ReactReduxFirebaseProvider {...rrfProps}>
         <PersistGate loading={null} persistor={persistor}>
-          <Component {...pageProps} />
+          <Container>
+            <div style={{margin: '24px 0'}}>
+              <NavigationBar />
+            </div>
+            <Component {...pageProps} />
+          </Container>
         </PersistGate>
       </ReactReduxFirebaseProvider>
     </Provider>

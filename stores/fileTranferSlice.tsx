@@ -10,7 +10,7 @@ export interface FileUpload {
     status: string;
     percentage: number;
     downloadUrl: string;
-    size: string;
+    size?: string;
     localPath: string;
     createdAt: Date;
     type: string;

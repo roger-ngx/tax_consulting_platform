@@ -3,9 +3,10 @@ import dayjs from 'dayjs';
 import { FileUpload, setFileStatus } from '../stores/fileTranferSlice';
 import { Dispatch } from 'redux';
 import { merge } from 'lodash';
+import { idea } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
 
-export const addMessage = async ({srcUserId, desUserId, message, type='text', name, size} : {srcUserId: string, desUserId: string, message: string, type?: string, name?: string, size: number}) => {
+export const addMessage = async ({srcUserId, desUserId, message, type='text', name, size} : {srcUserId: string, desUserId: string, message: string, type?: string, name?: string, size?: string}) => {
     try{
         const docId = srcUserId.localeCompare(desUserId) === -1 ? (srcUserId + desUserId) : (desUserId + srcUserId);
 
@@ -16,9 +17,10 @@ export const addMessage = async ({srcUserId, desUserId, message, type='text', na
             {
                 updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
                 lastMessage: message,
+                lastMessageType: type,
                 srcUserId,
                 unReadCount: firebase.firestore.FieldValue.increment(1),
-                users: [srcUserId, desUserId]
+                users: [srcUserId, desUserId],
             },
             {
                 merge: true
@@ -35,7 +37,7 @@ export const addMessage = async ({srcUserId, desUserId, message, type='text', na
                     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                     unRead: true
                 },
-                type==='file' ? {name, size} : {}
+                type.includes('application') ? {name, size} : {}
             )
         )
 
@@ -45,7 +47,19 @@ export const addMessage = async ({srcUserId, desUserId, message, type='text', na
     }
 }
 
+const convertSize = (size:number) => {
+    if(size < 1000){
+        return size + 'b';
+    }
 
+    if(size < 1000000){
+        return (size/1000).toFixed(1) + 'Kb';
+    }
+
+    if(size >= 1000000){
+        return (size/1000000).toFixed(1) + 'Mb';
+    }
+}
 
 export const uploadFile = ({file, srcUserId, desUserId, dispatch}: {file: File, srcUserId: string, desUserId: string, dispatch: Dispatch}) => {
 
@@ -55,7 +69,7 @@ export const uploadFile = ({file, srcUserId, desUserId, dispatch}: {file: File, 
             status: '',
             percentage: 0,
             downloadUrl: '',
-            size: (file.size / 10000000).toFixed(1),
+            size: convertSize(file.size),
             localPath: '',
             createdAt: dayjs().toDate(),
             type: file.type
@@ -111,7 +125,7 @@ export const uploadFile = ({file, srcUserId, desUserId, dispatch}: {file: File, 
     
                     dispatch(setFileStatus({...fileUpdateStatus}));
 
-                    addMessage({srcUserId, desUserId, message: downloadURL, name: file.name, size: (file.size / 10000000).toFixed(1), type: file.type})
+                    addMessage({srcUserId, desUserId, message: downloadURL, name: file.name, size: convertSize(file.size), type: file.type})
                 });
             }
         );

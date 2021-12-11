@@ -46,6 +46,6 @@ export class Message{
     }
 
     get size(){
-        return this.message.size + 'Mb';
+        return this.message.size;
     }
 }

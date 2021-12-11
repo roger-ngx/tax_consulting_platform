@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { useDispatch } from 'react-redux';
@@ -28,8 +28,8 @@ const ThreadContainer = styled.div`
 `
 
 const TextContainer = styled.div`
-    width: 100%;
     display: flex;
+    flex: 1;
     flex-direction: column;
     margin-left: 8px;
     overflow: hidden;
@@ -37,12 +37,10 @@ const TextContainer = styled.div`
 `
 
 const Text = styled.span`
-    flex: 1;
+    max-width: 100%;
     margin-top: 4px;
     text-overflow: ellipsis;
-    display: block;
     overflow: hidden;
-    white-space: nowrap;
 `
 
 const Name = styled.span`
@@ -100,22 +98,42 @@ const MessageThread : React.FC<Props> = ({id, name, time, text, unReadCount}) =>
 
     const dispatch = useDispatch();
 
+    const [ width, setWidth ] = useState();
+
     const onSelectThread = () => dispatch(setCurrentThreadId(id));
+
+    const ref = useRef(null);
+
+    useEffect(() => {
+        ref && setWidth(ref.current.offsetWidth - 70);
+    }, [ref])
 
     return (
         <Container
+            ref={ref}
             onClick={onSelectThread}
         >
-            <ThreadContainer>
+            <ThreadContainer >
                 <div style={{minWidth: 44}}>
-                    <Image src='/assets/icons/person.png' width={44} height={44} />
+                    <Image src='/assets/icons/person.png' width={44} height={44} style={{margin: 'auto'}}/>
                 </div>
                 <TextContainer>
                     <Container>
                         <Name>{name}</Name>
                         <Time>{time}</Time>
                     </Container>
-                    <Text>{text}</Text>
+                    <div
+                        style={{
+                            width,
+                            textOverflow: 'ellipsis',
+                            overflow:'hidden',
+                            whiteSpace:'nowrap',
+                            fontSize: 12,
+                            color: '#666'
+                        }}
+                    >
+                        {text}
+                    </div>
                 </TextContainer>
                 {
                     unReadCount > 0 &&
