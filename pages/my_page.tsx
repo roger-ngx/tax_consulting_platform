@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { styled } from '@mui/system';
 import { Tabs, Tab } from '@mui/material';
+
 import MyPageSideMenu from '../blocks/MyPage/MyPageSideMenu';
 import Profile from '../blocks/MyPage/Profile';
 import Service from '../blocks/MyPage/Service';
+import Price from '../blocks/MyPage/Price';
 
 const Container = styled('div')({
     display: 'flex',
@@ -41,9 +43,13 @@ const MyPage = () => {
                         selectedTab === 'profile' &&
                         <Profile />
                     }
-                                        {
+                    {
                         selectedTab === 'service' &&
                         <Service />
+                    }
+                    {
+                        selectedTab === 'price' &&
+                        <Price />
                     }
                 </div>
             </div>

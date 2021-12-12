@@ -35,10 +35,10 @@ function MyApp({ Component, pageProps }) {
     <Provider store={store}>
       <ReactReduxFirebaseProvider {...rrfProps}>
         <PersistGate loading={null} persistor={persistor}>
+          <div style={{padding: '24px 10%', position: 'sticky', top: 0, backgroundColor: 'white', zIndex: 1000}}>
+            <NavigationBar />
+          </div>
           <Container>
-            <div style={{margin: '24px 0'}}>
-              <NavigationBar />
-            </div>
             <Component {...pageProps} />
           </Container>
         </PersistGate>

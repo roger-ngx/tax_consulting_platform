@@ -1,16 +1,6 @@
 import React from 'react';
 import { styled } from '@mui/material/styles';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
-import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import ProfilePhotoUpload from '../../elements/ProfilePhotoUpload';
 import ProfileInput from './ProfileInput';
-import SearchBox from '../../elements/SearchBox';
 import PhotosUploader from './PhotosUploader';
 import TextArea from '../../elements/TextArea';
 import ButtonBase from '../../elements/ButtonBase';
