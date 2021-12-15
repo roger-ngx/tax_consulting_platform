@@ -2,6 +2,7 @@ import * as firebase from 'firebase/app'
 import 'firebase/firestore' // <- needed if using firestore
 import 'firebase/functions' // <- needed if using httpsCallable
 import 'firebase/storage'
+import 'firebase/auth'
 
 const firebaseConfig = {
   apiKey: "AIzaSyD18wnxIwXNFYqS7kvVyOpjJqaQ3UdqsaU",
@@ -22,6 +23,7 @@ if (!firebase.apps.length) {
   firebase.firestore() // <- needed if using firestore
   firebase.functions() // <- needed if using httpsCallable
   firebase.storage()
+  firebase.auth()
 }else {
   firebase.app(); // if already initialized, use that one
 }

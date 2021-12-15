@@ -1,8 +1,8 @@
 import React from 'react';
-import Button from '@mui/material/Button';
-import TouchRipple from '@mui/material/ButtonBase/TouchRipple';
+import ButtonBase from '@mui/material/ButtonBase';
+// import TouchRipple from '@mui/material/ButtonBase/TouchRipple';
 
-function ButtonBase({children, containerStyle={}}) {
+function TFButtonBase({children, containerStyle={}, onClick}) {
   const rippleRef = React.useRef(null);
 
   const onRippleStart = (e) => {
@@ -13,9 +13,10 @@ function ButtonBase({children, containerStyle={}}) {
   };
 
   return (
+    <ButtonBase
+      onClick={onClick}    
+    >
       <div
-        onMouseDown={onRippleStart}
-        onMouseUp={onRippleStop}
         style={{
           display: 'inline-block',
           position: 'relative',
@@ -25,9 +26,10 @@ function ButtonBase({children, containerStyle={}}) {
         }}
       >
         {children}
-        <TouchRipple ref={rippleRef} center={false} />
+        {/* <TouchRipple ref={rippleRef} center={false} /> */}
       </div>
+    </ButtonBase>
   );
 }
 
-export default ButtonBase;
+export default TFButtonBase;

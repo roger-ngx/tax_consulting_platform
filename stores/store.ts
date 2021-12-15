@@ -17,6 +17,7 @@ import storage from 'redux-persist/lib/storage'
 
 import messageSlice from './messageSlide';
 import fileTransferSlice from './fileTranferSlice';
+import userInfoSlide from './userInfoSlide';
 // const rootReducer = () => ({
 //     firebase: firebaseReducer,
 //     firestore: firestoreReducer
@@ -33,7 +34,8 @@ const rootReducer = combineReducers({
         firestoreReducer
     ),
     fileTransfer: fileTransferSlice,
-    messages: messageSlice
+    messages: messageSlice,
+    user: userInfoSlide
 })
 
 const persistConfig = {

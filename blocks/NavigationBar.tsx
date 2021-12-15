@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
 import Image from 'next/image';
+import Login from '../dialogs/Login';
+import Avatar from '../elements/Avatar';
+import { useSelector } from 'react-redux';
 
 const Horizontal = styled.div`
     display: flex;
@@ -22,6 +25,9 @@ const Anchor = styled.a`
 `
 
 const NavigationBar = () => {
+    const [ openLogin, setOpenLogin ] = useState(false);
+
+    const user = useSelector(state => state.firebase.auth)
 
     return (
         <Container>
@@ -41,10 +47,30 @@ const NavigationBar = () => {
                 <Link href='/messages'>
                     <Anchor>Message</Anchor>
                 </Link>
-                <Link href='/my_page'>
-                    <Anchor>Profile</Anchor>
-                </Link>
+                {
+                    user ? 
+                    <Link href='/my_page'>
+                        <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+                            <Anchor style={{marginRight: 4}}>My</Anchor>
+                            <Avatar
+                                src={user.photoURL}
+                                size={32}
+                            />
+                        </div>
+                    </Link>
+                    :
+                    <a onClick={() => setOpenLogin(true)}>
+                        <Anchor>Login</Anchor>
+                    </a>
+                }
             </Horizontal>
+            {
+                openLogin &&
+                <Login
+                    open={openLogin}
+                    onClose={() => setOpenLogin(false)}
+                />
+            }
         </Container>
     )
 }
