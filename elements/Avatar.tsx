@@ -16,7 +16,7 @@ type Props = {
     src: string
 }
 
-const Avatar: React.FC<Props> = ({src, size}) => {
+const Avatar: React.FC<Props> = ({src='/assets/images/profile.png', size}) => {
 
     return (
         <Container size={size}>

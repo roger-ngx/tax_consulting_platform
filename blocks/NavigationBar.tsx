@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
+import { isEmpty } from 'lodash';
 import Image from 'next/image';
+import { useSelector } from 'react-redux';
+
 import Login from '../dialogs/Login';
 import Avatar from '../elements/Avatar';
-import { useSelector } from 'react-redux';
 
 const Horizontal = styled.div`
     display: flex;
@@ -25,9 +27,10 @@ const Anchor = styled.a`
 `
 
 const NavigationBar = () => {
-    const [ openLogin, setOpenLogin ] = useState(false);
+    const [ openLogin, setOpenLogin ] = useState(true);
 
-    const user = useSelector(state => state.firebase.auth)
+    const user = useSelector(state => state.firebase.auth);
+    console.log('user', user);
 
     return (
         <Container>
@@ -44,24 +47,26 @@ const NavigationBar = () => {
                 </Link>
             </Horizontal>
             <Horizontal>
-                <Link href='/messages'>
-                    <Anchor>Message</Anchor>
-                </Link>
                 {
-                    user ? 
-                    <Link href='/my_page'>
-                        <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
-                            <Anchor style={{marginRight: 4}}>My</Anchor>
-                            <Avatar
-                                src={user.photoURL}
-                                size={32}
-                            />
-                        </div>
-                    </Link>
-                    :
+                    user.isEmpty ? 
                     <a onClick={() => setOpenLogin(true)}>
                         <Anchor>Login</Anchor>
                     </a>
+                    :
+                    <>
+                        <Link href='/messages'>
+                            <Anchor>Message</Anchor>
+                        </Link>
+                        <Link href='/my_page'>
+                            <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+                                <Anchor style={{marginRight: 4}}>My</Anchor>
+                                <Avatar
+                                    src={user.photoURL}
+                                    size={32}
+                                />
+                            </div>
+                        </Link>
+                    </>
                 }
             </Horizontal>
             {

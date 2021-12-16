@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Dialog, DialogContent, DialogTitle, IconButton } from '@mui/material';
+import { Button, CircularProgress, Dialog, DialogContent, DialogTitle, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close'
 import { styled } from '@mui/system';
 import { useDispatch } from 'react-redux';
@@ -21,9 +21,15 @@ const LoginButton = styled(Button)({
 const Login = ({open, onClose}) => {
 
     const dispatch = useDispatch();
+    const [ processing, setProcessing ] = useState(false);
 
     const doLogin = () => {
-        loginWithGoogle({dispatch});
+        loginWithGoogle({dispatch}).then(data => {
+            onClose();
+            console.log(data);
+        }).catch(ex => {
+            console.log(ex);
+        }).finally(() => setProcessing(false));
     }
 
     return (
@@ -42,9 +48,14 @@ const Login = ({open, onClose}) => {
                         <span>Happly Tax Life</span>
                     </Content>
                     <div style={{textAlign: 'center'}}>
-                        <ButtonBase onClick={doLogin}>
-                            <div style={{fontSize: 0, padding: '8px 32px', backgroundColor: '#EAEDF2', borderRadius: 4}}>
-                                <img src='/assets/images/google_login.png' style={{height: 24}}/>
+                        <ButtonBase onClick={doLogin} disabled={processing}>
+                            <div style={{fontSize: 0, padding: '8px 32px', backgroundColor: '#EAEDF2', borderRadius: 4, width: 190}}>
+                                {
+                                    processing ?
+                                    <CircularProgress style={{width: 24, height: 24}}/>
+                                    :
+                                    <img src='/assets/images/google_login.png' style={{height: 24}}/>
+                                }
                             </div>
                         </ButtonBase>
                     </div>
