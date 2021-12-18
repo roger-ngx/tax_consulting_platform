@@ -1,18 +1,19 @@
 import dayjs from 'dayjs';
+import { useSelector } from 'react-redux';
 
 interface Thread{
     id: string;
-    updatedAt: {seconds: number};
-    lastMessage: string;
-    lastMessageType: string;
-    srcUserId: string;
-    unRead: number;
+    updatedAt?: {seconds: number};
+    lastMessage?: string;
+    lastMessageType?: string;
+    srcUserId?: string;
+    unRead?: number;
+    userIDs: string[]
 }
 
 export default class ChatThread{
 
     constructor(private thread:Thread){
-
     }
 
     get id(){
@@ -27,14 +28,14 @@ export default class ChatThread{
         return this.thread.lastMessageType;
     }
 
-    get lastMessage(){
+    lastMessage = (userId: string, desUsername: string) => {
         switch(this.lastMessageType){
             case 'text':
-                return  this.thread.lastMessage;
+                return  (this.srcUserId === userId ? 'You: ' : `${desUsername}: `) + this.thread.lastMessage;
             case 'application/image':
-                return this.srcUserId === 'thanh' ? 'You sent a photo' : 'xxx sent a photo'
+                return this.srcUserId === userId ? 'You sent a photo' : `${desUsername} sent a photo`
             default:
-                return this.srcUserId === 'thanh' ? 'You sent a file' : 'xxx sent a file'
+                return this.srcUserId === userId ? 'You sent a file' : `${desUsername} sent a file`
         }
     }
 
@@ -44,5 +45,9 @@ export default class ChatThread{
 
     get unReadCount(){
         return this.thread.unRead;
+    }
+
+    get userIDs(){
+        return this.thread.userIDs;
     }
 }

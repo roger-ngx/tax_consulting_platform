@@ -1,5 +1,8 @@
 import dayjs  from 'dayjs'
 
+var advancedFormat = require('dayjs/plugin/advancedFormat')
+dayjs.extend(advancedFormat)
+
 export enum MESSAGE_TYPE {
     TEXT='text',
     IMAGE='image',
@@ -26,7 +29,21 @@ export class Message{
     }
 
     get time(){
-        return this.message.createdAt && dayjs(this.message.createdAt.seconds * 1000).format('HH:mm a')
+        const createdAt = dayjs(this.message.createdAt.seconds * 1000);
+
+        if(dayjs().isSame(createdAt, 'day')){
+            return createdAt.format('hh:mm a');
+        }
+
+        if(dayjs().isSame(createdAt, 'month')){
+            return createdAt.format('Do hh:mm a');
+        }
+        
+        if(dayjs().isSame(createdAt, 'year')){
+            return createdAt.format('MMM Do hh:mm a');
+        }
+
+        return createdAt.format('YYYY MMM Do hh:mm a');
     }
 
     get text(){

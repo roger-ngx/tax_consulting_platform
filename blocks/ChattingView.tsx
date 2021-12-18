@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
 import { useFirestoreConnect } from 'react-redux-firebase';
 import { useSelector } from 'react-redux'
-import { map, includes, filter } from 'lodash';
+import { map, includes, filter, find } from 'lodash';
 import Image from 'next/image';
+import { IconButton } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import MessageView from '../elements/Message';
 import MessageThread from '../elements/MessageThread';
@@ -18,7 +20,6 @@ import { FileUpload } from '../stores/fileTranferSlice';
 import FileUploadView from '../elements/FileUpload';
 
 const Container = styled.div`
-    flex: 1;
     display: flex;
     flex-direction: row;
     border: solid 1px #C7C7C7;
@@ -26,29 +27,37 @@ const Container = styled.div`
 `
 
 const ThreadsView = styled.div`
-    border-right: solid 1px #C7C7C7;
     flex: 1;
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    background-color: #f4f4f4;
 `
 
 const ChatView = styled.div`
     display: flex;
     flex-direction: column;
     flex: 3;
-    height: calc(100vh - 74px);
+    height: calc(100vh - 90px);
     overflow: scroll;
 `
 
 const ChatViewHeader = styled.div`
     padding: 8px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+`
+
+const Horizontal = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center
 `
 
 const ChatViewBody = styled.div`
     flex: 1;
-    border-top: solid 1px #C7C7C7;
-    border-bottom: solid 1px #C7C7C7;
     padding: 8px;
     height: 100%;
     overflow: scroll;
@@ -58,11 +67,31 @@ const ChatViewFooter = styled.div`
     padding: 8px;
 `
 
+const ThreadHeader = () => {
+
+    const user = useSelector(state => state.firebase.auth);
+    
+    return (
+        <div
+            style={{display: 'flex', flexDirection: 'row', alignItems: 'center', padding: 12}}
+        >   
+            <Avatar
+                src={user.photoURL}
+                size={32}
+            />
+            <span style={{flex: 1, fontWeight: 'bold', textAlign: 'center', marginLeft: -24}}>Messenger</span>
+        </div>
+    )
+}
+
 const ThreadList = () => {
+
+    const userId = useSelector(state => state.firebase.auth.uid);
+    console.log('userId', userId);
 
     useFirestoreConnect([{
         collection: 'chats',
-        where: ['users', 'array-contains', 'thanh'],
+        where: ['userIDs', 'array-contains', userId],
         storeAs: 'chats',
         orderBy: ['updatedAt', 'desc'],
         limit: 10
@@ -70,17 +99,21 @@ const ThreadList = () => {
 
     const chats = map(useSelector(({firestore}) => firestore.ordered.chats), chat => new ChatThread(chat));
 
+    const currentThreadId = useSelector(state => state.messages.currentThreadId);
+
     return (
         <ThreadsView>
+            <ThreadHeader />
             {
                 map(chats, chat => (
-                    <div style={{width: '100%'}}>
+                    <div key={chat.time} style={{width: '100%'}}>
                         <MessageThread
                             id={chat.id}
-                            name='Jessi'
+                            desUserId={find(chat.userIDs, id => id !== userId)}
                             time={chat.time}
-                            text={chat.lastMessage}
+                            getLastMessage={chat.lastMessage}
                             unReadCount={chat.unReadCount}
+                            selected={currentThreadId===chat.id}
                         />
                     </div>
                 ))
@@ -90,6 +123,7 @@ const ThreadList = () => {
 }
 
 const MessageList = ({chatId}) => {
+    const userId = useSelector(state => state.firebase.auth.uid);
 
     if(!chatId) return null;
 
@@ -109,6 +143,16 @@ const MessageList = ({chatId}) => {
 
     const uploads: FileUpload[] = filter(useSelector(state => state.fileTransfer.uploadFiles), file => file.status === 'running');
 
+    const messagesEndRef = useRef(null);
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+    }
+    
+    useEffect(() => {
+        scrollToBottom()
+    }, [messages]);
+
     return (
         <>
             {
@@ -119,7 +163,7 @@ const MessageList = ({chatId}) => {
                             <MessageView
                                 text={message.text}
                                 time={message.time}
-                                isMine={message.srcUserId==='thanh'}
+                                isMine={message.srcUserId===userId}
                             />
                         }
                         {
@@ -128,6 +172,7 @@ const MessageList = ({chatId}) => {
                                 src={message.text}
                                 size={80}
                                 time={message.time}
+                                isMine={message.srcUserId===userId}
                             />
                         }
 
@@ -138,6 +183,7 @@ const MessageList = ({chatId}) => {
                                 size={message!.size}
                                 downloadUrl={message.text}
                                 time={message.time}
+                                isMine={message.srcUserId===userId}
                             />
                         }
                     </div>
@@ -165,6 +211,7 @@ const MessageList = ({chatId}) => {
                     }
                 })
             }
+            <div ref={messagesEndRef} />
         </>
     )
 }
@@ -172,16 +219,23 @@ const MessageList = ({chatId}) => {
 const ChattingView = () => {
 
     const currentChatId = useSelector(state => state.messages.currentThreadId);
+    const {currentDesUser} = useSelector(state => state.messages);
 
     return (
         <Container>
             <ThreadList />
             <ChatView>
                 <ChatViewHeader>
-                    <Avatar
-                        src='/assets/images/profile.png'
-                        size={44}
-                    />
+                    <Horizontal>
+                        <Avatar
+                            src={currentDesUser && currentDesUser.photoURL}
+                            size={44}
+                        />
+                        <span style={{marginLeft: 8}}>{currentDesUser && currentDesUser.name}</span>
+                    </Horizontal>
+                    <IconButton>
+                        <DeleteIcon sx={{color: '#277be8'}}/>
+                    </IconButton>
                 </ChatViewHeader>
                 <ChatViewBody>
                     <MessageList chatId={currentChatId}/>

@@ -6,14 +6,16 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { IconButton } from '@mui/material';
 import { saveAs } from 'file-saver';
 
-const HorizontalContainer = styled('div')({
+const HorizontalContainer = styled('div')(props => ({
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: props.isMine ? 'row-reverse' : 'row',
     alignItems: 'center',
-    maxWidth: '80%'
-})
+    marginRight: props.isMine ? 0 : '20%',
+    marginLeft: props.isMine ? '20%' : 0,
+    // maxWidth: '80%'
+}))
 
-const Container = styled('div')({
+const Container = styled('div')(props => ({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
@@ -21,8 +23,9 @@ const Container = styled('div')({
     // alignSelf: 'flex-start',
     padding: 16,
     borderRadius: 4,
-    marginRight: 16
-})
+    marginRight: props.isMine ? 0 : 16,
+    marginLeft: props.isMine ? 16 : 0,
+}))
 
 const Time = styled('span')({
     alignSelf: 'flex-end',
@@ -37,9 +40,10 @@ interface Props {
     progress?: number;
     downloadUrl?: string|undefined;
     time: string;
+    isMine: boolean
 }
 
-const FileUpload: React.FC<Props> = ({name, size, progress, time, downloadUrl}) => {
+const FileUpload: React.FC<Props> = ({name, size, progress, time, downloadUrl, isMine}) => {
 
     const downloadFile = () => {
         saveAs(downloadUrl);
@@ -55,9 +59,9 @@ const FileUpload: React.FC<Props> = ({name, size, progress, time, downloadUrl}) 
     }
 
     return (
-        <HorizontalContainer>
-            <Container>
-                <span style={{padding: 8, height: 40, borderRadius: '50%', backgroundColor: '#666', marginRight: 4}}>
+        <HorizontalContainer isMine={isMine}>
+            <Container isMine={isMine}>
+                <span style={{padding: 8, height: 40, borderRadius: '50%', backgroundColor: '#666', marginRight: 4, fontSize: 0}}>
                     <FeedIcon style={{color: 'white'}}/>
                 </span>
                 <div style={{flex: 1, display: 'flex', flexDirection: 'column'}}>
@@ -66,7 +70,7 @@ const FileUpload: React.FC<Props> = ({name, size, progress, time, downloadUrl}) 
                 </div>
 
                 <IconButton
-                    style={{padding: 4, borderRadius: 12, height: 24, backgroundColor: 'white', marginLeft: 8}}
+                    style={{padding: 4, borderRadius: 12, height: 24, backgroundColor: 'white', marginLeft: 8, fontSize: 0}}
                     disabled={!downloadUrl}
                     onClick={downloadFile}
                 >

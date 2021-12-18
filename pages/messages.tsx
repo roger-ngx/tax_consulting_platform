@@ -12,7 +12,7 @@ const Container =styled.div`
 const Messages = () => {
 
   return (
-    <ChattingView chatId='thanhthuowng'/>
+    <ChattingView />
   )
 }
 

@@ -9,11 +9,11 @@ import Zoom from 'react-medium-image-zoom'
 import 'react-medium-image-zoom/dist/styles.css'
 import { CircularProgress } from '@mui/material';
 
-const HorizontalContainer = styled('div')({
+const HorizontalContainer = styled('div')(props => ({
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: props.isMine ? 'row-reverse' : 'row',
     alignItems: 'flex-end'
-})
+}))
 
 const Container = styled('div')({
     display: 'flex',
@@ -37,6 +37,7 @@ interface Props {
     progress?: number;
     size: number;
     time: string;
+    isMine: boolean;
 }
 
 const shimmer = (w, h) => `
@@ -58,7 +59,7 @@ const toBase64 = (str) =>
     ? Buffer.from(str).toString('base64')
     : window.btoa(str)
 
-const ImageUpload: React.FC<Props> = ({src, progress, size=80, time}) => {
+const ImageUpload: React.FC<Props> = ({src, progress, size=80, time, isMine}) => {
 
   const [ isZoomed, setZoomed ] = useState(false);
 
@@ -67,30 +68,30 @@ const ImageUpload: React.FC<Props> = ({src, progress, size=80, time}) => {
   }, [])
 
     return (
-        <HorizontalContainer>
+        <HorizontalContainer isMine={isMine}>
             <div style={{borderRadius: 4}}>
-            {
-              !isZoomed &&
-              <a onClick={() => setZoomed(true)}>
-                <Image
+              {
+                !isZoomed &&
+                <a onClick={() => setZoomed(true)}>
+                  <Image
+                      src={src}
+                      width={size}
+                      height={size}
+                      objectFit="cover"
+                      quality={50}
+                      placeholder="blur"
+                      blurDataURL={`data:image/svg+xml;base64,${toBase64(shimmer(700, 475))}`}
+                  />
+                </a>
+              }
+              {
+                isZoomed &&
+                <ControlledZoom isZoomed={isZoomed} onZoomChange={handleZoomChange}>
+                  <img
                     src={src}
-                    width={size}
-                    height={size}
-                    objectFit="cover"
-                    quality={50}
-                    placeholder="blur"
-                    blurDataURL={`data:image/svg+xml;base64,${toBase64(shimmer(700, 475))}`}
-                />
-              </a>
-            }
-            {
-              isZoomed &&
-              <ControlledZoom isZoomed={isZoomed} onZoomChange={handleZoomChange}>
-                <img
-                  src={src}
-                />
-              </ControlledZoom>
-            }
+                  />
+                </ControlledZoom>
+              }
             </div>
             <CircularProgress variant="determinate" value={progress} size={16}/>
             {

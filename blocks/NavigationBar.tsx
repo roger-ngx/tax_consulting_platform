@@ -24,10 +24,11 @@ const Container = styled.div`
 const Anchor = styled.a`
     margin-left: 24px;
     color: #000;
+    cursor: pointer;
 `
 
 const NavigationBar = () => {
-    const [ openLogin, setOpenLogin ] = useState(true);
+    const [ openLogin, setOpenLogin ] = useState(false);
 
     const user = useSelector(state => state.firebase.auth);
     console.log('user', user);
@@ -48,7 +49,7 @@ const NavigationBar = () => {
             </Horizontal>
             <Horizontal>
                 {
-                    user.isEmpty ? 
+                    user?.isEmpty ? 
                     <a onClick={() => setOpenLogin(true)}>
                         <Anchor>Login</Anchor>
                     </a>

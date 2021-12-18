@@ -1,8 +1,11 @@
 import React, { useRef, useEffect, useState } from 'react';
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
 import Image from 'next/image';
-import { useDispatch } from 'react-redux';
-import { setCurrentThreadId } from '../stores/messageSlide';
+import { useDispatch, useSelector } from 'react-redux';
+import { setCurrentDesUserId, setCurrentThreadId, setCurrentDesUser } from '../stores/messageSlide';
+import { useFirestore } from 'react-redux-firebase';
+import User from '../models/User';
+import { getUserById } from '../firebase/firebaseUser';
 
 
 const Container = styled.div`
@@ -24,6 +27,9 @@ const ThreadContainer = styled.div`
 
     ${Container}:hover & {
         transform: translateX(-60px)
+    }
+    ${
+        props => props.selected && css`background-color: #ddd`
     }
 `
 
@@ -87,20 +93,32 @@ const DeleteButton = styled.button`
 
 type Props = {
     id: string;
-    name: string;
-    time: string;
-    text: string;
-    unReadCount: number;
+    desUserId?: string;
+    time?: string;
+    text?: string;
+    unReadCount?: number;
+    getLastMessage: (userId: string, desUsername:string) => string,
+    selected: boolean
 }
 
 
-const MessageThread : React.FC<Props> = ({id, name, time, text, unReadCount}) => {
+const MessageThread : React.FC<Props> = ({id, desUserId, time, getLastMessage, unReadCount, selected=false}) => {
+    if(!desUserId){
+        return null;
+    }
 
     const dispatch = useDispatch();
 
-    const [ width, setWidth ] = useState();
+    const userId = useSelector(state => state.firebase.auth.uid);
 
-    const onSelectThread = () => dispatch(setCurrentThreadId(id));
+    const [ width, setWidth ] = useState();
+    const [ desUser, setDesUser ] = useState<User>();
+    const [ lastMessage, setLastMessage ] = useState();
+
+    const onSelectThread = () => {
+        dispatch(setCurrentThreadId(id));
+        dispatch(setCurrentDesUserId(desUserId));
+    }
 
     const ref = useRef(null);
 
@@ -108,20 +126,43 @@ const MessageThread : React.FC<Props> = ({id, name, time, text, unReadCount}) =>
         ref && setWidth(ref.current.offsetWidth - 70);
     }, [ref])
 
+    useEffect(() => {
+        console.log(desUserId);
+        if(desUserId){
+            getDesUser();
+        }
+    }, [desUserId]);
+
+    useEffect(() => {
+        if(desUser){
+            dispatch(setCurrentDesUser(desUser));
+            setLastMessage(getLastMessage && getLastMessage(userId, desUser.name));
+        }
+    }, [desUser]);
+
+    const getDesUser = async () => {
+        if(desUserId){
+            const userData = await getUserById(desUserId);
+            userData && setDesUser(new User(userData));
+        }
+    }
+
+    console.log('selected', selected);
+
     return (
         <Container
             ref={ref}
             onClick={onSelectThread}
         >
-            <ThreadContainer >
-                <div style={{minWidth: 44}}>
-                    <Image src='/assets/icons/person.png' width={44} height={44} style={{margin: 'auto'}}/>
+            <ThreadContainer selected={selected}>
+                <div style={{minWidth: 44, borderRadius: 22, overflow: 'hidden', fontSize: 0}}>
+                    <Image src={desUser?.photoURL || '/assets/images/profile.png'} width={44} height={44} />
                 </div>
                 <TextContainer>
-                    <Container>
-                        <Name>{name}</Name>
+                    <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                        <Name>{desUser?.name}</Name>
                         <Time>{time}</Time>
-                    </Container>
+                    </div>
                     <div
                         style={{
                             width,
@@ -132,7 +173,7 @@ const MessageThread : React.FC<Props> = ({id, name, time, text, unReadCount}) =>
                             color: '#666'
                         }}
                     >
-                        {text}
+                        {lastMessage}
                     </div>
                 </TextContainer>
                 {

@@ -5,7 +5,7 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 
 import { throttle, size } from 'lodash';
 import { addMessage, uploadFile } from '../firebase/messageController';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Container = styled.div`
     display: flex;
@@ -48,6 +48,9 @@ const MessageInput = () => {
 
     const dispatch = useDispatch();
 
+    const srcUserId = useSelector(state => state.firebase.auth.uid);
+    const desUserId = useSelector(state => state.messages.currentDesUserId);
+
     useEffect(() => {
         if(size(message)){
             setActive(true);
@@ -56,9 +59,18 @@ const MessageInput = () => {
 
     const sendMessage = async () => {
         try{
-            await addMessage({srcUserId: 'thanh', desUserId: 'thuowng', message});
+            console.log('message', message)
+            size(message) && addMessage({srcUserId, desUserId, message});
+            setMessage('');
         }catch(ex){
             console.log(ex)
+        }
+    }
+
+    const onKeyPress = e => {
+        console.log(e.key);
+        if(e.key==='Enter'){
+            sendMessage();
         }
     }
 
@@ -67,7 +79,7 @@ const MessageInput = () => {
     const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files![0];
         console.log(file);
-        uploadFile({file, srcUserId: 'thanh', desUserId: 'thuowng', dispatch});
+        uploadFile({file, srcUserId, desUserId, dispatch});
     }
 
     return (
@@ -75,7 +87,8 @@ const MessageInput = () => {
             <Input 
                 placeholder='Type a message'
                 value={message}
-                onChange={throttle(onChangeText, 50, { trailing: false })}
+                onChange={onChangeText}
+                onKeyPress={onKeyPress}
             />
             <label htmlFor='icon-button-file'>
                 <FileInput
@@ -83,6 +96,7 @@ const MessageInput = () => {
                     id='icon-button-file'
                     type='file'
                     onChange={onFileChange}
+                    onClick={e => e.target.value = ''}
                 />
                 <IconButton color="primary" aria-label="upload picture" component="span">
                     <AttachFileIcon />

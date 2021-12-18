@@ -34,12 +34,13 @@ const TextTime = styled.span`
     font-size: 12px;
     color: #888;
     align-self: flex-end;
+    margin-bottom: 4px;
 
     ${
         props => props.isMine ? 
-        css`margin-left: 12px;`
-        :
         css`margin-right: 12px;`
+        :
+        css`margin-left: 12px;`
     }
 `
 
