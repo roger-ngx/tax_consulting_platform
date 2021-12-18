@@ -1,13 +1,10 @@
 import React, { useState, useCallback } from 'react';
 import { styled } from '@mui/system';
-import FeedIcon from '@mui/icons-material/Feed';
-import VerticalAlignBottomIcon from '@mui/icons-material/VerticalAlignBottom';
-import { Controlled as ControlledZoom } from 'react-medium-image-zoom'
 import Image from 'next/image';
-
-import Zoom from 'react-medium-image-zoom'
-import 'react-medium-image-zoom/dist/styles.css'
 import { CircularProgress } from '@mui/material';
+
+import { Controlled as ControlledZoom } from 'react-medium-image-zoom'
+import 'react-medium-image-zoom/dist/styles.css'
 
 const HorizontalContainer = styled('div')(props => ({
     display: 'flex',
@@ -72,7 +69,7 @@ const ImageUpload: React.FC<Props> = ({src, progress, size=80, time, isMine}) =>
             <div style={{borderRadius: 4}}>
               {
                 !isZoomed &&
-                <a onClick={() => setZoomed(true)}>
+                <a style={{cursor: 'pointer'}} onClick={() => setZoomed(true)}>
                   <Image
                       src={src}
                       width={size}
@@ -84,14 +81,15 @@ const ImageUpload: React.FC<Props> = ({src, progress, size=80, time, isMine}) =>
                   />
                 </a>
               }
-              {
-                isZoomed &&
-                <ControlledZoom isZoomed={isZoomed} onZoomChange={handleZoomChange}>
-                  <img
-                    src={src}
-                  />
-                </ControlledZoom>
-              }
+              <div style={{display: isZoomed ? '' : 'none'}}>
+                <figure>
+                  <ControlledZoom isZoomed={isZoomed} onZoomChange={handleZoomChange} transitionDuration={0}>
+                    <img
+                      src={src}
+                    />
+                  </ControlledZoom>
+                </figure>
+              </div>
             </div>
             <CircularProgress variant="determinate" value={progress} size={16}/>
             {

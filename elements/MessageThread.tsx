@@ -14,6 +14,7 @@ const Container = styled.div`
     flex-direction: row;
     align-items: center;
     position: relative;
+    cursor: pointer;
 `
 const ThreadContainer = styled.div`
     display: flex;
@@ -25,13 +26,13 @@ const ThreadContainer = styled.div`
     transition: transform 1s;
     padding: 24px 12px;
 
-    ${Container}:hover & {
-        transform: translateX(-60px)
-    }
     ${
         props => props.selected && css`background-color: #ddd`
     }
-`
+    `
+    // ${Container}:hover & {
+    //     transform: translateX(-60px)
+    // }
 
 const TextContainer = styled.div`
     display: flex;

@@ -61,16 +61,16 @@ const FileUpload: React.FC<Props> = ({name, size, progress, time, downloadUrl, i
     return (
         <HorizontalContainer isMine={isMine}>
             <Container isMine={isMine}>
-                <span style={{padding: 8, height: 40, borderRadius: '50%', backgroundColor: '#666', marginRight: 4, fontSize: 0}}>
-                    <FeedIcon style={{color: 'white'}}/>
+                <span style={{padding: 8, height: 40, borderRadius: '50%', backgroundColor: '#666', marginRight: 4, fontSize: 0, marginRight: 8}}>
+                    <FeedIcon style={{color: 'white', margin: 'auto'}}/>
                 </span>
-                <div style={{flex: 1, display: 'flex', flexDirection: 'column'}}>
+                <div style={{flex: 1, display: 'flex', flexDirection: 'column', marginRight: 16}}>
                     <span>{name}</span>
                     <span style={{color: '#999'}}>{size}</span>
                 </div>
 
                 <IconButton
-                    style={{padding: 4, borderRadius: 12, height: 24, backgroundColor: 'white', marginLeft: 8, fontSize: 0}}
+                    style={{borderRadius: 12, backgroundColor: 'white', marginLeft: 8, fontSize: 0}}
                     disabled={!downloadUrl}
                     onClick={downloadFile}
                 >
