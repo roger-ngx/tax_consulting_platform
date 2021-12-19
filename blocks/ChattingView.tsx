@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
 import { useFirestoreConnect } from 'react-redux-firebase';
@@ -18,6 +18,7 @@ import ChatThread from '../models/ChatThread';
 import ImageUpload from '../elements/ImageUpload';
 import { FileUpload } from '../stores/fileTranferSlice';
 import FileUploadView from '../elements/FileUpload';
+import User from '../models/User';
 
 const Container = styled.div`
     display: flex;
@@ -123,11 +124,11 @@ const ThreadList = () => {
 }
 
 const MessageList = ({chatId}) => {
-    const userId = useSelector(state => state.firebase.auth.uid);
-
     if(!chatId) return null;
 
     console.log('chatId', chatId);
+
+    const userId = useSelector(state => state.firebase.auth.uid);
 
     useFirestoreConnect([{
         collection: 'chats',
@@ -218,24 +219,37 @@ const MessageList = ({chatId}) => {
 
 const ChattingView = () => {
 
+    const [ chattingUser, setChattingUser ] = useState<User>();
+
     const currentChatId = useSelector(state => state.messages.currentThreadId);
-    const {currentDesUser} = useSelector(state => state.messages);
+    const currentDesUser = useSelector(state => state.messages.currentDesUser);
+
+    useEffect(() => {
+        if(currentDesUser){
+            setChattingUser(new User(currentDesUser));
+        }
+    }, [currentDesUser]);
 
     return (
         <Container>
             <ThreadList />
             <ChatView>
                 <ChatViewHeader>
-                    <Horizontal>
-                        <Avatar
-                            src={currentDesUser && currentDesUser.photoURL}
-                            size={44}
-                        />
-                        <span style={{marginLeft: 8}}>{currentDesUser && currentDesUser.name}</span>
-                    </Horizontal>
-                    <IconButton>
-                        <DeleteIcon sx={{color: '#277be8'}}/>
-                    </IconButton>
+                {
+                    chattingUser &&
+                    <>
+                        <Horizontal>
+                            <Avatar
+                                src={chattingUser.photoURL}
+                                size={44}
+                            />
+                            <span style={{marginLeft: 8}}>{chattingUser.name}</span>
+                        </Horizontal>
+                        <IconButton>
+                            <DeleteIcon sx={{color: '#277be8'}}/>
+                        </IconButton>
+                    </>
+                }
                 </ChatViewHeader>
                 <ChatViewBody>
                     <MessageList chatId={currentChatId}/>

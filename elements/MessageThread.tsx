@@ -19,9 +19,9 @@ const Container = styled.div`
 const ThreadContainer = styled.div`
     display: flex;
     flex-direction: row;
+    background-color: #f4f4f4;  
     flex: 1;
     align-items: center;
-    background-color: white;
     z-index: 1;
     transition: transform 1s;
     padding: 24px 12px;
@@ -115,10 +115,16 @@ const MessageThread : React.FC<Props> = ({id, desUserId, time, getLastMessage, u
     const [ width, setWidth ] = useState();
     const [ desUser, setDesUser ] = useState<User>();
     const [ lastMessage, setLastMessage ] = useState();
+    const [ threadSelected, setThreadSelected ] = useState(false);
 
     const onSelectThread = () => {
         dispatch(setCurrentThreadId(id));
         dispatch(setCurrentDesUserId(desUserId));
+        if(threadSelected){
+            desUser && dispatch(setCurrentDesUser(desUser.original));
+        }else{
+            setThreadSelected(true);
+        }
     }
 
     const ref = useRef(null);
@@ -136,10 +142,10 @@ const MessageThread : React.FC<Props> = ({id, desUserId, time, getLastMessage, u
 
     useEffect(() => {
         if(desUser){
-            dispatch(setCurrentDesUser(desUser));
-            setLastMessage(getLastMessage && getLastMessage(userId, desUser.name));
+            threadSelected && dispatch(setCurrentDesUser(desUser.original));
+            !lastMessage && setLastMessage(getLastMessage && getLastMessage(userId, desUser.name));
         }
-    }, [desUser]);
+    }, [desUser, threadSelected]);
 
     const getDesUser = async () => {
         if(desUserId){

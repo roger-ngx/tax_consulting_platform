@@ -2,31 +2,35 @@ import React, { useState, useCallback } from 'react';
 import { styled } from '@mui/system';
 import Image from 'next/image';
 import { CircularProgress } from '@mui/material';
+import { isEmpty } from 'lodash';
 
 import { Controlled as ControlledZoom } from 'react-medium-image-zoom'
 import 'react-medium-image-zoom/dist/styles.css'
 
-const HorizontalContainer = styled('div')(props => ({
-    display: 'flex',
-    flexDirection: props.isMine ? 'row-reverse' : 'row',
-    alignItems: 'flex-end'
-}))
-
-const Container = styled('div')({
+const HorizontalContainer = styled('div')({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#eee',
-    alignSelf: 'flex-start',
-    padding: 16,
-    borderRadius: 4,
-    marginRight: 16
 })
+
+const Container = styled('div')(props => ({
+  display: 'flex',
+  flexDirection: props.isMine ? 'row-reverse' : 'row',
+  alignItems: 'flex-end'
+}))
 
 const Time = styled('span')({
   alignSelf: 'flex-end',
   color: '#888',
-  fontSize: 12
+  fontSize: 12,
+})
+
+const Anchor = styled('a')({
+  cursor: 'pointer',
+  marginRight: 12,
+  fontSize: 0,
+  borderRadius: 4,
+  overflow: 'hidden'
 })
 
 interface Props {
@@ -41,12 +45,12 @@ const shimmer = (w, h) => `
 <svg width="${w}" height="${h}" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
   <defs>
     <linearGradient id="g">
-      <stop stop-color="#333" offset="20%" />
-      <stop stop-color="#222" offset="50%" />
-      <stop stop-color="#333" offset="70%" />
+      <stop stop-color="#eee" offset="20%" />
+      <stop stop-color="#fff" offset="50%" />
+      <stop stop-color="#eee" offset="70%" />
     </linearGradient>
   </defs>
-  <rect width="${w}" height="${h}" fill="#333" />
+  <rect width="${w}" height="${h}" fill="#eee" />
   <rect id="r" width="${w}" height="${h}" fill="url(#g)" />
   <animate xlink:href="#r" attributeName="x" from="-${w}" to="${w}" dur="1s" repeatCount="indefinite"  />
 </svg>`
@@ -65,11 +69,13 @@ const ImageUpload: React.FC<Props> = ({src, progress, size=80, time, isMine}) =>
   }, [])
 
     return (
-        <HorizontalContainer isMine={isMine}>
-            <div style={{borderRadius: 4}}>
+        <Container isMine={isMine}>
+            <HorizontalContainer>
               {
                 !isZoomed &&
-                <a style={{cursor: 'pointer'}} onClick={() => setZoomed(true)}>
+                <Anchor
+                  onClick={() => setZoomed(true)}
+                >
                   <Image
                       src={src}
                       width={size}
@@ -79,23 +85,31 @@ const ImageUpload: React.FC<Props> = ({src, progress, size=80, time, isMine}) =>
                       placeholder="blur"
                       blurDataURL={`data:image/svg+xml;base64,${toBase64(shimmer(700, 475))}`}
                   />
-                </a>
+                </Anchor>
               }
-              <div style={{display: isZoomed ? '' : 'none'}}>
-                <figure>
-                  <ControlledZoom isZoomed={isZoomed} onZoomChange={handleZoomChange} transitionDuration={0}>
-                    <img
-                      src={src}
-                    />
-                  </ControlledZoom>
-                </figure>
-              </div>
+              {
+                isEmpty(time) &&
+                <CircularProgress variant="determinate" value={progress} size={16}/>
+              }
+            </HorizontalContainer>
+
+            <div style={{display: isZoomed ? '' : 'none'}}>
+              <figure>
+                <ControlledZoom
+                  isZoomed={isZoomed}
+                  onZoomChange={handleZoomChange}
+                  transitionDuration={0}
+                >
+                  <img
+                    src={src}
+                  />
+                </ControlledZoom>
+              </figure>
             </div>
-            <CircularProgress variant="determinate" value={progress} size={16}/>
             {
               time && <Time>{time}</Time>
             }
-        </HorizontalContainer>
+        </Container>
     )
 }
 

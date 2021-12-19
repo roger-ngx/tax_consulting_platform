@@ -3,6 +3,10 @@ export default class User{
 
     }
 
+    get original(){
+        return this.user;
+    }
+
     get name(){
         return this.user.displayName;
     }

@@ -65,3 +65,14 @@ export const loginWithGoogle = ({dispatch} : {dispatch: Dispatch}) => {
         }
     })
 }
+
+export const updateOnlineStatus = async (uid: string) => {
+
+    try{
+        await firebase.firestore().collection('users').doc(uid).update({
+            lastAccessAt: firebase.firestore.FieldValue.serverTimestamp()
+        })
+    }catch(ex){
+        console.log('updateOnlineStatus', ex);
+    }
+}

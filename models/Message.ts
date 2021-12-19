@@ -29,6 +29,8 @@ export class Message{
     }
 
     get time(){
+        if(!this.message.createdAt) return null;
+
         const createdAt = dayjs(this.message.createdAt.seconds * 1000);
 
         if(dayjs().isSame(createdAt, 'day')){
