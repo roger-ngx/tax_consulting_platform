@@ -1,16 +1,14 @@
 import React from 'react';
 import { styled } from '@mui/material/styles';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
-import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import { FormControlLabel } from '@mui/material';
+
 import ProfilePhotoUpload from '../../elements/ProfilePhotoUpload';
-import ProfileInput from './ProfileInput';
-import SearchBox from '../../elements/SearchBox';
+import ProfileCareerInput from './ProfileCareerInput';
+import ProfileEducationInput from './ProfileEducationInput';
+import ProfileCertificateInput from './ProfileCertificateInput';
+import ProfileLocationInput from './ProfileLocationInput';
 
 const Container = styled('div')({
 
@@ -34,16 +32,13 @@ const Profile = () => {
                 rows={5}
             />
 
-            <ProfileInput title='Career' />
+            <ProfileCareerInput />
 
-            <ProfileInput title='Education' />
+            <ProfileEducationInput />
 
-            <ProfileInput title='Certificate' />
+            <ProfileCertificateInput />
 
-            <span style={{marginBottom: '4px'}}>
-                Service Location
-            </span>
-            <SearchBox containerStyle={{borderRadius: '4px'}} />
+            <ProfileLocationInput />
             
             <FormControlLabel control={<Checkbox defaultChecked />} label="Working now" />
         </Container>

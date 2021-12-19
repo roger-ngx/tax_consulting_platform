@@ -14,22 +14,23 @@ const StateShort = styled('span')({
 })
 
 const StateLong = styled('span')({
-    marginLeft: 8
+    marginLeft: 8,
+    whiteSpace: 'nowrap'
 })
 
 type Props = {
-    short: string;
-    long: string;
+    code: string;
+    name: string;
     checked?: boolean;
     onClick?: () => void
 }
 
-const StateCheckbox: React.FC<Props> = ({short, long, checked=false, onClick}) => {
+const StateCheckbox: React.FC<Props> = ({code, name, checked=false, onClick}) => {
     return (
         <Container onClick={onClick}>
             <Checkbox checked={checked}/>
-            <StateShort>{short}</StateShort>
-            <StateLong>{long}</StateLong>
+            <StateShort>{code}</StateShort>
+            <StateLong>{name}</StateLong>
         </Container>
     )
 }

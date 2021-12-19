@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
@@ -13,7 +13,14 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+
+import { map, findIndex } from 'lodash';
+
 import ProfilePhotoUpload from '../../elements/ProfilePhotoUpload';
+import SearchBox from '../../elements/SearchBox';
+import { State, US_STATES } from '../../utils/Constants';
+import StateCheckbox from '../../elements/StateCheckbox';
+import LocationChip from '../../elements/LocationChip';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -59,23 +66,31 @@ const Duration = styled('span')({
     alignItems: 'center'
 })
 
-export default function LocationAddDialog() {
-  const [open, setOpen] = React.useState(false);
+const Horizontal = styled('div')({
+  height: '60vh',
+  display: 'flex',
+  flexDirection: 'row',
+  marginTop: 12
+})
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
+export default function LocationAddDialog({open, onClose}) {
+
+  const [ selectedStates, setSelectedStates ] = useState<State[]>([]);
+
+  const checkState = (state: State) => {
+    const index = findIndex(selectedStates, selectedState => state.name === selectedState.name);
+    if(index >= 0){
+      selectedStates.splice(index, 1);
+    }else{
+      selectedStates.push(state);
+    }
+    setSelectedStates([...selectedStates]);
+  }
 
   return (
     <div>
-        <Button variant="outlined" onClick={handleClickOpen}>
-            Open dialog
-        </Button>
         <BootstrapDialog
-            onClose={handleClose}
+            onClose={onClose}
             aria-labelledby="customized-dialog-title"
             open={open}
         >
@@ -86,6 +101,7 @@ export default function LocationAddDialog() {
                   sx={{
                       color: '#333'
                   }}
+                  onClick={onClose}
               >
                   <CloseIcon />
               </IconButton>
@@ -98,22 +114,35 @@ export default function LocationAddDialog() {
               </Button>
             </div>
           </DialogTitle>
-          <DialogContent dividers>
-            <div style={{margin: '24px auto', display: 'flex', justifyContent: 'center'}}>
-              <ProfilePhotoUpload />
-            </div>
-
-            <Typography>
-                Certificate
-            </Typography>
-            <TextField variant='outlined' style={{width: 400}}/>
-
-            <Typography style={{marginTop: 24}}>
-                Authority
-            </Typography>
-            <TextField variant='outlined'  style={{width: 400}}/>
-
-            <FormControlLabel control={<Checkbox defaultChecked />} label="Working now" />
+          <DialogContent dividers style={{display: 'flex', flexDirection: 'column'}}>
+            <SearchBox />
+            <Horizontal>
+              <div style={{height: '100%', display: 'inline-block', overflow: 'scroll', paddingRight: 12}}>
+                  {
+                    map(US_STATES, (state) => (
+                      <StateCheckbox
+                        key={state.code}
+                        code={state.code}
+                        name={state.name}
+                        onClick={() => checkState(state)}
+                        checked={findIndex(selectedStates, selectedState => state.name === selectedState.name)>=0}
+                      />
+                    ))
+                  }
+              </div>
+              <div style={{height: '100%',minWidth: 220, backgroundColor: '#F0F2F5', padding: 16, display: 'inline-block', overflow: 'scroll'}}>
+                  {
+                    map(selectedStates, state => (
+                      <div style={{marginBottom: 4}} key={state.code}>
+                        <LocationChip
+                          text={state.name}
+                          onDelete={() => checkState(state)}
+                        />
+                      </div>
+                    ))
+                  }
+              </div>
+            </Horizontal>
           </DialogContent>
         </BootstrapDialog>
     </div>

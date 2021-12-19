@@ -8,10 +8,11 @@ import SearchIcon from '@mui/icons-material/Search';
 import DirectionsIcon from '@mui/icons-material/Directions';
 
 type Props = {
-  containerStyle: object
+  containerStyle?: object,
+  disabled?: boolean
 }
 
-const SearchBox : React.FC<Props> = ({containerStyle}) => {
+const SearchBox : React.FC<Props> = ({disabled=false, containerStyle={}}) => {
   return (
     <Paper
       component="form"
@@ -24,6 +25,7 @@ const SearchBox : React.FC<Props> = ({containerStyle}) => {
         sx={{ ml: 1, flex: 1 }}
         placeholder="Search"
         inputProps={{ 'aria-label': 'search google maps' }}
+        disabled={disabled}
       />
     </Paper>
   )

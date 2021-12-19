@@ -59,23 +59,12 @@ const Duration = styled('span')({
     alignItems: 'center'
 })
 
-export default function CertificateAddDialog() {
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
+export default function CertificateAddDialog({open, onClose, onSave}) {
 
   return (
     <div>
-        <Button variant="outlined" onClick={handleClickOpen}>
-            Open dialog
-        </Button>
         <BootstrapDialog
-            onClose={handleClose}
+            onClose={onClose}
             aria-labelledby="customized-dialog-title"
             open={open}
         >
@@ -113,7 +102,6 @@ export default function CertificateAddDialog() {
             </Typography>
             <TextField variant='outlined'  style={{width: 400}}/>
 
-            <FormControlLabel control={<Checkbox defaultChecked />} label="Working now" />
           </DialogContent>
         </BootstrapDialog>
     </div>

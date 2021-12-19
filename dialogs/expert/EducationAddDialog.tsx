@@ -59,23 +59,12 @@ const Duration = styled('span')({
     alignItems: 'center'
 })
 
-export default function EducationAddDialog() {
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
+export default function EducationAddDialog({open, onClose, onSave}) {
 
   return (
     <div>
-        <Button variant="outlined" onClick={handleClickOpen}>
-            Open dialog
-        </Button>
         <BootstrapDialog
-            onClose={handleClose}
+            onClose={onClose}
             aria-labelledby="customized-dialog-title"
             open={open}
         >
