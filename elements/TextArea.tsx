@@ -16,7 +16,8 @@ const Counter = styled('span')({
 })
 
 const Title = styled('span')({
-    marginBottom: 4
+    marginBottom: 4,
+    fontWeight: 'bold'
 })
 
 const TextArea = ({title, placeholder, value='', onChange}) => {

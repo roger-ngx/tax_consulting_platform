@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import InfoIcon from '@mui/icons-material/Info';
 
 import ProfileInput from './ProfileInput';
+import PriceAddDialog from '../../dialogs/expert/PriceAddDialog';
 
 const Container = styled('div')({
 
@@ -29,10 +30,23 @@ const Text = styled('span')({
 })
 
 const Price = () => {
+    const [ showInputDialog, setShowInputDialog ] = useState(false);
 
     return (
         <Container>
-            <ProfileInput title='Price table'/>
+            <ProfileInput
+                title='Price table'
+                onShowInputDialog={() => setShowInputDialog(true)}
+            />
+            {
+                showInputDialog &&
+                <PriceAddDialog
+                    open={showInputDialog}
+                    onClose={() => setShowInputDialog(false)}
+                    onSave={() => {}}
+                />
+            }
+            
             <FormControlLabel control={<Checkbox defaultChecked />} label="Negotiable" />
             <Notice>
                 <Horizontal>

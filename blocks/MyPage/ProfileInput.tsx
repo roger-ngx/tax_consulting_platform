@@ -31,9 +31,10 @@ const CareerBox = styled('div')({
 
 type Props = {
     title: string;
+    onShowInputDialog: () => void
 }
 
-const ProfileInput: React.FC<Props> = ({title}) => {
+const ProfileInput: React.FC<Props> = ({title, onShowInputDialog}) => {
 
     const [ inputCount, setInputCount ] = useState(0);
     const [ showInputDialog, setShowInputDialog ] = useState(false);
@@ -41,7 +42,7 @@ const ProfileInput: React.FC<Props> = ({title}) => {
     return (
         <Container>
             <Horizontal>
-                <span>{ title }</span>
+                <span style={{fontWeight: 'bold'}}>{ title }</span>
                 <IconButton style={{marginRight: -10}} onClick={() => setInputCount(inputCount + 1)}>
                     <AddBoxIcon sx={{color: '#0045D1'}} />
                 </IconButton>
@@ -50,18 +51,13 @@ const ProfileInput: React.FC<Props> = ({title}) => {
                 map(
                     range(0, inputCount), 
                     index => (
-                        <CareerBox onClick={() => setShowInputDialog(true)}>
+                        <CareerBox onClick={onShowInputDialog}>
                             <CancelIcon sx={{color: '#686868'}}/>
                             <span style={{marginLeft: 8}}>OOO대학교, 경제학과, 2012 ~ 2017</span>
                         </CareerBox>
                     )
                 )
             }
-            <CareerAddDialog
-                open={showInputDialog}
-                onClose={() => setShowInputDialog(false)}
-                onSave={() => {}}
-            />
         </Container>
     )
 }
