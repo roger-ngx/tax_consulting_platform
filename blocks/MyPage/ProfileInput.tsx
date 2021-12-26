@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import CancelIcon from '@mui/icons-material/Cancel';
-import { map, range } from 'lodash';
+import { map, range, get } from 'lodash';
 
 import CareerAddDialog from '../../dialogs/expert/CareerAddDialog';
 
@@ -31,10 +31,11 @@ const CareerBox = styled('div')({
 
 type Props = {
     title: string;
-    onShowInputDialog: () => void
+    onShowInputDialog: () => void;
+    content?: React.ReactElement
 }
 
-const ProfileInput: React.FC<Props> = ({title, onShowInputDialog}) => {
+const ProfileInput: React.FC<Props> = ({title, onShowInputDialog, content}) => {
 
     const [ inputCount, setInputCount ] = useState(0);
     const [ showInputDialog, setShowInputDialog ] = useState(false);
@@ -52,8 +53,17 @@ const ProfileInput: React.FC<Props> = ({title, onShowInputDialog}) => {
                     range(0, inputCount), 
                     index => (
                         <CareerBox onClick={onShowInputDialog}>
-                            <CancelIcon sx={{color: '#686868'}}/>
-                            <span style={{marginLeft: 8}}>OOO대학교, 경제학과, 2012 ~ 2017</span>
+                            {
+                                get(content, `${index}`) &&
+                                (
+                                    <>
+                                        <CancelIcon sx={{color: '#686868'}}/>
+                                        <span style={{marginLeft: 8}}>
+                                            { get(content, `${index}`) }
+                                        </span>
+                                    </>
+                                )
+                            }
                         </CareerBox>
                     )
                 )

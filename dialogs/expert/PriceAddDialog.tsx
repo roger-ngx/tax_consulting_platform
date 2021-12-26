@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
@@ -10,7 +10,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 
-import { map } from 'lodash';
+import { map, throttle } from 'lodash';
 import TFButtonBase from '../../elements/ButtonBase';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -61,7 +61,6 @@ const Unit = styled('span')({
 const UnitButton = styled('div')( props => ({
     backgroundColor: props.active ? '#D8E5FF' : '#EAEDF2',
     padding: '12px 24px',
-    fontWeight: props.active ? 'bold' : 'normal',
     fontSize: 16,
     color: props.active ? '#0045D1' : '#797979',
 }))
@@ -78,6 +77,11 @@ const Group = styled('div')({
 const PRICE_UNITS = ['per hour', 'per day', 'per case', 'etc'];
 
 export default function PriceAddDialog({open, onClose, onSave}) {
+
+  const [ title, setTitle ] = useState();
+  const [ detail, setDetail ] = useState();
+  const [ priceUnit, setPriceUnit ] = useState();
+  const [ price, setPrice ] = useState();
 
   return (
     <div>
@@ -100,7 +104,7 @@ export default function PriceAddDialog({open, onClose, onSave}) {
               <Button
                   variant='contained'
                   color='primary'
-                  onClick={onSave}
+                  onClick={() => onSave({title, detail, price, priceUnit})}
               >
                   Save
               </Button>
@@ -111,14 +115,24 @@ export default function PriceAddDialog({open, onClose, onSave}) {
               <Title>
                   Title
               </Title>
-              <TextField variant='outlined' style={{width: '100%'}}/>
+              <TextField
+                variant='outlined'
+                style={{width: '100%'}}
+                value={title}
+                onChange={throttle(e => setTitle(e.target.value), 500, {trailing: false})}
+              />
             </Group>    
 
             <Group>
               <Title>
                   Detail (optional)
               </Title>
-              <TextField variant='outlined'  style={{width: '100%'}}/>
+              <TextField
+                variant='outlined'
+                style={{width: '100%'}}
+                onChange={throttle(e => setDetail(e.target.value), 500, {trailing: false})}
+                value={detail}
+              />
             </Group>
 
             <Group>
@@ -127,9 +141,11 @@ export default function PriceAddDialog({open, onClose, onSave}) {
               </Title>
               <Unit>
                 {
-                    map(PRICE_UNITS, (unit, index) => (<div style={{marginRight: index==3?0:8}}>
-                      <TFButtonBase>
-                        <UnitButton active={index==1}>
+                    map(PRICE_UNITS, (unit: string, index: number) => (<div style={{marginRight: index==3?0:8}}>
+                      <TFButtonBase
+                        onClick={() => unit===priceUnit ? setPriceUnit() : setPriceUnit(unit)}
+                      >
+                        <UnitButton active={unit==priceUnit}>
                           <span>{unit}</span>
                         </UnitButton>
                       </TFButtonBase>
@@ -143,7 +159,12 @@ export default function PriceAddDialog({open, onClose, onSave}) {
               <Title>
                   Price
               </Title>
-              <TextField variant='outlined'  style={{width: '100%'}}/>
+              <TextField
+                variant='outlined'
+                style={{width: '100%'}}
+                value={price}
+                onChange={throttle(e => setPrice(e.target.value), 500, {trailing: false})}
+              />
             </Group>
           </DialogContent>
         </BootstrapDialog>

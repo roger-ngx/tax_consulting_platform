@@ -31,19 +31,32 @@ const Text = styled('span')({
 
 const Price = () => {
     const [ showInputDialog, setShowInputDialog ] = useState(false);
+    const [ inputContent, setInputContent ] = useState<React.ReactElement>();
 
     return (
         <Container>
             <ProfileInput
                 title='Price table'
                 onShowInputDialog={() => setShowInputDialog(true)}
+                content={inputContent}
             />
             {
                 showInputDialog &&
                 <PriceAddDialog
                     open={showInputDialog}
                     onClose={() => setShowInputDialog(false)}
-                    onSave={() => {}}
+                    onSave={
+                        ({title, detail, price, priceUnit}) => {
+                            setShowInputDialog(false);
+                            setInputContent(
+                                <div style={{display: 'inline-block'}}>
+                                    <span>{title}</span>
+                                    <span>{detail}</span>
+                                    <span>{price} {priceUnit}</span>
+                                </div>
+                            )
+                        }
+                    }
                 />
             }
             

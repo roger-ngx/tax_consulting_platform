@@ -14,6 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import ProfilePhotoUpload from '../../elements/ProfilePhotoUpload';
+import Certificate from '../../models/Certificate';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -53,13 +54,10 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-const Duration = styled('span')({
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center'
-})
-
 export default function CertificateAddDialog({open, onClose, onSave}) {
+
+  const [ certName, setCertName ] = React.useState();
+  const [ certAuthority, setCertAuthority ] = React.useState();
 
   return (
     <div>
@@ -69,12 +67,20 @@ export default function CertificateAddDialog({open, onClose, onSave}) {
             open={open}
         >
           <DialogTitle style={{padding: 8}}>
-            <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center'
+              }}
+            >
               <IconButton
                   aria-label="close"
                   sx={{
                       color: '#333'
                   }}
+                  onClick={onClose}
               >
                   <CloseIcon />
               </IconButton>
@@ -82,6 +88,8 @@ export default function CertificateAddDialog({open, onClose, onSave}) {
               <Button
                   variant='contained'
                   color='primary'
+                  disabled={!certName || !certAuthority}
+                  onClick={() => onSave(new Certificate({name: certName, authority: certAuthority}))}
               >
                   Save
               </Button>
@@ -95,12 +103,23 @@ export default function CertificateAddDialog({open, onClose, onSave}) {
             <Typography>
                 Certificate
             </Typography>
-            <TextField variant='outlined' style={{width: 400}}/>
+            <TextField
+              variant='outlined'
+              style={{width: 400}}
+              placeholder='Your certificate name'
+              value={certName}
+              onChange={e => setCertName(e.target.value)}
+            />
 
             <Typography style={{marginTop: 24}}>
                 Authority
             </Typography>
-            <TextField variant='outlined'  style={{width: 400}}/>
+            <TextField
+              variant='outlined'
+              style={{width: 400}}
+              onChange={e => setCertAuthority(e.target.value)}
+              value={certAuthority}
+            />
 
           </DialogContent>
         </BootstrapDialog>

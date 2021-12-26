@@ -14,6 +14,8 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import ProfilePhotoUpload from '../../elements/ProfilePhotoUpload';
+import { range } from 'lodash';
+import Career from '../../models/Career';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -62,10 +64,16 @@ const Duration = styled('span')({
 type Props = {
   open: boolean;
   onClose: () => void,
-  onSave: () => void
+  onSave: (career: Career) => void
 }
 
 const CareerAddDialog: React.FC<Props> = ({open, onClose, onSave}) => {
+
+  const [ company, setCompany ] = React.useState('');
+  const [ position, setPosition ] = React.useState('');
+  const [ startYear, setStartYear ] = React.useState();
+  const [ endYear, setEndYear ] = React.useState();
+  const [ isWorkingNow, setWorkingNow ] = React.useState(false);
 
   return (
     <div>
@@ -73,6 +81,8 @@ const CareerAddDialog: React.FC<Props> = ({open, onClose, onSave}) => {
         onClose={onClose}
         aria-labelledby="customized-dialog-title"
         open={open}
+        disableEscapeKeyDown
+        onBackdropClick={() => false}
       >
         <DialogTitle style={{padding: 8}}>
           <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
@@ -89,7 +99,7 @@ const CareerAddDialog: React.FC<Props> = ({open, onClose, onSave}) => {
             <Button
                 variant='contained'
                 color='primary'
-                onClick={onSave}
+                onClick={() => onSave(new Career({company, position, startYear, endYear, isWorkingNow}))}
             >
                 Save
             </Button>
@@ -103,30 +113,59 @@ const CareerAddDialog: React.FC<Props> = ({open, onClose, onSave}) => {
           <Typography>
               Company
           </Typography>
-          <TextField variant='outlined' style={{width: 400}}/>
+          <TextField
+            variant='outlined'
+            style={{width: 400}}
+            onChange={e => setCompany(e.target.value)}
+          />
 
           <Typography style={{marginTop: 24}}>
               Position
           </Typography>
-          <TextField variant='outlined'  style={{width: 400}}/>
+          <TextField
+            variant='outlined'
+            style={{width: 400}}
+            onChange={e => setPosition(e.target.value)}
+          />
 
           <Typography style={{marginTop: 24}}>
-              Contactable Time
+              Duration
           </Typography>
           <Duration>
-            <Select style={{flex: 1}}>
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
-            </Select> 
-            <span style={{margin: '0 8px'}}>~</span>
-            <Select style={{flex: 1}}>
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
-            </Select>         
+            <Select
+              style={{flex: 1}}
+              onChange={e => setStartYear(e.target.value)}
+            >
+              {
+                range(1990, endYear || 2023).map(year => (
+                  <MenuItem value={year}>{year}</MenuItem>
+                ))
+              }
+            </Select>
+            {
+              !isWorkingNow && <>
+                <span style={{margin: '0 8px'}}>~</span>
+                <Select
+                  style={{flex: 1}}
+                  onChange={e => setEndYear(e.target.value)}            
+                >
+                  {
+                    range(startYear || 1990, 2023).map(year => (
+                      <MenuItem
+                        value={year}
+                      >
+                        {year}
+                      </MenuItem>
+                    ))
+                  }
+                </Select>         
+              </>
+            }
           </Duration>
-          <FormControlLabel control={<Checkbox defaultChecked />} label="Working now" />
+          <FormControlLabel
+            control={<Checkbox checked={isWorkingNow} onChange={e => setWorkingNow(e.target.checked)}/>}
+            label="Working now"
+          />
         </DialogContent>
       </BootstrapDialog>
     </div>

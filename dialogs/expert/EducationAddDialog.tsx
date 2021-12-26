@@ -13,7 +13,11 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+
+import { range } from 'lodash';
+
 import ProfilePhotoUpload from '../../elements/ProfilePhotoUpload';
+import Education, { EDUCATION_DEGREES } from '../../models/Education';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -61,6 +65,13 @@ const Duration = styled('span')({
 
 export default function EducationAddDialog({open, onClose, onSave}) {
 
+  const [ university, setUniversity ] = React.useState('');
+  const [ major, setMajor ] = React.useState('');
+  const [ degree, setDegree ] = React.useState<EDUCATION_DEGREES>();
+  const [ startYear, setStartYear ] = React.useState();
+  const [ endYear, setEndYear ] = React.useState();
+  const [ isStudyNow, setStudyNow ] = React.useState(false);
+
   return (
     <div>
         <BootstrapDialog
@@ -75,6 +86,7 @@ export default function EducationAddDialog({open, onClose, onSave}) {
                   sx={{
                       color: '#333'
                   }}
+                  onClick={onClose}
               >
                   <CloseIcon />
               </IconButton>
@@ -82,6 +94,7 @@ export default function EducationAddDialog({open, onClose, onSave}) {
               <Button
                   variant='contained'
                   color='primary'
+                  onClick={() => onSave(new Education({university, major, degree, startYear, endYear, isStudyNow}))}
               >
                   Save
               </Button>
@@ -91,40 +104,72 @@ export default function EducationAddDialog({open, onClose, onSave}) {
             <Typography>
                 University
             </Typography>
-            <TextField variant='outlined' style={{width: 400}}/>
+            <TextField
+              variant='outlined'
+              style={{width: 400}}
+              value={university}
+              onChange={e=>setUniversity(e.target.value)}
+            />
 
             <Typography style={{marginTop: 24}}>
                 Major
             </Typography>
-            <TextField variant='outlined'  style={{width: 400}}/>
+            <TextField
+              variant='outlined'
+              style={{width: 400}}
+              onChange={e=>setMajor(e.target.value)}
+            />
 
             <Typography style={{marginTop: 24}}>
                 Degree
             </Typography>
-            <Select style={{width: '100%'}}>
-                <MenuItem value={10}>Associate’s degree</MenuItem>
-                <MenuItem value={20}>Bachelor’s degree</MenuItem>
-                <MenuItem value={30}>Master’s degree</MenuItem>
-                <MenuItem value={30}>Doctor’s degree</MenuItem>
+            <Select
+              style={{width: '100%'}}
+              value={degree}
+              onChange={e=>e.target.value}
+            >
+                <MenuItem value={EDUCATION_DEGREES.ASSOCIATE}>Associate’s degree</MenuItem>
+                <MenuItem value={EDUCATION_DEGREES.BACHELOR}>Bachelor’s degree</MenuItem>
+                <MenuItem value={EDUCATION_DEGREES.MASTER}>Master’s degree</MenuItem>
+                <MenuItem value={EDUCATION_DEGREES.DOCTOR}>Doctor’s degree</MenuItem>
             </Select> 
 
             <Typography style={{marginTop: 24}}>
                 Duration
             </Typography>
             <Duration>
-                <Select style={{flex: 1}}>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                </Select> 
-                <span style={{margin: '0 8px'}}>~</span>
-                <Select style={{flex: 1}}>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                </Select>         
+                <Select
+                  style={{flex: 1}}
+                  onChange={e => setStartYear(e.target.value)}    
+                >
+                  {
+                    range(1990, endYear || 2023).map(year => (
+                      <MenuItem value={year}>{year}</MenuItem>
+                    ))
+                  }
+                </Select>
+                {
+                  !isStudyNow && <>
+                    <span style={{margin: '0 8px'}}>~</span>
+                    <Select
+                      style={{flex: 1}}
+                      onChange={e => setEndYear(e.target.value)}    
+                    >
+                      {
+                        range(startYear || 1990, 2023).map(year => (
+                          <MenuItem value={year}>{year}</MenuItem>
+                        ))
+                      }
+                    </Select>         
+                  </>
+                }
             </Duration>
-            <FormControlLabel control={<Checkbox defaultChecked />} label="Studying now" />
+            <FormControlLabel
+              control={
+                <Checkbox checked={isStudyNow} onChange={e => setStudyNow(e.target.checked)} />
+              }
+              label="Studying now"
+            />
           </DialogContent>
         </BootstrapDialog>
     </div>
