@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import CancelIcon from '@mui/icons-material/Cancel';
-import { map, range, isEmpty, findIndex } from 'lodash';
+import { map, range, isEmpty, findIndex, size } from 'lodash';
 
 import EducationAddDialog from '../../dialogs/expert/EducationAddDialog';
 import Education from '../../models/Education';
@@ -55,7 +55,7 @@ const ProfileEducationInput: React.FC<Props> = () => {
     }
 
     const isEmptyInput = () => {
-        return isEmpty(educations) || findIndex(educations, isEmpty) >= 0;
+        return inputCount > size(educations) || isEmpty(educations) || findIndex(educations, isEmpty) >= 0;
     }
 
     return (
@@ -73,7 +73,7 @@ const ProfileEducationInput: React.FC<Props> = () => {
                 map(
                     range(0, inputCount), 
                     index => (
-                        <InputBox onClick={() => setShowInputDialog(index)}>
+                        <InputBox style={{marginTop: index > 0 ? 8 : 0}}  onClick={() => setShowInputDialog(index)}>
                             {
                                 !isEmpty(educations[index]) &&
                                 <IconButton onClick={(e) => deleteEducation(index, e)}>

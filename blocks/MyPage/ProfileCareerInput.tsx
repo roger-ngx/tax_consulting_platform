@@ -53,14 +53,14 @@ const ProfileCareerInput = () => {
     }
 
     const checkEmptyInput = () => {
-        return isEmpty(careers) || findIndex(careers, isEmpty) >= 0;
+        return inputCount > size(careers) || isEmpty(careers) || findIndex(careers, isEmpty) >= 0;
     }
 
     return (
         <Container>
             <Horizontal>
                 <span>Career</span>
-                <IconButton style={{marginRight: -10}} onClick={() => !checkEmptyInput(inputCount) && setInputCount(inputCount + 1)}>
+                <IconButton style={{marginRight: -10}} onClick={() => !checkEmptyInput() && setInputCount(inputCount + 1)}>
                     <AddBoxIcon sx={{color: '#0045D1'}} />
                 </IconButton>
             </Horizontal>
@@ -68,7 +68,7 @@ const ProfileCareerInput = () => {
                 map(
                     range(0, inputCount), 
                     index => (
-                        <CareerBox onClick={() => setShowInputDialog(index)}>
+                        <CareerBox style={{marginTop: index > 0 ? 8 : 0}} onClick={() => setShowInputDialog(index)}>
                             {
                                 !isEmpty(careers[index]) &&
                                 <IconButton

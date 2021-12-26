@@ -12,6 +12,8 @@ import TextField from '@mui/material/TextField';
 
 import { map, throttle } from 'lodash';
 import TFButtonBase from '../../elements/ButtonBase';
+import Price from '../../models/Price';
+import { Input, InputAdornment } from '@mui/material';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -97,6 +99,7 @@ export default function PriceAddDialog({open, onClose, onSave}) {
                   sx={{
                       color: '#333'
                   }}
+                  onClick={onClose}
               >
                   <CloseIcon />
               </IconButton>
@@ -104,7 +107,8 @@ export default function PriceAddDialog({open, onClose, onSave}) {
               <Button
                   variant='contained'
                   color='primary'
-                  onClick={() => onSave({title, detail, price, priceUnit})}
+                  onClick={() => onSave(new Price({title, detail, price, unit: priceUnit}))}
+                  disabled={!title || !detail || !price || !priceUnit}
               >
                   Save
               </Button>
@@ -160,10 +164,15 @@ export default function PriceAddDialog({open, onClose, onSave}) {
                   Price
               </Title>
               <TextField
-                variant='outlined'
                 style={{width: '100%'}}
+                inputProps={{
+                  style: {textAlign: 'right', marginRight: 4}
+                }}
                 value={price}
                 onChange={throttle(e => setPrice(e.target.value), 500, {trailing: false})}
+                InputProps={{
+                  endAdornment: <InputAdornment style={{marginTop: 2}} position="start">$</InputAdornment>,
+                }}
               />
             </Group>
           </DialogContent>

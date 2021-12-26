@@ -6,6 +6,8 @@ import InfoIcon from '@mui/icons-material/Info';
 
 import ProfileInput from './ProfileInput';
 import PriceAddDialog from '../../dialogs/expert/PriceAddDialog';
+import Price from '../../models/Price';
+import ProfilePriceInput from './ProfilePriceInput';
 
 const Container = styled('div')({
 
@@ -22,43 +24,19 @@ const Notice = styled('div')({
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: '#EAEDF2',
-    padding: 16
+    padding: 16,
+    marginTop: 32
 })
 
 const Text = styled('span')({
     fontSize: 12
 })
 
-const Price = () => {
-    const [ showInputDialog, setShowInputDialog ] = useState(false);
-    const [ inputContent, setInputContent ] = useState<React.ReactElement>();
+const PriceView = () => {
 
     return (
         <Container>
-            <ProfileInput
-                title='Price table'
-                onShowInputDialog={() => setShowInputDialog(true)}
-                content={inputContent}
-            />
-            {
-                showInputDialog &&
-                <PriceAddDialog
-                    open={showInputDialog}
-                    onClose={() => setShowInputDialog(false)}
-                    onSave={
-                        ({title, detail, price, priceUnit}) => {
-                            setShowInputDialog(false);
-                            setInputContent(
-                                <div style={{display: 'inline-block'}}>
-                                    <span>{title}</span>
-                                    <span>{detail}</span>
-                                    <span>{price} {priceUnit}</span>
-                                </div>
-                            )
-                        }
-                    }
-                />
-            }
+            <ProfilePriceInput />
             
             <FormControlLabel control={<Checkbox defaultChecked />} label="Negotiable" />
             <Notice>
@@ -73,4 +51,4 @@ const Price = () => {
     )
 }
 
-export default Price;
+export default PriceView;

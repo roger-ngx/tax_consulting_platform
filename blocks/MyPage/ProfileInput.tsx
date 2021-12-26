@@ -26,7 +26,7 @@ const CareerBox = styled('div')({
     cursor: 'pointer',
     border: 'solid 1px #C7C7C7',
     borderRadius: 4,
-    padding: 8
+    height: 50
 })
 
 type Props = {

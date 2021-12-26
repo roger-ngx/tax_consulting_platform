@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import CancelIcon from '@mui/icons-material/Cancel';
-import { map, range, isEmpty, findIndex } from 'lodash';
+import { map, range, isEmpty, findIndex, size } from 'lodash';
 
 import CertificateAddDialog from '../../dialogs/expert/CertificateAddDialog';
 import Certificate from '../../models/Certificate';
@@ -56,7 +56,7 @@ const ProfileCertificateInput: React.FC<Props> = () => {
     }
 
     const checkEmptyInput = () => {
-        return isEmpty(certificates) || findIndex(certificates, isEmpty) >= 0;
+        return inputCount > size(certificates) || isEmpty(certificates) || findIndex(certificates, isEmpty) >= 0;
     }
 
     return (
@@ -74,7 +74,7 @@ const ProfileCertificateInput: React.FC<Props> = () => {
                 map(
                     range(0, inputCount), 
                     index => (
-                        <InputBox onClick={() => setShowInputDialog(index)}>
+                        <InputBox style={{marginTop: index > 0 ? 8 : 0}} onClick={() => setShowInputDialog(index)}>
                             {
                                 !isEmpty(certificates[index]) &&
                                 <IconButton onClick={(e) => deleteCertificate(index, e)}>
