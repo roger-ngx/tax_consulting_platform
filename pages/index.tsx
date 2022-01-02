@@ -1,4 +1,6 @@
 import { Grid } from '@mui/material';
+import Link from 'next/link';
+
 import styled from 'styled-components';
 import Banner from '../blocks/Banner';
 import Filter from '../blocks/Filter';
@@ -28,18 +30,26 @@ const Home = () => {
             <Filter />
           </div>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <Card />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <Card />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <Card />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <Card />
-            </Grid>
+            <Link href='/expert_detail'>
+              <Grid item xs={12} sm={6}>
+                  <Card />
+              </Grid>
+            </Link>
+            <Link href='/expert_detail'>
+              <Grid item xs={12} sm={6}>
+                <Card />
+              </Grid>
+            </Link>
+            <Link href='/expert_detail'>
+              <Grid item xs={12} sm={6}>
+                <Card />
+              </Grid>
+            </Link>
+            <Link href='/expert_detail'>
+              <Grid item xs={12} sm={6}>
+                <Card />
+              </Grid>
+            </Link>
           </Grid>
         </div>
       </Container>

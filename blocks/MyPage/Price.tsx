@@ -39,14 +39,7 @@ const PriceView = () => {
             <ProfilePriceInput />
             
             <FormControlLabel control={<Checkbox defaultChecked />} label="Negotiable" />
-            <Notice>
-                <Horizontal>
-                    <InfoIcon sx={{color: '#9B9B9B', fontSize: 16, marginRight: '4px'}}/>
-                    <span>Please check</span>
-                </Horizontal>
-                <Text>&middot; A freelancer with an acquired experience of more than 5 years in the field of data entry and web </Text>
-                <Text>&middot; A freelancer with an acquired experience of more than 5 years in the </Text>
-            </Notice>
+            <InfoCard />
         </Container>
     )
 }

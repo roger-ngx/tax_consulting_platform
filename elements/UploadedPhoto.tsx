@@ -3,10 +3,11 @@ import CloseIcon from '@mui/icons-material/Close';
 import ButtonBase from './ButtonBase';
 
 type Props = {
-    src: string
+    src: string,
+    onDelete: (src: string) => void
 }
 
-const UploadedPhoto : React.FC<Props> = ({src}) => {
+const UploadedPhoto : React.FC<Props> = ({src, onDelete}) => {
 
     return (
         <div
@@ -18,7 +19,7 @@ const UploadedPhoto : React.FC<Props> = ({src}) => {
                 overflow: 'hidden'
             }}
         >
-            <img src={src} style={{objectFit: 'cover'}} />
+            <img src={src} style={{objectFit: 'cover', width: '100%', height: '100%'}} />
             <div
                 style={{
                     position: 'absolute',
@@ -26,7 +27,9 @@ const UploadedPhoto : React.FC<Props> = ({src}) => {
                     backgroundColor: 'rgba(0, 0, 0, 0.75)'
                 }}
             >
-                <ButtonBase>
+                <ButtonBase
+                    onClick={() => onDelete(src)}
+                >
                     <div>
                         <CloseIcon sx={{color: 'white'}}/>
                     </div>

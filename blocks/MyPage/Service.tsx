@@ -3,8 +3,9 @@ import { styled } from '@mui/material/styles';
 import ProfileInput from './ProfileInput';
 import PhotosUploader from './PhotosUploader';
 import TextArea from '../../elements/TextArea';
-import ButtonBase from '../../elements/ButtonBase';
 import PriceAddDialog from '../../dialogs/expert/PriceAddDialog';
+import { SERVICE_CATEGORIES } from '../../models/EnrollService';
+import TFButtonBase from '../../elements/ButtonBase';
 
 const Container = styled('div')({
 
@@ -21,6 +22,11 @@ const Part = styled('div')({
 
 const Service = () => {
 
+    const [ category, setCategory ] = useState(SERVICE_CATEGORIES.TAX);
+    const [ detail, setDetail ] = useState();
+    const [ photos, setPhotos ] = useState<string[]>([]);
+    const [ videos, setVideos ] = useState<string[]>([]);
+
     return (
         <Container>
             <Part>
@@ -28,28 +34,39 @@ const Service = () => {
                     Category
                 </Title>
                 <div style={{display: 'flex', flexDirection: 'row', width: '100%'}}>
-                    <ButtonBase containerStyle={{flex: 1}}>
-                        <div style={{flex: 1, padding: 8, backgroundColor: '#0045D1', }}>
+                    <TFButtonBase
+                        containerStyle={{flex: 1}}
+                        onClick={() => setCategory(SERVICE_CATEGORIES.TAX)}
+                    >
+                        <div style={{flex: 1, padding: 8, backgroundImage: SERVICE_CATEGORIES.TAX===category ? 'linear-gradient(#0045D1, #5185EE)' : 'linear-gradient(#B7BECA, #B7BECAAA)', }}>
                             <span style={{fontWeight: 'bold', color: 'white'}}>Tax</span>
                         </div>
-                    </ButtonBase>
-                    <ButtonBase containerStyle={{flex: 1, margin: '0 8px'}}>
-                        <div style={{flex: 1, padding: 8, backgroundColor: '#B7BECA'}}>
+                    </TFButtonBase>
+                    <TFButtonBase
+                        containerStyle={{flex: 1, margin: '0 8px'}}
+                        onClick={() => setCategory(SERVICE_CATEGORIES.FUND)}
+                    >
+                        <div style={{flex: 1, padding: 8, backgroundImage: SERVICE_CATEGORIES.FUND===category ? 'linear-gradient(#0045D1, #5185EE)' : 'linear-gradient(#B7BECA, #B7BECAAA)'}}>
                             <span style={{fontWeight: 'bold', color: 'white'}}>Fund</span>
                         </div>
-                    </ButtonBase>
-                    <ButtonBase containerStyle={{flex: 1}}>
-                        <div style={{flex: 1, padding: 8, backgroundColor: '#B7BECA'}}>
+                    </TFButtonBase>
+                    <TFButtonBase
+                        containerStyle={{flex: 1}}
+                        onClick={() => setCategory(SERVICE_CATEGORIES.ACCOUNTANCY)}
+                    >
+                        <div style={{flex: 1, padding: 8, backgroundImage: SERVICE_CATEGORIES.ACCOUNTANCY===category ? 'linear-gradient(#0045D1, #5185EE)' : 'linear-gradient(#B7BECA, #B7BECAAA)'}}>
                             <span style={{fontWeight: 'bold', color: 'white'}}>Accountance</span>
                         </div>
-                    </ButtonBase>
+                    </TFButtonBase>
                 </div>
             </Part>
             
             <Part>
                 <TextArea
-                    title='Explanation'
-                    placeholder='Text service explanation'
+                    title='Detail'
+                    placeholder='Text service detail'
+                    value={detail}
+                    onChange={e => setDetail(e.target.value)}
                 />
             </Part>
 
@@ -57,12 +74,14 @@ const Service = () => {
                 <Title>
                     Photos
                 </Title>
-                <PhotosUploader />
+                <PhotosUploader
+                    onChange={setPhotos}
+                />
             </Part>
 
             <ProfileInput
                 title='Video link (Ad)'
-                onShowInputDialog={() => setShowInputDialog(true)}
+                onChange={setVideos}
             />
         </Container>
     )

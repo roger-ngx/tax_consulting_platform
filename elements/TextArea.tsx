@@ -20,7 +20,7 @@ const Title = styled('span')({
     fontWeight: 'bold'
 })
 
-const TextArea = ({title, placeholder, value='', onChange}) => {
+const TextArea = ({title, placeholder, value='', onChange, maxLength=250}) => {
 
     return (
         <Component>
@@ -35,9 +35,10 @@ const TextArea = ({title, placeholder, value='', onChange}) => {
                 value={value}
                 onChange={onChange && throttle(onChange, 200, {trailing: false})}
                 placeholder={placeholder}
+                inputProps={{maxLength}}
             />
             <Counter>
-                {value.length}/250
+                {value.length}/{maxLength}
             </Counter>
         </Component>
     )

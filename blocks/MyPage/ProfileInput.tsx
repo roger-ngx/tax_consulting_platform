@@ -3,9 +3,10 @@ import { styled } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import CancelIcon from '@mui/icons-material/Cancel';
-import { map, range, get } from 'lodash';
+import { map, range, size, isEmpty, findIndex } from 'lodash';
 
 import CareerAddDialog from '../../dialogs/expert/CareerAddDialog';
+import { TextField } from '@mui/material';
 
 const Container = styled('div')({
     display: 'flex',
@@ -31,20 +32,30 @@ const CareerBox = styled('div')({
 
 type Props = {
     title: string;
-    onShowInputDialog: () => void;
-    content?: React.ReactElement
+    onChange: (values: string[]) => void;
 }
 
-const ProfileInput: React.FC<Props> = ({title, onShowInputDialog, content}) => {
+const ProfileInput: React.FC<Props> = ({title, onChange}) => {
 
-    const [ inputCount, setInputCount ] = useState(0);
-    const [ showInputDialog, setShowInputDialog ] = useState(false);
+    const [ inputCount, setInputCount ] = useState(1);
+    const [ values, setValues ] = useState<string[]>([]);
+
+    useEffect(() => {
+        onChange(values);
+    }, [values]);
+
+    const isEmptyInput = () => {
+        return inputCount > size(values) || findIndex(values, isEmpty) >= 0;
+    }
 
     return (
         <Container>
             <Horizontal>
                 <span style={{fontWeight: 'bold'}}>{ title }</span>
-                <IconButton style={{marginRight: -10}} onClick={() => setInputCount(inputCount + 1)}>
+                <IconButton
+                    style={{marginRight: -10}}
+                    onClick={() => !isEmptyInput && setInputCount(inputCount + 1)}
+                >
                     <AddBoxIcon sx={{color: '#0045D1'}} />
                 </IconButton>
             </Horizontal>
@@ -52,19 +63,14 @@ const ProfileInput: React.FC<Props> = ({title, onShowInputDialog, content}) => {
                 map(
                     range(0, inputCount), 
                     index => (
-                        <CareerBox onClick={onShowInputDialog}>
-                            {
-                                get(content, `${index}`) &&
-                                (
-                                    <>
-                                        <CancelIcon sx={{color: '#686868'}}/>
-                                        <span style={{marginLeft: 8}}>
-                                            { get(content, `${index}`) }
-                                        </span>
-                                    </>
-                                )
-                            }
-                        </CareerBox>
+                        <TextField
+                            style={{marginTop: index > 0 ? 8 : 0}}
+                            value={values[index]}
+                            onChange={e => {
+                                values[index] = e.target.value;
+                                setValues([...values]);
+                            }}
+                        />
                     )
                 )
             }

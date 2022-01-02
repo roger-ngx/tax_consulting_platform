@@ -1,13 +1,12 @@
 import React from 'react';
 import ButtonBase from '@mui/material/ButtonBase';
 
-function TFButtonBase({children, containerStyle={}, onClick, disabled}) {
+function TFButtonBase({children, containerStyle={alignSelf: 'flex-start'}, ...props}) {
 
   return (
     <ButtonBase
-      onClick={onClick}
-      disabled={disabled}
       style={containerStyle}
+      {...props}
     >
       <div
         style={{
@@ -15,7 +14,7 @@ function TFButtonBase({children, containerStyle={}, onClick, disabled}) {
           position: 'relative',
           cursor: 'pointer',
           userSelect: 'none',
-          flex: 1
+          flex: 1,
         }}
       >
         {children}
