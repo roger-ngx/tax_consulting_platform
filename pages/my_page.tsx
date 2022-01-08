@@ -6,6 +6,8 @@ import MyPageSideMenu from '../blocks/MyPage/MyPageSideMenu';
 import Profile from '../blocks/MyPage/Profile';
 import Service from '../blocks/MyPage/Service';
 import Price from '../blocks/MyPage/Price';
+import Reservation from '../blocks/MyPage/Reservation';
+import EnrollExpert from '../blocks/MyPage/EnrollExport';
 
 const Container = styled('div')({
     display: 'flex',
@@ -20,38 +22,30 @@ const Title = styled('span')({
 
 const MyPage = () => {
 
-    const [ selectedTab, setSelectedTab ] = useState('profile');
+    const [ selectedItem, setSelectedItem ] = useState();
 
     const handleTabChange = (event, newValue) => {
-        setSelectedTab(newValue);
+        setSelectedItem(newValue);
     };
 
     return (
         <Container>
             <div>
-                <MyPageSideMenu />
+                <MyPageSideMenu
+                    onSelectedItemChanged={setSelectedItem}
+                />
             </div>
             <div style={{flex: 1, marginLeft: 24}}>
-                <Title>Enroll Expert</Title>
-                <Tabs value={selectedTab} onChange={handleTabChange} aria-label="basic tabs example">
-                    <Tab label="Profile" value='profile'/>
-                    <Tab label="Service" value='service'/>
-                    <Tab label="Price" value='price'/>
-                </Tabs>
-                <div style={{width: '100%', backgroundColor: '#F6F8FB', padding: 24}}>
-                    {
-                        selectedTab === 'profile' &&
-                        <Profile />
-                    }
-                    {
-                        selectedTab === 'service' &&
-                        <Service />
-                    }
-                    {
-                        selectedTab === 'price' &&
-                        <Price />
-                    }
-                </div>
+                <Title>{selectedItem}</Title>
+                {
+                    selectedItem==='Reservation' &&
+                    <Reservation />
+                }
+
+                {
+                    selectedItem === 'Enroll Expert' &&
+                    <EnrollExpert />
+                }
             </div>
         </Container>
     )

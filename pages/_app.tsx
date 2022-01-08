@@ -12,7 +12,7 @@ import {persistor, store} from '../stores/store';
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 0 10%;
+  padding: 0 10% 200px;
 `
 
 function MyApp({ Component, pageProps }) {

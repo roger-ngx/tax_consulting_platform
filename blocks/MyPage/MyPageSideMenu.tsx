@@ -9,13 +9,23 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import InboxIcon from '@mui/icons-material/Inbox';
 import DraftsIcon from '@mui/icons-material/Drafts';
 
-export default function MyPageSideMenu() {
+export default function MyPageSideMenu({onSelectedItemChanged} : {onSelectedItemChanged: (string) => void}) {
+
+  const [ selectedItem, setSelectedItem ] = React.useState('Reservation');
+
+  React.useEffect(() => {
+    onSelectedItemChanged(selectedItem);
+  }, [selectedItem])
+
   return (
     <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
       <nav aria-label="main mailbox folders">
         <List>
           <ListItem disablePadding>
-            <ListItemButton>
+            <ListItemButton
+              selected={selectedItem==='Reservation'}
+              onClick={() => setSelectedItem('Reservation')}
+            >
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
@@ -23,7 +33,10 @@ export default function MyPageSideMenu() {
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton>
+            <ListItemButton
+              selected={selectedItem==='Enroll Expert'}          
+              onClick={() => setSelectedItem('Enroll Expert')}
+            >
               <ListItemIcon>
                 <DraftsIcon />
               </ListItemIcon>
@@ -31,7 +44,10 @@ export default function MyPageSideMenu() {
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton>
+            <ListItemButton
+              selected={selectedItem==='Like'}          
+              onClick={() => setSelectedItem('Like')}
+            >
               <ListItemIcon>
                 <FavoriteIcon />
               </ListItemIcon>

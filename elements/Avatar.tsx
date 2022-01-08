@@ -50,13 +50,14 @@ type Props = {
     size: number;
     src: string;
     active?: boolean;
-    name?: string
+    name?: string,
+    containerStyle?: object
 }
 
-const Avatar: React.FC<Props> = ({src='/assets/images/profile.png', size, active, name}) => {
+const Avatar: React.FC<Props> = ({src='/assets/images/profile.png', size, active, name, containerStyle}) => {
 
     return (
-        <Container>
+        <Container style={containerStyle}>
             <Div>
                 <ImageContainer size={size}>
                     <Image src={src} width={size} height={size} />

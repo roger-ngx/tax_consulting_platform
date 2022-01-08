@@ -12,6 +12,7 @@ import ExpertiseDetail from '../blocks/expert/ExpertiseDetail';
 import Link from 'next/link';
 import ServiceReview from '../blocks/expert/ServiceReview';
 import { useRouter } from 'next/router';
+import ExpertInfo from '../blocks/expert/Info';
 
 const Container = styled('div')({
     display: 'flex',
@@ -21,16 +22,6 @@ const Container = styled('div')({
 const Horizontal = styled('div')({
     display: 'flex',
     flexDirection: 'row'
-})
-
-const Info = styled('div')({
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    border: 'solid 1px #eee',
-    borderTopWidth: 0,
-    padding: '20px 0',
-    marginBottom: 20
 })
 
 const ColumnLeft = styled('div')({
@@ -75,10 +66,7 @@ const ExpertServiceDetail = () => {
                     <Grid item xs={12} sm={8}>
                         <ColumnLeft>
                             <ProfileHeader />
-                            <Info>
-                                <ServiceLocation />
-                                <ContactInfo />
-                            </Info>
+                            <ExpertInfo />
 
                             <Box sx={{ borderBottom: 1, borderColor: 'divider' }} style={{marginBottom: 24}}>
                                 <Tabs value={selectedTab} onChange={handleTabChange} aria-label="basic tabs example">

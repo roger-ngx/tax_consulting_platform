@@ -9,7 +9,12 @@ const ButtonContainer = styled('div')({
     borderRadius: 4
 })
 
-const GradientButton = ({text, containerStyle, ...props}) => (
+type Props = {
+    text: string,
+    containerStyle?: object
+}
+
+const GradientButton: React.FC<Props> = ({text, containerStyle={}, ...props}) => (
     <TFButtonBase
         containerStyle={containerStyle}
         {...props}

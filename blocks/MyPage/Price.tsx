@@ -8,6 +8,7 @@ import ProfileInput from './ProfileInput';
 import PriceAddDialog from '../../dialogs/expert/PriceAddDialog';
 import Price from '../../models/Price';
 import ProfilePriceInput from './ProfilePriceInput';
+import InfoCard from '../../elements/InfoCard';
 
 const Container = styled('div')({
 
