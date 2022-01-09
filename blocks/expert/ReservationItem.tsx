@@ -60,10 +60,12 @@ const ReservationItem : React.FC<Props> = ({date, time, content, status, isFinis
                 <span style={{margin: '16px 0'}}>{content}</span>
                 {
                     status==='Completed' &&
-                    <GradientButton
-                        text='leave a review'
-                        containerStyle={{maxWidth: 200}}
-                    />
+                    <Link href='/reservation?isFinished=true' passHref>
+                        <GradientButton
+                            text='Leave a review'
+                            containerStyle={{textAlign: 'center', maxWidth: 200}}
+                        />
+                    </Link>
                 }
             </Body>
             {

@@ -13,6 +13,7 @@ import Link from 'next/link';
 import ServiceReview from '../blocks/expert/ServiceReview';
 import { useRouter } from 'next/router';
 import ExpertInfo from '../blocks/expert/Info';
+import AboutService from '../blocks/expert/AboutService';
 
 const Container = styled('div')({
     display: 'flex',
@@ -75,6 +76,10 @@ const ExpertServiceDetail = () => {
                                     <Tab label="Review" />
                                 </Tabs>
                             </Box>
+                            {
+                                selectedTab === 0 &&
+                                <AboutService />
+                            }
                             {
                                 selectedTab === 1 &&
                                 <ExpertiseDetail />

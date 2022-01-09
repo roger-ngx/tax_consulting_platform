@@ -10,7 +10,8 @@ const Container = styled('div')({
     flexDirection: 'row',
     border: 'solid 1px #C7C7C7',
     padding: 16,
-    borderRadius: 4
+    borderRadius: 4,
+    userSelect: 'none',
 })
 
 const Horizontal = styled('div')({
@@ -36,7 +37,7 @@ const Price = styled('span')({
 const Card = () => {
 
     return (
-        <Container>
+        <Container style={{cursor: 'pointer'}}>
             <Profile />
             <Body>
                 <Horizontal>

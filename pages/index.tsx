@@ -45,7 +45,7 @@ const Home = () => {
                 <Card />
               </Grid>
             </Link>
-            <Link href='/expert_detail'>
+            <Link href='/expert_detail' >
               <Grid item xs={12} sm={6}>
                 <Card />
               </Grid>

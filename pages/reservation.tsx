@@ -6,8 +6,10 @@ import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import InsertCommentIcon from '@mui/icons-material/InsertComment';
 
 import ExpertInfo from '../blocks/expert/Info';
-import CancelReservationDialog from '../dialogs/expert/CancelReservationDialog';
-import ReservationTimeChangingDialog from '../dialogs/expert/ReservationTimeChangingDialog';
+import CancelReservationDialog from '../dialogs/user/CancelReservationDialog';
+import ReservationTimeChangingDialog from '../dialogs/user/ReservationTimeChangingDialog';
+import ExpertReviewDialog from '../dialogs/user/ExpertReviewDialog';
+import { useRouter } from 'next/router';
 
 const Container = styled('div')({
     display: 'flex',
@@ -115,10 +117,14 @@ const steps = [
     'Complete'
 ]
 
-const Reservation = () => {
+const Reservation = ({}) => {
 
     const [ openCancelDialog, setOpenCancelDialog ] = useState(false);
     const [ openDatetimeChangingDialog, setOpenDatetimeChangingDialog ] = useState(false);
+    const [ openReviewDialog, setOpenReviewDialog ] = useState(false);
+
+    const router = useRouter();
+    const { isFinished } = router.query;
 
     return (
         <Container>
@@ -146,10 +152,10 @@ const Reservation = () => {
                 <ButtonContainer>
                     <CalendarButton
                         variant='outlined'
-                        startIcon={<EventAvailableIcon />}
-                        onClick={() => setOpenDatetimeChangingDialog(true)}
+                        startIcon={!isFinished && <EventAvailableIcon />}
+                        onClick={() => isFinished ? setOpenReviewDialog(true) : setOpenDatetimeChangingDialog(true)}
                     >
-                        Change a date
+                        {isFinished ? 'Leave a review' : 'Change a date'}
                     </CalendarButton>
                     <ChattingButton
                         startIcon={<InsertCommentIcon />}
@@ -185,6 +191,11 @@ const Reservation = () => {
             <ReservationTimeChangingDialog
                 open={openDatetimeChangingDialog}
                 onClose={() => setOpenDatetimeChangingDialog(false)}
+                onSave={() => {}}
+            />
+            <ExpertReviewDialog
+                open={openReviewDialog}
+                onClose={() => setOpenReviewDialog(false)}
                 onSave={() => {}}
             />
         </Container>

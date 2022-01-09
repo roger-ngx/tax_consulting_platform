@@ -20,7 +20,23 @@ const Title = styled('span')({
     fontWeight: 'bold'
 })
 
-const TextArea = ({title, placeholder, value='', onChange, maxLength=250}) => {
+type Props = {
+    title?: string,
+    placeholder?: string,
+    value?: string,
+    onChange?: (value: string) => void,
+    maxLength: number
+}
+
+const TextArea: React.FC<Props> = ({title, placeholder, value='', onChange, maxLength=250}) => {
+
+    const onTextChanged = (e) => {
+        if(!onChange){
+            return;
+        }
+        const text = e.target.value;
+        onChange(text);
+    }
 
     return (
         <Component>
@@ -33,7 +49,7 @@ const TextArea = ({title, placeholder, value='', onChange, maxLength=250}) => {
                 multiline
                 rows={5}
                 value={value}
-                onChange={onChange && throttle(onChange, 200, {trailing: false})}
+                onChange={throttle(onTextChanged, 200, {trailing: false})}
                 placeholder={placeholder}
                 inputProps={{maxLength}}
             />

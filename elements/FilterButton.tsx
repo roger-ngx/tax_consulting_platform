@@ -20,7 +20,7 @@ type Props = {
     containerStyle?: object
 }
 
-const FilterButton: React.FC<Props> = ({text, active=false, activeIcon, startIcon, containerStyle={}}) => {
+const FilterButton: React.FC<Props> = ({text, active=false, activeIcon, startIcon, containerStyle={}, ...props}) => {
 
     return (
         <StyledButton
@@ -28,6 +28,7 @@ const FilterButton: React.FC<Props> = ({text, active=false, activeIcon, startIco
             active={active}
             startIcon={startIcon || (active && activeIcon)}
             style={containerStyle}
+            {...props}
         >
             {text}
         </StyledButton>

@@ -4,6 +4,8 @@ import { Box, Breadcrumbs, Grid, Paper, styled, Tab, Tabs, TextField } from '@mu
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import StaticDatePicker from '@mui/lab/StaticDatePicker';
+import EventAvailableIcon from '@mui/icons-material/EventAvailable';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 import PriceCard from '../blocks/expert/PriceCard';
 import ProfileHeader from '../blocks/expert/ProfileHeader';
@@ -25,7 +27,7 @@ const Container = styled('div')({
 
 const Horizontal = styled('div')({
     display: 'flex',
-    flexDirection: 'row'
+    flexDirection: 'row',
 })
 
 const UnWrapHorizontal = styled('div')({
@@ -113,17 +115,30 @@ const ExpertServiceReservation = () => {
                 </UnWrapHorizontal>
                 <Group>
                     <Horizontal>
-                        <Paper>
-                            <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                <StaticDatePicker
-                                    displayStaticWrapperAs="desktop"
-                                    value={selectedDate}
-                                    onChange={setSelectedDate}
-                                    openTo="day"
-                                    renderInput={(params) => <TextField {...params} />}
-                                />
-                            </LocalizationProvider>
-                        </Paper>
+                        <Column style={{marginRight: 32}}>
+                            <Horizontal style={{marginBottom: 4}}>
+                                <EventAvailableIcon style={{marginRight: 4}}/>
+                                <span>Date</span>
+                            </Horizontal>
+                            <Paper>
+                                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                    <StaticDatePicker
+                                        displayStaticWrapperAs="desktop"
+                                        value={selectedDate}
+                                        onChange={setSelectedDate}
+                                        openTo="day"
+                                        renderInput={(params) => <TextField {...params} />}
+                                    />
+                                </LocalizationProvider>
+                            </Paper>
+                        </Column>
+                        <Column>
+                            <Horizontal style={{marginBottom: 4}}>
+                                <AccessTimeIcon style={{marginRight: 4}}/>
+                                <span>Time</span>
+                            </Horizontal>
+                            
+                        </Column>
                     </Horizontal>
                 </Group>
                 <Group>
