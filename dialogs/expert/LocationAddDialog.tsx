@@ -24,35 +24,6 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-const BootstrapDialogTitle = (props) => {
-  const { children, onClose, ...other } = props;
-
-  return (
-    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
-      {children}
-      {onClose ? (
-        <IconButton
-          aria-label="close"
-          onClick={onClose}
-          sx={{
-            position: 'absolute',
-            right: 8,
-            top: 8,
-            color: (theme) => theme.palette.grey[500],
-          }}
-        >
-          <CloseIcon />
-        </IconButton>
-      ) : null}
-    </DialogTitle>
-  );
-};
-
-BootstrapDialogTitle.propTypes = {
-  children: PropTypes.node,
-  onClose: PropTypes.func.isRequired,
-};
-
 const Horizontal = styled('div')({
   height: '60vh',
   display: 'flex',
@@ -62,9 +33,9 @@ const Horizontal = styled('div')({
 
 type Props = {
   open: boolean;
-  states: State[];
-  onClose : () => {};
-  onSave : () => {}
+  states?: State[];
+  onClose : () => void;
+  onSave: (param: State[]) => void
 }
 
 const LocationAddDialog : React.FC<Props> = ({open, states=[], onClose, onSave}) => {

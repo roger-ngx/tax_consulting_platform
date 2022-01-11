@@ -1,12 +1,13 @@
 import React from 'react';
 import ButtonBase from '@mui/material/ButtonBase';
+import { ButtonProps } from '@mui/material';
 
-type Props = {
-  children: React.ReactChildren,
+type Props = ButtonProps & {
+  children: JSX.Element,
   containerStyle?: object
 }
 
-const TFButtonBase: React.FC<Props> = ({children, containerStyle={alignSelf: 'flex-start'}, ...props}) => {
+const TFButtonBase : React.FC<Props> = ({children, containerStyle, ...props}) => {
 
   return (
     <ButtonBase

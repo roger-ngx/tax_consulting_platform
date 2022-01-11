@@ -25,8 +25,12 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-const BootstrapDialogTitle = (props) => {
-  const { children, onClose, ...other } = props;
+type Props = {
+  children: JSX.Element,
+  onClose: () => void
+}
+
+const BootstrapDialogTitle: React.FC<Props> = ({ children, onClose, ...other }) => {
 
   return (
     <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
@@ -49,12 +53,13 @@ const BootstrapDialogTitle = (props) => {
   );
 };
 
-BootstrapDialogTitle.propTypes = {
-  children: PropTypes.node,
-  onClose: PropTypes.func.isRequired,
-};
+type CAD = {
+  open: boolean,
+  onClose: (e: any, reason?: string) => void,
+  onSave: (param: Certificate) => void
+}
 
-export default function CertificateAddDialog({open, onClose, onSave}) {
+const CertificateAddDialog : React.FC<CAD> = ({open, onClose, onSave}) => {
 
   const [ certName, setCertName ] = React.useState();
   const [ certAuthority, setCertAuthority ] = React.useState();
@@ -108,7 +113,7 @@ export default function CertificateAddDialog({open, onClose, onSave}) {
               style={{width: 400}}
               placeholder='Your certificate name'
               value={certName}
-              onChange={e => setCertName(e.target.value)}
+              onChange={(e: any) => setCertName(e.target.value)}
             />
 
             <Typography style={{marginTop: 24}}>
@@ -117,7 +122,7 @@ export default function CertificateAddDialog({open, onClose, onSave}) {
             <TextField
               variant='outlined'
               style={{width: 400}}
-              onChange={e => setCertAuthority(e.target.value)}
+              onChange={(e: any) => setCertAuthority(e.target.value)}
               value={certAuthority}
             />
 
@@ -126,3 +131,5 @@ export default function CertificateAddDialog({open, onClose, onSave}) {
     </div>
   );
 }
+
+export default CertificateAddDialog;

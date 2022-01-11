@@ -6,15 +6,9 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
 
 import Career from '../../models/Career';
-import { Rating, TextField } from '@mui/material';
-import { StarRateSharp } from '@mui/icons-material';
+import { Rating } from '@mui/material';
 import TextArea from '../../elements/TextArea';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -51,8 +45,8 @@ type Props = {
 }
 
 const ExpertReviewDialog: React.FC<Props> = ({open, onClose, onSave}) => {
-    const [ rate, setRate ] = useState();
-    const [ review, setReview ] = useState();
+    const [ rate, setRate ] = useState<number>();
+    const [ review, setReview ] = useState('');
 
     return (
         <BootstrapDialog
@@ -93,7 +87,7 @@ const ExpertReviewDialog: React.FC<Props> = ({open, onClose, onSave}) => {
             <Rating
                 name="simple-controlled"
                 value={rate}
-                onChange={(event, newValue) => {
+                onChange={(event: any, newValue: any) => {
                     setRate(newValue);
                 }}
                 style={{marginBottom: 24}}

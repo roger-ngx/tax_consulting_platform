@@ -1,10 +1,13 @@
 import { IconButton } from "@mui/material";
-import DialogTitle from '@mui/material/DialogTitle';
+import DialogTitle, { DialogTitleProps } from '@mui/material/DialogTitle';
 import CloseIcon from '@mui/icons-material/Close';
-import PropTypes from 'prop-types';
 
-const TFDialogTitle = (props) => {
-    const { children, onClose, ...other } = props;
+type Props = DialogTitleProps & {
+  children: JSX.Element,
+  onClose?: () => void
+}
+
+const TFDialogTitle : React.FC<Props> = ({children, onClose, ...other}) => {
   
     return (
       <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
@@ -25,11 +28,6 @@ const TFDialogTitle = (props) => {
         ) : null}
       </DialogTitle>
     );
-};
-  
-TFDialogTitle.propTypes = {
-    children: PropTypes.node,
-    onClose: PropTypes.func.isRequired,
 };
 
 export default TFDialogTitle;

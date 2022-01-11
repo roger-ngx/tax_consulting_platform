@@ -18,6 +18,7 @@ import { range } from 'lodash';
 
 import ProfilePhotoUpload from '../../elements/ProfilePhotoUpload';
 import Education, { EDUCATION_DEGREES } from '../../models/Education';
+import TFDialogTitle from './DialogTitle';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -28,42 +29,19 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-const BootstrapDialogTitle = (props) => {
-  const { children, onClose, ...other } = props;
-
-  return (
-    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
-      {children}
-      {onClose ? (
-        <IconButton
-          aria-label="close"
-          onClick={onClose}
-          sx={{
-            position: 'absolute',
-            right: 8,
-            top: 8,
-            color: (theme) => theme.palette.grey[500],
-          }}
-        >
-          <CloseIcon />
-        </IconButton>
-      ) : null}
-    </DialogTitle>
-  );
-};
-
-BootstrapDialogTitle.propTypes = {
-  children: PropTypes.node,
-  onClose: PropTypes.func.isRequired,
-};
-
 const Duration = styled('span')({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center'
 })
 
-export default function EducationAddDialog({open, onClose, onSave}) {
+type Props = {
+  open: boolean,
+  onClose: (e: any, reason?: string) => void,
+  onSave: (param: Education) => void
+}
+
+const EducationAddDialog : React.FC<Props> = ({open, onClose, onSave}) => {
 
   const [ university, setUniversity ] = React.useState('');
   const [ major, setMajor ] = React.useState('');
@@ -140,7 +118,7 @@ export default function EducationAddDialog({open, onClose, onSave}) {
             <Duration>
                 <Select
                   style={{flex: 1}}
-                  onChange={e => setStartYear(e.target.value)}    
+                  onChange={(e: any) => setStartYear(e.target.value)}    
                 >
                   {
                     range(1990, endYear || 2023).map(year => (
@@ -153,7 +131,7 @@ export default function EducationAddDialog({open, onClose, onSave}) {
                     <span style={{margin: '0 8px'}}>~</span>
                     <Select
                       style={{flex: 1}}
-                      onChange={e => setEndYear(e.target.value)}    
+                      onChange={(e: any) => setEndYear(e.target.value)}    
                     >
                       {
                         range(startYear || 1990, 2023).map(year => (
@@ -175,3 +153,5 @@ export default function EducationAddDialog({open, onClose, onSave}) {
     </div>
   );
 }
+
+export default EducationAddDialog;

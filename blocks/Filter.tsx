@@ -4,7 +4,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import FmdGoodIcon from '@mui/icons-material/FmdGood';
 
 import FilterButton from '../elements/FilterButton';
-import { MenuItem, Select } from '@mui/material';
+import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import LocationAddDialog from '../dialogs/expert/LocationAddDialog';
 
 const Container = styled('div')({
@@ -15,7 +15,7 @@ const Container = styled('div')({
 
 const Filter = () => {
 
-    const [ sortBy, setSortBy ] = useState(1);
+    const [ sortBy, setSortBy ] = useState('1');
     const [ showLocationSelectDialog, setShowLocationSelectDialog ] = useState(false);
 
     return (
@@ -44,16 +44,17 @@ const Filter = () => {
                     height: 36,
                     paddingRight: 16, paddingLeft: 16
                 }}
-                onChange={e => setSortBy(e.target.value)}
+                onChange={(e:SelectChangeEvent) => setSortBy(e.target.value)}
             >
-                <MenuItem value={1}>Most popular</MenuItem>
-                <MenuItem value={2}>Most recommended</MenuItem>
-                <MenuItem value={3}>Most responsive</MenuItem>
-                <MenuItem value={4}>Most reviews</MenuItem>
+                <MenuItem value='1'>Most popular</MenuItem>
+                <MenuItem value='2'>Most recommended</MenuItem>
+                <MenuItem value='3'>Most responsive</MenuItem>
+                <MenuItem value='4'>Most reviews</MenuItem>
             </Select>
             <LocationAddDialog
                 open={showLocationSelectDialog}
                 onClose={() => setShowLocationSelectDialog(false)}
+                onSave={() => {}}
             />
         </Container>
     )

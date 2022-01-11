@@ -47,7 +47,7 @@ const ProfileEducationInput: React.FC<Props> = () => {
         return education.university + ', ' + education.major + ', ' + education.duration;
     }
 
-    const deleteEducation = (index: number, e) => {
+    const deleteEducation = (index: number, e: Event) => {
         e.stopPropagation();
         
         educations.splice(index, 1);
@@ -76,7 +76,7 @@ const ProfileEducationInput: React.FC<Props> = () => {
                         <InputBox style={{marginTop: index > 0 ? 8 : 0}}  onClick={() => setShowInputDialog(index)}>
                             {
                                 !isEmpty(educations[index]) &&
-                                <IconButton onClick={(e) => deleteEducation(index, e)}>
+                                <IconButton onClick={(e: any) => deleteEducation(index, e)}>
                                     <CancelIcon sx={{color: '#686868'}}/>
                                 </IconButton>
                             }
@@ -87,7 +87,7 @@ const ProfileEducationInput: React.FC<Props> = () => {
             }
             <EducationAddDialog
                 open={showInputDialog>=0}
-                onClose={(e, reason) => {
+                onClose={(e: any, reason?: string) => {
                     if(reason==='backdropClick'){
                         return;
                     }

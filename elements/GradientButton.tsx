@@ -1,6 +1,6 @@
 import React from 'react';
 import { styled } from '@mui/system';
-import TFButtonBase from './ButtonBase';
+import TFButtonBase from './TFButtonBase';
 
 const ButtonContainer = styled('div')({
     backgroundImage: 'linear-gradient(#0045D1, #5185EE)',

@@ -5,7 +5,7 @@ import PhotosUploader from './PhotosUploader';
 import TextArea from '../../elements/TextArea';
 import PriceAddDialog from '../../dialogs/expert/PriceAddDialog';
 import { SERVICE_CATEGORIES } from '../../models/EnrollService';
-import TFButtonBase from '../../elements/ButtonBase';
+import TFButtonBase from '../../elements/TFButtonBase';
 
 const Container = styled('div')({
 
@@ -23,7 +23,7 @@ const Part = styled('div')({
 const Service = () => {
 
     const [ category, setCategory ] = useState(SERVICE_CATEGORIES.TAX);
-    const [ detail, setDetail ] = useState();
+    const [ detail, setDetail ] = useState('');
     const [ photos, setPhotos ] = useState<string[]>([]);
     const [ videos, setVideos ] = useState<string[]>([]);
 
@@ -66,7 +66,7 @@ const Service = () => {
                     title='Detail'
                     placeholder='Text service detail'
                     value={detail}
-                    onChange={e => setDetail(e.target.value)}
+                    onChange={setDetail}
                 />
             </Part>
 

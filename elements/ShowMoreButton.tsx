@@ -1,7 +1,7 @@
 import { styled } from '@mui/system';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-import TFButtonBase from './ButtonBase';
+import TFButtonBase from './TFButtonBase';
 
 const Container = styled('div')({
     display: 'flex',

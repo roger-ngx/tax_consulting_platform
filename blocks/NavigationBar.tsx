@@ -30,7 +30,7 @@ const Anchor = styled.a`
 const NavigationBar = () => {
     const [ openLogin, setOpenLogin ] = useState(false);
 
-    const user = useSelector(state => state.firebase.auth);
+    const user = useSelector((state: any) => state.firebase.auth);
     console.log('user', user);
 
     return (

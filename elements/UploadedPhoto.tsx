@@ -1,6 +1,6 @@
 import React from 'react';
 import CloseIcon from '@mui/icons-material/Close';
-import ButtonBase from './ButtonBase';
+import ButtonBase from './TFButtonBase';
 
 type Props = {
     src: string,

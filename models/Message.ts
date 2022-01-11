@@ -29,7 +29,7 @@ export class Message{
     }
 
     get time(){
-        if(!this.message.createdAt) return null;
+        if(!this.message.createdAt) return '';
 
         const createdAt = dayjs(this.message.createdAt.seconds * 1000);
 

@@ -14,14 +14,17 @@ const Notice = styled('div')(props => ({
     flexDirection: 'column',
     backgroundColor: '#EAEDF2',
     padding: 16,
-    ...props.containerStyle
 }))
 
 const Text = styled('span')({
     fontSize: 12
 })
 
-const InfoCard = ({containerStyle}) => {
+type Props ={
+    containerStyle?: object
+}
+
+const InfoCard = ({containerStyle={}}) => {
 
     return (
         <Notice style={containerStyle}>

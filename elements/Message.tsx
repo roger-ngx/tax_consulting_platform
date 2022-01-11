@@ -1,8 +1,11 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import dayjs, { Dayjs }  from 'dayjs'
 
-const Container = styled.div`
+type T = {
+    isMine: boolean
+}
+
+const Container = styled.div<T>`
     display: flex;
     ${
         props => props.isMine ? 
@@ -12,7 +15,7 @@ const Container = styled.div`
     }
 `
 
-const MessageContainer = styled.div`
+const MessageContainer = styled.div<T>`
     border-radius: 32px;
     padding: 8px 16px;
     align-self: flex-start;
@@ -26,11 +29,7 @@ const MessageContainer = styled.div`
     }
 `
 
-const Text = styled.span`
-
-`
-
-const TextTime = styled.span`
+const TextTime = styled.span<T>`
     font-size: 12px;
     color: #888;
     align-self: flex-end;
@@ -55,7 +54,7 @@ const Message: React.FC<Props> = ({text, time, isMine}) => {
     return(
         <Container isMine={isMine}>
             <MessageContainer isMine={isMine}>
-                <Text>{text}</Text> 
+                <div>{text}</div> 
             </MessageContainer>
             <TextTime isMine={isMine}>{time}</TextTime>
         </Container>

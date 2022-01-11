@@ -25,7 +25,7 @@ type Props = {
     placeholder?: string,
     value?: string,
     onChange?: (value: string) => void,
-    maxLength: number
+    maxLength?: number
 }
 
 const TextArea: React.FC<Props> = ({title, placeholder, value='', onChange, maxLength=250}) => {

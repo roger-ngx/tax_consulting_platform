@@ -6,21 +6,22 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { IconButton } from '@mui/material';
 import { saveAs } from 'file-saver';
 
-const HorizontalContainer = styled('div')(props => ({
+type HC = {
+    isMine?: boolean
+}
+const HorizontalContainer = styled('div')<HC>(props => ({
     display: 'flex',
     flexDirection: props.isMine ? 'row-reverse' : 'row',
     alignItems: 'center',
     marginRight: props.isMine ? 0 : '20%',
     marginLeft: props.isMine ? '20%' : 0,
-    // maxWidth: '80%'
 }))
 
-const Container = styled('div')(props => ({
+const Container = styled('div')<HC>(props => ({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#eee',
-    // alignSelf: 'flex-start',
     padding: 16,
     borderRadius: 4,
     marginRight: props.isMine ? 0 : 16,
@@ -35,21 +36,21 @@ const Time = styled('span')({
 })
 
 interface Props {
-    name: string;
-    size: string;
+    name?: string;
+    size?: number|string;
     progress?: number;
     downloadUrl?: string|undefined;
-    time: string;
-    isMine: boolean
+    time?: string;
+    isMine?: boolean
 }
 
 const FileUpload: React.FC<Props> = ({name, size, progress, time, downloadUrl, isMine}) => {
 
     const downloadFile = () => {
-        saveAs(downloadUrl);
+        downloadUrl && saveAs(downloadUrl);
     }
 
-    const dl = (url, filename) => {
+    const dl = (url: string, filename: string) => {
         var a = document.createElement('a');
         a.setAttribute('href',url);
         a.setAttribute('download', filename||'');
@@ -61,7 +62,16 @@ const FileUpload: React.FC<Props> = ({name, size, progress, time, downloadUrl, i
     return (
         <HorizontalContainer isMine={isMine}>
             <Container isMine={isMine}>
-                <span style={{padding: 8, height: 40, borderRadius: '50%', backgroundColor: '#666', marginRight: 4, fontSize: 0, marginRight: 8}}>
+                <span
+                    style={{
+                        padding: 8,
+                        height: 40,
+                        borderRadius: '50%',
+                        backgroundColor: '#666',
+                        marginRight: 4,
+                        fontSize: 0
+                    }}
+                >
                     <FeedIcon style={{color: 'white', margin: 'auto'}}/>
                 </span>
                 <div style={{flex: 1, display: 'flex', flexDirection: 'column', marginRight: 16}}>

@@ -1,18 +1,8 @@
 import React from 'react';
-import Button from '@mui/material/Button';
+import Button, { ButtonProps } from '@mui/material/Button';
 import { styled } from '@mui/system';
-import { SvgIconTypeMap } from '@mui/material';
 
-const StyledButton = styled(Button)(props => ({
-    borderRadius: 24,
-    borderColor: '#C7C7C7',
-    color: props.active ? '#0045D1' : '#333',
-    fontWeight: props.active ? 'bold' : '400',
-    textTransform: 'none',
-    ...props.style
-}))
-
-type Props = {
+type Props = ButtonProps & {
     text: string,
     active?: boolean,
     activeIcon?: React.ReactNode,
@@ -23,15 +13,21 @@ type Props = {
 const FilterButton: React.FC<Props> = ({text, active=false, activeIcon, startIcon, containerStyle={}, ...props}) => {
 
     return (
-        <StyledButton
+        <Button
             variant='outlined'
-            active={active}
             startIcon={startIcon || (active && activeIcon)}
-            style={containerStyle}
+            style={{
+                    borderRadius: 24,
+                    borderColor: '#C7C7C7',
+                    color: active ? '#0045D1' : '#333',
+                    fontWeight: active ? 'bold' : '400',
+                    textTransform: 'none',
+                    ...containerStyle
+            }}
             {...props}
         >
             {text}
-        </StyledButton>
+        </Button>
     )
 }
 

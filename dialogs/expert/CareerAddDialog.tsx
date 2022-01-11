@@ -26,8 +26,12 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-const BootstrapDialogTitle = (props) => {
-  const { children, onClose, ...other } = props;
+type BDT = {
+  children: JSX.Element,
+  onClose: () => void
+}
+
+const BootstrapDialogTitle: React.FC<BDT> = ({children, onClose, ...other}) => {
 
   return (
     <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
@@ -48,11 +52,6 @@ const BootstrapDialogTitle = (props) => {
       ) : null}
     </DialogTitle>
   );
-};
-
-BootstrapDialogTitle.propTypes = {
-  children: PropTypes.node,
-  onClose: PropTypes.func.isRequired,
 };
 
 const Duration = styled('span')({
@@ -134,7 +133,7 @@ const CareerAddDialog: React.FC<Props> = ({open, onClose, onSave}) => {
           <Duration>
             <Select
               style={{flex: 1}}
-              onChange={e => setStartYear(e.target.value)}
+              onChange={(e: any) => setStartYear(e.target.value)}
             >
               {
                 range(1990, endYear || 2023).map(year => (
@@ -147,7 +146,7 @@ const CareerAddDialog: React.FC<Props> = ({open, onClose, onSave}) => {
                 <span style={{margin: '0 8px'}}>~</span>
                 <Select
                   style={{flex: 1}}
-                  onChange={e => setEndYear(e.target.value)}            
+                  onChange={(e: any) => setEndYear(e.target.value)}            
                 >
                   {
                     range(startYear || 1990, 2023).map(year => (

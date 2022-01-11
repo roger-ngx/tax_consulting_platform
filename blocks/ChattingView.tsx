@@ -19,6 +19,7 @@ import ImageUpload from '../elements/ImageUpload';
 import { FileUpload } from '../stores/fileTranferSlice';
 import FileUploadView from '../elements/FileUpload';
 import User from '../models/User';
+import { RootState } from '../stores/store';
 
 const Container = styled.div`
     display: flex;
@@ -70,7 +71,7 @@ const ChatViewFooter = styled.div`
 
 const ThreadHeader = () => {
 
-    const user = useSelector(state => state.firebase.auth);
+    const user = useSelector((state: any) => state.firebase.auth);
     
     return (
         <div
@@ -87,7 +88,7 @@ const ThreadHeader = () => {
 
 const ThreadList = () => {
 
-    const userId = useSelector(state => state.firebase.auth.uid);
+    const userId = useSelector((state: any) => state.firebase.auth.uid);
     console.log('userId', userId);
 
     useFirestoreConnect([{
@@ -98,9 +99,9 @@ const ThreadList = () => {
         limit: 10
     }])
 
-    const chats = map(useSelector(({firestore}) => firestore.ordered.chats), chat => new ChatThread(chat));
+    const chats = map(useSelector((state: any) => state.firestore.ordered.chats), chat => new ChatThread(chat));
 
-    const currentThreadId = useSelector(state => state.messages.currentThreadId);
+    const currentThreadId = useSelector((state:any) => state.messages.currentThreadId);
 
     return (
         <ThreadsView>
@@ -123,12 +124,16 @@ const ThreadList = () => {
     )
 }
 
-const MessageList = ({chatId}) => {
+type Props = {
+    chatId: string
+}
+
+const MessageList : React.FC<Props> = ({chatId}) => {
     if(!chatId) return null;
 
     console.log('chatId', chatId);
 
-    const userId = useSelector(state => state.firebase.auth.uid);
+    const userId = useSelector((state: any) => state.firebase.auth.uid);
 
     useFirestoreConnect([{
         collection: 'chats',
@@ -140,14 +145,14 @@ const MessageList = ({chatId}) => {
         storeAs: 'messages',
     }])
 
-    const messages = map(useSelector(({firestore}) => firestore.ordered.messages), message => new Message(message));
+    const messages = map(useSelector((state: any) => state.firestore.ordered.messages), message => new Message(message));
 
-    const uploads: FileUpload[] = filter(useSelector(state => state.fileTransfer.uploadFiles), file => file.status === 'running');
+    const uploads: FileUpload[] = filter(useSelector((state: any) => state.fileTransfer.uploadFiles), file => file.status === 'running');
 
-    const messagesEndRef = useRef(null);
+    const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+        messagesEndRef?.current?.scrollIntoView({ behavior: "smooth" })
     }
     
     useEffect(() => {
@@ -221,8 +226,8 @@ const ChattingView = () => {
 
     const [ chattingUser, setChattingUser ] = useState<User>();
 
-    const currentChatId = useSelector(state => state.messages.currentThreadId);
-    const currentDesUser = useSelector(state => state.messages.currentDesUser);
+    const currentChatId = useSelector((state: any) => state.messages.currentThreadId);
+    const currentDesUser = useSelector((state: any) => state.messages.currentDesUser);
 
     useEffect(() => {
         if(currentDesUser){

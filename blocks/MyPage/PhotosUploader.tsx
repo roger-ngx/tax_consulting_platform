@@ -10,7 +10,11 @@ const Container = styled('div')({
     alignItems: 'center'
 })
 
-const PhotosUploader = ({onChange}) => {
+type Props = {
+    onChange: (param: string[]) => void
+}
+
+const PhotosUploader: React.FC<Props> = ({onChange}) => {
 
     const [ photoURIs, setPhotoURLs] = useState<string[]>([]);
 

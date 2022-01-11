@@ -2,7 +2,7 @@ import React from 'react';
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 
 type Props = {
-    locations: string[],
+
 }
 
 const AvailableTime: React.FC<Props> = () => {

@@ -99,7 +99,7 @@ const CancelReservationDialog: React.FC<Props> = ({open, onClose, onSave}) => {
                     defaultValue="female"
                     name="radio-buttons-group"
                     value={selectedReason}
-                    onChange={e => setSelectedReason(e.target.value)}
+                    onChange={(e: any) => setSelectedReason(e.target.value)}
                 >
                     <FormControlLabel value="1" control={<Radio />} label="Personal situation" />
                     <FormControlLabel value="2" control={<Radio />} label="Matched with other expert" />
@@ -113,7 +113,7 @@ const CancelReservationDialog: React.FC<Props> = ({open, onClose, onSave}) => {
                         rows={4}
                         multiline
                         value={etcReason}
-                        onChange={e => setEtcReason(e.target.value)}
+                        onChange={(e: any) => setEtcReason(e.target.value)}
                     />
                 }
             </FormControl>

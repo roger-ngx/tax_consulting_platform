@@ -1,7 +1,7 @@
 import { Radio } from '@mui/material';
 import { styled } from '@mui/system';
 import React from 'react';
-import TFButtonBase from '../../elements/ButtonBase';
+import TFButtonBase from '../../elements/TFButtonBase';
 
 const Container = styled('div')(props => ({
         border: 'solid 1px #C7C7C7',

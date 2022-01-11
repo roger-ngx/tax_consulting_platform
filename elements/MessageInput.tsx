@@ -15,7 +15,10 @@ const Container = styled.div`
     border-radius: 4px;
 `;
 
-const Button = styled.button`
+type T = {
+    active: boolean
+}
+const Button = styled.button<T>`
     border-radius: 4px;
     border: none;
     font-size: 12px;
@@ -43,13 +46,13 @@ const FileInput = styled.input`
 
 const MessageInput = () => {
 
-    const [ message, setMessage ] = useState();
+    const [ message, setMessage ] = useState('');
     const [ active, setActive ] = useState(false);
 
     const dispatch = useDispatch();
 
-    const srcUserId = useSelector(state => state.firebase.auth.uid);
-    const desUserId = useSelector(state => state.messages.currentDesUserId);
+    const srcUserId = useSelector((state: any) => state.firebase.auth.uid);
+    const desUserId = useSelector((state: any) => state.messages.currentDesUserId);
 
     useEffect(() => {
         if(size(message)){
@@ -60,7 +63,7 @@ const MessageInput = () => {
     const sendMessage = async () => {
         try{
             console.log('message', message)
-            size(message) && addMessage({srcUserId, desUserId, message});
+            size(message) > 0 && addMessage({srcUserId, desUserId, message});
             setMessage('');
         }catch(ex){
             console.log(ex)

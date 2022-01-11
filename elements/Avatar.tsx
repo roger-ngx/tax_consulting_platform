@@ -14,10 +14,6 @@ const Container = styled.div`
 const Div = styled.div`
     display: flex;
     position: relative;
-
-    ${
-        props => props.size && css`width: ${props.size}px; height: ${props.size}px`
-    }
 `
 
 const ImageContainer = styled.div`
@@ -28,7 +24,10 @@ const ImageContainer = styled.div`
     font-size: 0;
 `
 
-const Active = styled.div`
+type A = {
+    size: number
+}
+const Active = styled.div<A>`
     position: absolute;
     width: 12px;
     height: 12px;
@@ -59,7 +58,7 @@ const Avatar: React.FC<Props> = ({src='/assets/images/profile.png', size, active
     return (
         <Container style={containerStyle}>
             <Div>
-                <ImageContainer size={size}>
+                <ImageContainer>
                     <Image src={src} width={size} height={size} />
                 </ImageContainer>
                 {

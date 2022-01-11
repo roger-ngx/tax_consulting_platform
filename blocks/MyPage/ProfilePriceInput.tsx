@@ -39,7 +39,7 @@ const ProfilePriceInput: React.FC<Props> = () => {
     const [ showInputDialog, setShowInputDialog ] = useState(-1);
     const [ prices, setPrices ] = useState<Price[]>([]);
 
-    const deletePrice = (index: number, e) => {
+    const deletePrice = (index: number, e: Event) => {
         e.stopPropagation();
         
         prices.splice(index, 1);
@@ -69,7 +69,7 @@ const ProfilePriceInput: React.FC<Props> = () => {
                                     <>
                                         <IconButton
                                             style={{alignSelf: 'flex-start'}}
-                                            onClick={(e) => deletePrice(index, e)}
+                                            onClick={(e: any) => deletePrice(index, e)}
                                         >
                                             <CancelIcon sx={{color: '#686868'}}/>
                                         </IconButton>

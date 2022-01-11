@@ -9,7 +9,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import InboxIcon from '@mui/icons-material/Inbox';
 import DraftsIcon from '@mui/icons-material/Drafts';
 
-export default function MyPageSideMenu({onSelectedItemChanged} : {onSelectedItemChanged: (string) => void}) {
+export default function MyPageSideMenu({onSelectedItemChanged} : {onSelectedItemChanged: (param: string) => void}) {
 
   const [ selectedItem, setSelectedItem ] = React.useState('Reservation');
 

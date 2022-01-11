@@ -45,7 +45,7 @@ const ProfileCareerInput = () => {
         return career.company + ', ' + career.position + ', ' + career.duration;
     }
 
-    const deleteCareer = (index: number, e) => {
+    const deleteCareer = (index: number, e: MouseEvent) => {
         e.stopPropagation();
         
         careers.splice(index, 1);
@@ -72,7 +72,7 @@ const ProfileCareerInput = () => {
                             {
                                 !isEmpty(careers[index]) &&
                                 <IconButton
-                                    onClick={(e) => deleteCareer(index, e)}
+                                    onClick={(e: any) => deleteCareer(index, e)}
                                 >
                                     <CancelIcon sx={{color: '#686868'}}/>
                                 </IconButton>

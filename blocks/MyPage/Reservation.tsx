@@ -28,7 +28,7 @@ const Reservation = () => {
 
     const [ selectedTab, setSelectedTab ] = useState('inprogress');
 
-    const handleTabChange = (event, newValue) => {
+    const handleTabChange = (event: any, newValue: string) => {
         setSelectedTab(newValue);
     };
 

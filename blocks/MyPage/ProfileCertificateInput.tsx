@@ -48,7 +48,7 @@ const ProfileCertificateInput: React.FC<Props> = () => {
         return certificate.name + ', ' + certificate.authority;
     }
 
-    const deleteCertificate = (index: number, e) => {
+    const deleteCertificate = (index: number, e: Event) => {
         e.stopPropagation();
         
         certificates.splice(index, 1);
@@ -77,7 +77,7 @@ const ProfileCertificateInput: React.FC<Props> = () => {
                         <InputBox style={{marginTop: index > 0 ? 8 : 0}} onClick={() => setShowInputDialog(index)}>
                             {
                                 !isEmpty(certificates[index]) &&
-                                <IconButton onClick={(e) => deleteCertificate(index, e)}>
+                                <IconButton onClick={(e: any) => deleteCertificate(index, e)}>
                                     <CancelIcon sx={{color: '#686868'}}/>
                                 </IconButton>
                             }
@@ -88,7 +88,7 @@ const ProfileCertificateInput: React.FC<Props> = () => {
             }
             <CertificateAddDialog
                 open={showInputDialog>=0}
-                onClose={(e, reason) => {
+                onClose={(e: any, reason?: string) => {
                     if(reason==='backdropClick'){
                         return;
                     }

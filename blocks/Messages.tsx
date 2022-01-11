@@ -11,7 +11,10 @@ const Container = styled.div`
     flex-direction: row;
 `
 
-const MessagesContainer = styled.div`
+type MC ={
+    isMine: boolean
+}
+const MessagesContainer = styled.div<MC>`
     flex: 1;
     display: flex;
     flex-direction: column;

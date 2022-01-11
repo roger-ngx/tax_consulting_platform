@@ -21,7 +21,7 @@ const EnrollExpert = () => {
 
     const [ selectedTab, setSelectedTab ] = useState('profile');
 
-    const handleTabChange = (event, newValue) => {
+    const handleTabChange = (event:any, newValue: string) => {
         setSelectedTab(newValue);
     };
 

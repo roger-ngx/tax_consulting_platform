@@ -18,7 +18,7 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 
 import GradientButton from '../../elements/GradientButton';
 import Career from '../../models/Career';
-import TFButtonBase from '../../elements/ButtonBase';
+import TFButtonBase from '../../elements/TFButtonBase';
 import InfoCard from '../../elements/InfoCard';
 import { LocalizationProvider, StaticDatePicker } from '@mui/lab';
 
@@ -125,7 +125,7 @@ const ReservationTimeChangingDialog: React.FC<Props> = ({open, onClose, onSave})
                     <StaticDatePicker
                         displayStaticWrapperAs="desktop"
                         value={selectedDate}
-                        onChange={setSelectedDate}
+                        onChange={(value: any) => setSelectedDate(value)}
                         openTo="day"
                         renderInput={(params) => <TextField {...params} />}
                     />

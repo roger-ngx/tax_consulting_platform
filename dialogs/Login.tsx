@@ -4,7 +4,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import { styled } from '@mui/system';
 import { useDispatch } from 'react-redux';
 
-import ButtonBase from '../elements/ButtonBase';
+import ButtonBase from '../elements/TFButtonBase';
 import { loginWithGoogle } from '../firebase/login';
 
 const Content = styled('div')({
@@ -14,11 +14,12 @@ const Content = styled('div')({
     marginBottom: 24
 })
 
-const LoginButton = styled(Button)({
+type Props = {
+    open: boolean, 
+    onClose: () => void
+}
 
-})
-
-const Login = ({open, onClose}) => {
+const Login : React.FC<Props> = ({open, onClose}) => {
 
     const dispatch = useDispatch();
     const [ processing, setProcessing ] = useState(false);

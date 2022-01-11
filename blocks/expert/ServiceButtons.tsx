@@ -3,13 +3,12 @@ import { IconButton } from '@mui/material';
 import { styled } from '@mui/system';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 
-import TFButtonBase from '../../elements/ButtonBase';
+import TFButtonBase from '../../elements/TFButtonBase';
 
 const Container = styled('div')(props => ({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    ...props.containerStyle
 }))
 
 const ButtonContainer = styled('div')({
@@ -20,13 +19,15 @@ const ButtonContainer = styled('div')({
 })
 
 type Props = {
-    containerStyle?:object
+    containerStyle?:object,
+    goToReservation: () => void,
+    goToChat: () => void
 }
 
 const ServiceButtons: React.FC<Props> = ({containerStyle, goToReservation, goToChat}) => {
 
     return (
-        <Container containerStyle={containerStyle}>
+        <Container style={containerStyle}>
             <IconButton
                 onClick={goToChat}
             >

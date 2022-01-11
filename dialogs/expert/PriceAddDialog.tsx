@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 
 import { map, throttle } from 'lodash';
-import TFButtonBase from '../../elements/ButtonBase';
+import TFButtonBase from '../../elements/TFButtonBase';
 import Price from '../../models/Price';
 import { Input, InputAdornment } from '@mui/material';
 
@@ -24,35 +24,6 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-const BootstrapDialogTitle = (props) => {
-  const { children, onClose, ...other } = props;
-
-  return (
-    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
-      {children}
-      {onClose ? (
-        <IconButton
-          aria-label="close"
-          onClick={onClose}
-          sx={{
-            position: 'absolute',
-            right: 8,
-            top: 8,
-            color: (theme) => theme.palette.grey[500],
-          }}
-        >
-          <CloseIcon />
-        </IconButton>
-      ) : null}
-    </DialogTitle>
-  );
-};
-
-BootstrapDialogTitle.propTypes = {
-  children: PropTypes.node,
-  onClose: PropTypes.func.isRequired,
-};
-
 const Unit = styled('span')({
     display: 'flex',
     flexDirection: 'row',
@@ -60,7 +31,11 @@ const Unit = styled('span')({
     justifyContent: 'space-between'
 })
 
-const UnitButton = styled('div')( props => ({
+type UB = {
+  active: boolean
+}
+
+const UnitButton = styled('div')<UB>( props => ({
     backgroundColor: props.active ? '#D8E5FF' : '#EAEDF2',
     padding: '12px 24px',
     fontSize: 16,
@@ -78,11 +53,17 @@ const Group = styled('div')({
 
 const PRICE_UNITS = ['per hour', 'per day', 'per case', 'etc'];
 
-export default function PriceAddDialog({open, onClose, onSave}) {
+type Props = {
+  open: boolean;
+  onClose: () => void,
+  onSave: (price: Price) => void
+}
+
+const PriceAddDialog: React.FC<Props> = ({open, onClose, onSave}) => {
 
   const [ title, setTitle ] = useState();
   const [ detail, setDetail ] = useState();
-  const [ priceUnit, setPriceUnit ] = useState();
+  const [ priceUnit, setPriceUnit ] = useState('');
   const [ price, setPrice ] = useState();
 
   return (
@@ -147,7 +128,7 @@ export default function PriceAddDialog({open, onClose, onSave}) {
                 {
                     map(PRICE_UNITS, (unit: string, index: number) => (<div style={{marginRight: index==3?0:8}}>
                       <TFButtonBase
-                        onClick={() => unit===priceUnit ? setPriceUnit() : setPriceUnit(unit)}
+                        onClick={() => unit===priceUnit ? setPriceUnit('') : setPriceUnit(unit)}
                       >
                         <UnitButton active={unit==priceUnit}>
                           <span>{unit}</span>
@@ -180,3 +161,5 @@ export default function PriceAddDialog({open, onClose, onSave}) {
     </div>
   );
 }
+
+export default PriceAddDialog;
