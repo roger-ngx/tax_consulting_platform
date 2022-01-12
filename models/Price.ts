@@ -1,6 +1,12 @@
-export default class Price{
-    constructor(private price: object){
 
+interface IPrice {
+    title?: string,
+    detail?: string,
+    unit?: string,
+    price?: number
+}
+export default class Price{
+    constructor(private price: IPrice){
     }
 
     get title(){

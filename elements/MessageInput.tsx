@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, KeyboardEvent } from 'react';
 import styled, { css } from 'styled-components';
 import IconButton from '@mui/material/IconButton';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
@@ -70,8 +70,7 @@ const MessageInput = () => {
         }
     }
 
-    const onKeyPress = e => {
-        console.log(e.key);
+    const onKeyPress = (e: KeyboardEvent) => {
         if(e.key==='Enter'){
             sendMessage();
         }
@@ -99,7 +98,7 @@ const MessageInput = () => {
                     id='icon-button-file'
                     type='file'
                     onChange={onFileChange}
-                    onClick={e => e.target.value = ''}
+                    onClick={(e: any) => e.target.value = ''}
                 />
                 <IconButton color="primary" aria-label="upload picture" component="span">
                     <AttachFileIcon />

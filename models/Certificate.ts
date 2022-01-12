@@ -1,5 +1,9 @@
+interface ICertificate{
+    name?: string,
+    authority?: string
+}
 export default class Certificate{
-    constructor(private certificate: object){
+    constructor(private certificate: ICertificate){
 
     }
 

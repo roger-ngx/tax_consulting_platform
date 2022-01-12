@@ -63,7 +63,7 @@ const ExpertServiceReservation = () => {
     const [ selectedTab, setSelectedTab ] = useState(0);
     const [selectedDate, setSelectedDate] = useState(new Date());
 
-    const handleTabChange = (event, newValue) => {
+    const handleTabChange = (event: Event, newValue: number) => {
         setSelectedTab(newValue);
     };
 
@@ -71,15 +71,15 @@ const ExpertServiceReservation = () => {
         <Container>
             <Breadcrumbs separator=">" aria-label="breadcrumb" style={{marginBottom: 24}}>
                 <Link
-                    underline="hover"
-                    color="inherit"
+                    // underline="hover"
+                    // color="inherit"
                     href="/"
                 >
                     Find Expert
                 </Link>
                 <Link
-                    underline="hover"
-                    color="inherit"
+                    // underline="hover"
+                    // color="inherit"
                     href="/expert_detail"
                 >
                     Expert Profile
@@ -125,7 +125,7 @@ const ExpertServiceReservation = () => {
                                     <StaticDatePicker
                                         displayStaticWrapperAs="desktop"
                                         value={selectedDate}
-                                        onChange={setSelectedDate}
+                                        onChange={(date: any) => setSelectedDate(date)}
                                         openTo="day"
                                         renderInput={(params) => <TextField {...params} />}
                                     />

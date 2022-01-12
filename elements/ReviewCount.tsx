@@ -6,7 +6,6 @@ const Container = styled('div')(props => ({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    ...props.containerStyle
 }))
 
 type Props = {

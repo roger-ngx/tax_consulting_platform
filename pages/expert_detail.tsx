@@ -43,7 +43,7 @@ const ExpertServiceDetail = () => {
 
     const [ selectedTab, setSelectedTab ] = useState(0);
 
-    const handleTabChange = (event, newValue) => {
+    const handleTabChange = (event: Event, newValue: number) => {
         setSelectedTab(newValue);
     };
 
@@ -51,8 +51,8 @@ const ExpertServiceDetail = () => {
         <Container>
             <Breadcrumbs separator=">" aria-label="breadcrumb" style={{marginBottom: 24}}>
                 <Link
-                    underline="hover"
-                    color="inherit"
+                    // underline="hover"
+                    // color="inherit"
                     href="/"
                 >
                     Find Expert
@@ -70,7 +70,10 @@ const ExpertServiceDetail = () => {
                             <ExpertInfo />
 
                             <Box sx={{ borderBottom: 1, borderColor: 'divider' }} style={{marginBottom: 24}}>
-                                <Tabs value={selectedTab} onChange={handleTabChange} aria-label="basic tabs example">
+                                <Tabs
+                                    value={selectedTab}
+                                    // onChange={handleTabChange}
+                                >
                                     <Tab label="Service" />
                                     <Tab label="Expertise" />
                                     <Tab label="Review" />

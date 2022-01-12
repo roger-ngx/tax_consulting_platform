@@ -18,13 +18,13 @@ export const messageSlice = createSlice({
     name: 'messageSlide',
     initialState,
     reducers: {
-        setCurrentDesUserId: (state :MessageState, action: PayloadAction<string>) => {
+        setCurrentDesUserId: (state: any, action: PayloadAction<string>) => {
             state.currentDesUserId = action.payload;
         },
-        setCurrentThreadId: (state :MessageState, action: PayloadAction<string>) => {
+        setCurrentThreadId: (state :any, action: PayloadAction<string>) => {
             state.currentThreadId = action.payload;
         },
-        setCurrentDesUser: (state :MessageState, action: PayloadAction<User>) => {
+        setCurrentDesUser: (state :any, action: PayloadAction<User>) => {
             state.currentDesUser = action.payload;
         }
     }

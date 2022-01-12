@@ -5,8 +5,17 @@ export enum EDUCATION_DEGREES {
     DOCTOR
 }
 
+interface IEducation {
+    university?: string,
+    major?: string,
+    degree?: EDUCATION_DEGREES,
+    startYear?: number,
+    endYear?: number,
+    isStudyNow?: boolean
+}
+
 export default class Education{
-    constructor(private education: object){
+    constructor(private education: IEducation){
 
     }
 

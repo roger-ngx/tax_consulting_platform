@@ -16,7 +16,12 @@ const Container = styled.div`
     position: relative;
     cursor: pointer;
 `
-const ThreadContainer = styled.div`
+
+type TC = {
+    selected: boolean
+}
+
+const ThreadContainer = styled.div<TC>`
     display: flex;
     flex-direction: row;
     background-color: #f4f4f4;  
@@ -103,18 +108,18 @@ type Props = {
 }
 
 
-const MessageThread : React.FC<Props> = ({id, desUserId, time, getLastMessage, unReadCount, selected=false}) => {
+const MessageThread : React.FC<Props> = ({id, desUserId, time, getLastMessage, unReadCount=0, selected=false}) => {
     if(!desUserId){
         return null;
     }
 
     const dispatch = useDispatch();
 
-    const userId = useSelector(state => state.firebase.auth.uid);
+    const userId = useSelector((state: any) => state.firebase.auth.uid);
 
-    const [ width, setWidth ] = useState();
+    const [ width, setWidth ] = useState<number>();
     const [ desUser, setDesUser ] = useState<User>();
-    const [ lastMessage, setLastMessage ] = useState();
+    const [ lastMessage, setLastMessage ] = useState<string>();
     const [ threadSelected, setThreadSelected ] = useState(false);
 
     const onSelectThread = () => {
@@ -130,7 +135,7 @@ const MessageThread : React.FC<Props> = ({id, desUserId, time, getLastMessage, u
     const ref = useRef(null);
 
     useEffect(() => {
-        ref && setWidth(ref.current.offsetWidth - 70);
+        ref.current && setWidth((ref.current as HTMLElement).offsetWidth - 70);
     }, [ref])
 
     useEffect(() => {
@@ -143,7 +148,7 @@ const MessageThread : React.FC<Props> = ({id, desUserId, time, getLastMessage, u
     useEffect(() => {
         if(desUser){
             threadSelected && dispatch(setCurrentDesUser(desUser.original));
-            !lastMessage && setLastMessage(getLastMessage && getLastMessage(userId, desUser.name));
+            !lastMessage && setLastMessage(getLastMessage ? getLastMessage(userId, desUser.name): '');
         }
     }, [desUser, threadSelected]);
 

@@ -30,7 +30,7 @@ type Props = {
 
 const TextArea: React.FC<Props> = ({title, placeholder, value='', onChange, maxLength=250}) => {
 
-    const onTextChanged = (e) => {
+    const onTextChanged = (e: any) => {
         if(!onChange){
             return;
         }

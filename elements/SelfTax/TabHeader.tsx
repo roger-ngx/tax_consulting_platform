@@ -1,18 +1,22 @@
 import React from 'react';
 import { styled } from '@mui/system';
 
-const Container = styled('div')(props => ({
+type T = {
+    active: boolean
+}
+
+const Container = styled('div')<T>(props => ({
     backgroundColor: props.active ? '#414854' : '#EAEDF2',
     padding: '24px 40px',
     display: 'inline-block',
 }));
 
-const Text = styled('div')(props => ({
+const Text = styled('div')<T>(props => ({
     color: props.active ? 'white' : '#9B9B9B',
     position: 'relative'
 }));
 
-const Index = styled('div')(props => ({
+const Index = styled('div')<T>(props => ({
     backgroundColor: props.active ? 'white' : '#414854',
     color: props.active ? '#414854' : 'white',
     position: 'absolute',
@@ -27,8 +31,6 @@ type Props = {
     active: boolean;
     index: number;
 }
-
-
 
 const TabHeader: React.FC<Props> = ({text, active, index}) => {
 

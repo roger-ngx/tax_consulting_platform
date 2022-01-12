@@ -1,7 +1,11 @@
 import React from 'react';
 import { styled } from '@mui/system';
 
-const Container = styled('div')(props => ({
+type T = {
+    active: boolean
+}
+
+const Container = styled('div')<T>(props => ({
     backgroundColor: props.active ? '#0045D1' : '#EAEDF2',
     padding: '4px 8px',
     borderRadius: 16,
@@ -9,7 +13,7 @@ const Container = styled('div')(props => ({
     ...props.style
 }));
 
-const Text = styled('div')(props => ({
+const Text = styled('div')<T>(props => ({
     color: props.active ? 'white' : '#888',
     whiteSpace: 'nowrap'
 }));

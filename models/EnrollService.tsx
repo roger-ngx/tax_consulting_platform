@@ -4,8 +4,15 @@ export const enum SERVICE_CATEGORIES {
     ACCOUNTANCY
 }
 
+interface IEnrollService {
+    category: string,
+    detail: string,
+    images: string,
+    videos: string[]
+}
+
 export default class EnrollService {
-    constructor(private service: object){
+    constructor(private service: IEnrollService){
 
     }
 

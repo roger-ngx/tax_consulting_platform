@@ -1,6 +1,13 @@
+interface ICarrer {
+    company: string,
+    position: string,
+    startYear: number,
+    endYear?: number,
+    isWorkingNow?: boolean;
+}
+
 export default class Career {
-    constructor(private career: object){
-        console.log(career);
+    constructor(private career: ICarrer){
     }
 
     get company(){

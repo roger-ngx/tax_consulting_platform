@@ -1,10 +1,11 @@
-import '../styles/globals.css'
+import React, { ReactNode } from 'react';
 import { Provider } from 'react-redux';
 import { ReactReduxFirebaseProvider } from 'react-redux-firebase'
 import { createFirestoreInstance } from 'redux-firestore';
 import { PersistGate } from 'redux-persist/integration/react'
 import styled from 'styled-components';
 
+import '../styles/globals.css'
 import NavigationBar from '../blocks/NavigationBar';
 import firebase from '../firebase/firebaseInit';
 import {persistor, store} from '../stores/store';
@@ -15,7 +16,12 @@ const Container = styled.div`
   padding: 0 10% 200px;
 `
 
-function MyApp({ Component, pageProps }) {
+type Props = {
+  Component: any,
+  pageProps: any
+}
+
+const MyApp : React.FC<Props> = ({ Component, pageProps }) => {
 
   // react-redux-firebase config
   const rrfConfig = {

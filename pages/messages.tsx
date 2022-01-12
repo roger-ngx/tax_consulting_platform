@@ -14,7 +14,7 @@ const Container =styled.div`
 
 const Messages = () => {
 
-  const uid = useSelector(state => state.firebase.auth.uid);
+  const uid = useSelector((state: any) => state.firebase.auth.uid);
 
   useEffect(() => {
     if(uid){

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import ButtonBase from './TFButtonBase';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import { styled } from '@mui/system';
@@ -7,9 +7,15 @@ const Input = styled('input')({
     display: 'none',
 });
 
-const PhotoUploader = ({onChange, size}) => {
+type Props = {
+    onChange: (param: any) => void,
+    size: number
+}
 
-    const uploadFile = e => {
+const PhotoUploader: React.FC<Props> = ({onChange, size}) => {
+
+    const uploadFile = (e: any) => {
+
         const file: File = e.target.files[0];
 
         if (file) {

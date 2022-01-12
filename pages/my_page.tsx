@@ -22,9 +22,9 @@ const Title = styled('span')({
 
 const MyPage = () => {
 
-    const [ selectedItem, setSelectedItem ] = useState();
+    const [ selectedItem, setSelectedItem ] = useState<string>();
 
-    const handleTabChange = (event, newValue) => {
+    const handleTabChange = (event: Event, newValue: any) => {
         setSelectedItem(newValue);
     };
 
@@ -32,7 +32,7 @@ const MyPage = () => {
         <Container>
             <div>
                 <MyPageSideMenu
-                    onSelectedItemChanged={setSelectedItem}
+                    onSelectedItemChanged={(item: string) => setSelectedItem(item)}
                 />
             </div>
             <div style={{flex: 1, marginLeft: 24}}>

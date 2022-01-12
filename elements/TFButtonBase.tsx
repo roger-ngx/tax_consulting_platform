@@ -1,16 +1,17 @@
 import React from 'react';
-import ButtonBase from '@mui/material/ButtonBase';
+import Button from '@mui/material/Button';
 import { ButtonProps } from '@mui/material';
 
 type Props = ButtonProps & {
   children: JSX.Element,
-  containerStyle?: object
+  containerStyle?: object,
+  component?: string
 }
 
 const TFButtonBase : React.FC<Props> = ({children, containerStyle, ...props}) => {
 
   return (
-    <ButtonBase
+    <Button
       style={containerStyle}
       {...props}
     >
@@ -25,7 +26,7 @@ const TFButtonBase : React.FC<Props> = ({children, containerStyle, ...props}) =>
       >
         {children}
       </div>
-    </ButtonBase>
+    </Button>
   );
 }
 

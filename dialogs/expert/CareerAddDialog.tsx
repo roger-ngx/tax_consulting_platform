@@ -70,8 +70,8 @@ const CareerAddDialog: React.FC<Props> = ({open, onClose, onSave}) => {
 
   const [ company, setCompany ] = React.useState('');
   const [ position, setPosition ] = React.useState('');
-  const [ startYear, setStartYear ] = React.useState();
-  const [ endYear, setEndYear ] = React.useState();
+  const [ startYear, setStartYear ] = React.useState<number>();
+  const [ endYear, setEndYear ] = React.useState<number>();
   const [ isWorkingNow, setWorkingNow ] = React.useState(false);
 
   return (
@@ -98,7 +98,7 @@ const CareerAddDialog: React.FC<Props> = ({open, onClose, onSave}) => {
             <Button
                 variant='contained'
                 color='primary'
-                onClick={() => onSave(new Career({company, position, startYear, endYear, isWorkingNow}))}
+                onClick={() => startYear && onSave(new Career({company, position, startYear, endYear, isWorkingNow}))}
             >
                 Save
             </Button>

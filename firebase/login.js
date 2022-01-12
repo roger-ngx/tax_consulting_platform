@@ -1,9 +1,9 @@
 import { Dispatch } from '@reduxjs/toolkit';
 import dayjs from 'dayjs';
-import firebase from '../firebase/firebaseInit';
+import firebase from './firebaseInit';
 import { setUserCredential } from '../stores/userInfoSlide';
 
-export const loginWithGoogle = ({dispatch} : {dispatch: Dispatch}) => {
+export const loginWithGoogle = ({dispatch}) => {
 
     return new Promise((resolve, reject) => {
 
@@ -66,7 +66,7 @@ export const loginWithGoogle = ({dispatch} : {dispatch: Dispatch}) => {
     })
 }
 
-export const updateOnlineStatus = async (uid: string) => {
+export const updateOnlineStatus = async (uid) => {
 
     try{
         await firebase.firestore().collection('users').doc(uid).update({

@@ -1,6 +1,10 @@
-export default class User{
-    constructor(private user: object){
+interface IUser {
+    displayName: string,
+    photoURL: string
+}
 
+export default class User{
+    constructor(private user: any){
     }
 
     get original(){
