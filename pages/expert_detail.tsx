@@ -43,7 +43,7 @@ const ExpertServiceDetail = () => {
 
     const [ selectedTab, setSelectedTab ] = useState(0);
 
-    const handleTabChange = (event: Event, newValue: number) => {
+    const handleTabChange = (event: any, newValue: any) => {
         setSelectedTab(newValue);
     };
 
@@ -72,7 +72,7 @@ const ExpertServiceDetail = () => {
                             <Box sx={{ borderBottom: 1, borderColor: 'divider' }} style={{marginBottom: 24}}>
                                 <Tabs
                                     value={selectedTab}
-                                    // onChange={handleTabChange}
+                                    onChange={handleTabChange}
                                 >
                                     <Tab label="Service" />
                                     <Tab label="Expertise" />

@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from '@mui/material/Button';
+import ButtonBase from '@mui/material/ButtonBase';
 import { ButtonProps } from '@mui/material';
 
 type Props = ButtonProps & {
@@ -8,11 +8,13 @@ type Props = ButtonProps & {
   component?: string
 }
 
-const TFButtonBase : React.FC<Props> = ({children, containerStyle, ...props}) => {
+const TFButtonBase : React.FC<Props> = ({children, containerStyle={}, ...props}) => {
 
   return (
-    <Button
-      style={containerStyle}
+    <ButtonBase
+      style={{
+        ...containerStyle
+      }}
       {...props}
     >
       <div
@@ -26,7 +28,7 @@ const TFButtonBase : React.FC<Props> = ({children, containerStyle, ...props}) =>
       >
         {children}
       </div>
-    </Button>
+    </ButtonBase>
   );
 }
 
