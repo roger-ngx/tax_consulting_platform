@@ -134,7 +134,6 @@ const ReservationTimeChangingDialog: React.FC<Props> = ({open, onClose, onSave})
                                 onChange={(value: any) => setSelectedDate(value)}
                                 openTo="day"
                                 renderInput={(params) => <TextField {...params} />}
-                                style={{flex: 1}}
                             />
                         </LocalizationProvider>
                     </div>
