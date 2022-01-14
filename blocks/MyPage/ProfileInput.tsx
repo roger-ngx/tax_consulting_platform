@@ -54,7 +54,8 @@ const ProfileInput: React.FC<Props> = ({title, onChange}) => {
                 <span style={{fontWeight: 'bold'}}>{ title }</span>
                 <IconButton
                     style={{marginRight: -10}}
-                    onClick={() => !isEmptyInput && setInputCount(inputCount + 1)}
+                    disabled={isEmptyInput()}
+                    onClick={() => setInputCount(inputCount + 1)}
                 >
                     <AddBoxIcon sx={{color: '#0045D1'}} />
                 </IconButton>

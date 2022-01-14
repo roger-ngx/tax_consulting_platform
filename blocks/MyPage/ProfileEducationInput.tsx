@@ -64,7 +64,8 @@ const ProfileEducationInput: React.FC<Props> = () => {
                 <span>Education</span>
                 <IconButton
                     style={{marginRight: -10}}
-                    onClick={() => !isEmptyInput() && setInputCount(inputCount + 1)}
+                    disabled={isEmptyInput()}
+                    onClick={() => setInputCount(inputCount + 1)}
                 >
                     <AddBoxIcon sx={{color: '#0045D1'}} />
                 </IconButton>

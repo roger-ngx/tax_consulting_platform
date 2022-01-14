@@ -65,7 +65,8 @@ const ProfileCertificateInput: React.FC<Props> = () => {
                 <span>Certificate</span>
                 <IconButton
                     style={{marginRight: -10}}
-                    onClick={() => !checkEmptyInput() && setInputCount(inputCount + 1)}
+                    disabled={checkEmptyInput()}
+                    onClick={() => setInputCount(inputCount + 1)}
                 >
                     <AddBoxIcon sx={{color: '#0045D1'}} />
                 </IconButton>

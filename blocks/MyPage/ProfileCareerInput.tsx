@@ -60,7 +60,11 @@ const ProfileCareerInput = () => {
         <Container>
             <Horizontal>
                 <span>Career</span>
-                <IconButton style={{marginRight: -10}} onClick={() => !checkEmptyInput() && setInputCount(inputCount + 1)}>
+                <IconButton
+                    style={{marginRight: -10}}
+                    disabled={checkEmptyInput()}
+                    onClick={() => setInputCount(inputCount + 1)}
+                >
                     <AddBoxIcon sx={{color: '#0045D1'}} />
                 </IconButton>
             </Horizontal>

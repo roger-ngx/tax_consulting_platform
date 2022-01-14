@@ -54,7 +54,11 @@ const ProfilePriceInput: React.FC<Props> = () => {
         <Container>
             <Horizontal>
                 <span style={{fontWeight: 'bold'}}>Price table</span>
-                <IconButton style={{marginRight: -10}} onClick={() => !isEmptyInput() && setInputCount(inputCount + 1)}>
+                <IconButton
+                    style={{marginRight: -10}}
+                    onClick={() => setInputCount(inputCount + 1)}
+                    disabled={isEmptyInput()}
+                >
                     <AddBoxIcon sx={{color: '#0045D1'}} />
                 </IconButton>
             </Horizontal>
