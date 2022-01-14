@@ -64,7 +64,6 @@ const HeaderContainer = styled('div')({
     padding: '16px 0',
 })
 
-
 const Header = () => {
     
     return (
@@ -119,26 +118,44 @@ const ReservationTimeChangingDialog: React.FC<Props> = ({open, onClose, onSave})
                     flexDirection: 'column',
                 }}
             >
+                <div
+                    style={{
+                        flex: 1,
+                        overflow: 'scroll',
+                        scrollbarWidth: 'none' 
+                    }}
+                >
+                    <Header />
+                    <div style={{flex: 1}}>
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                            <StaticDatePicker
+                                displayStaticWrapperAs="desktop"
+                                value={selectedDate}
+                                onChange={(value: any) => setSelectedDate(value)}
+                                openTo="day"
+                                renderInput={(params) => <TextField {...params} />}
+                                style={{flex: 1}}
+                            />
+                        </LocalizationProvider>
+                    </div>
+                    <Divider/>
+                    <Header />
 
-                <Header />
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <StaticDatePicker
-                        displayStaticWrapperAs="desktop"
-                        value={selectedDate}
-                        onChange={(value: any) => setSelectedDate(value)}
-                        openTo="day"
-                        renderInput={(params) => <TextField {...params} />}
-                    />
-                </LocalizationProvider>
-                <Divider/>
-                <Header />
-
-                <InfoCard containerStyle={{marginTop: 32, marginBottom: 16, width: '100%'}}/>
+                    <InfoCard containerStyle={{marginTop: 32, marginBottom: 16, width: '100%'}}/>
+                </div>
 
                 <GradientButton
                     text='Change a date'
                 />
             </DialogContent>
+            <style jsx>{`
+            *{
+                -ms-overflow-style: none;
+            }
+            ::-webkit-scrollbar {
+                display: none;
+            }
+            `}</style>
         </BootstrapDialog>
     );
 }
