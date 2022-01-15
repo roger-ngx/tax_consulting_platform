@@ -7,7 +7,7 @@ import Profile from '../blocks/MyPage/Profile';
 import Service from '../blocks/MyPage/Service';
 import Price from '../blocks/MyPage/Price';
 import Reservation from '../blocks/MyPage/Reservation';
-import EnrollExpert from '../blocks/MyPage/EnrollExport';
+import EnrollExpert from '../blocks/MyPage/EnrollExpert';
 import TermsAndConditions from '../blocks/MyPage/TermsAndConditions';
 
 const Container = styled('div')({
