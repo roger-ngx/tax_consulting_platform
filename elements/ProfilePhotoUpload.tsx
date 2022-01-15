@@ -20,7 +20,7 @@ const ImageContainer = styled('div')<ICProps>(({size}) => ({
 }))
 
 type Props = {
-    size: number,
+    size?: number,
     onFileChanged: (URL: string) => void
 }
 

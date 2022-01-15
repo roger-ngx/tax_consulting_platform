@@ -19,7 +19,9 @@ const Profile = () => {
     return (
         <Container>
             <div style={{margin: '24px auto', display: 'flex'}}>
-                <ProfilePhotoUpload />
+                <ProfilePhotoUpload
+                    onFileChanged={url => {}}
+                />
             </div>
 
             <span style={{marginBottom: '4px'}}>
