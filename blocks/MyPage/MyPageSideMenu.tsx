@@ -74,7 +74,10 @@ export default function MyPageSideMenu({onSelectedItemChanged} : {onSelectedItem
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding sx={{marginBottom: 0}}>
-            <ListItemButton sx={{backgroundColor: '#EAEDF2'}}>
+            <ListItemButton
+              sx={{backgroundColor: '#EAEDF2'}}
+              onClick={() => setSelectedItem('Terms and conditions')}
+            >
               <ListItemText primary="Terms and conditions" />
             </ListItemButton>
           </ListItem>

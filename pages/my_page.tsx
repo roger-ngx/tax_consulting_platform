@@ -8,6 +8,7 @@ import Service from '../blocks/MyPage/Service';
 import Price from '../blocks/MyPage/Price';
 import Reservation from '../blocks/MyPage/Reservation';
 import EnrollExpert from '../blocks/MyPage/EnrollExport';
+import TermsAndConditions from '../blocks/MyPage/TermsAndConditions';
 
 const Container = styled('div')({
     display: 'flex',
@@ -38,13 +39,18 @@ const MyPage = () => {
             <div style={{flex: 1, marginLeft: 24}}>
                 <Title>{selectedItem}</Title>
                 {
-                    selectedItem==='Reservation' &&
+                    selectedItem === 'Reservation' &&
                     <Reservation />
                 }
 
                 {
                     selectedItem === 'Enroll Expert' &&
                     <EnrollExpert />
+                }
+
+                {
+                    selectedItem === 'Terms and conditions' &&
+                    <TermsAndConditions />
                 }
             </div>
         </Container>

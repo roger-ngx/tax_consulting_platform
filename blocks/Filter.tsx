@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { styled } from '@mui/system';
 import CheckIcon from '@mui/icons-material/Check';
-import FmdGoodIcon from '@mui/icons-material/FmdGood';
+import FmdGoodOutlinedIcon from '@mui/icons-material/FmdGoodOutlined';
 import { join, size, map } from 'lodash';
 
 import FilterButton from '../elements/FilterButton';
@@ -25,7 +25,7 @@ const Filter = () => {
         <Container>
             <FilterButton
                 text={size(searchingStates) ? join(map(searchingStates, state => state.code), ', ') : 'Location'}
-                startIcon={<FmdGoodIcon />}
+                startIcon={<FmdGoodOutlinedIcon />}
                 containerStyle={{marginRight: 8}}
                 onClick={() => setShowLocationSelectDialog(true)}
                 active={size(searchingStates) > 0}
