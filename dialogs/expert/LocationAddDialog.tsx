@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
@@ -8,7 +7,7 @@ import DialogContent from '@mui/material/DialogContent';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
-import { map, findIndex } from 'lodash';
+import { map, findIndex, size } from 'lodash';
 
 import SearchBox from '../../elements/SearchBox';
 import { State, US_STATES } from '../../utils/Constants';
@@ -35,10 +34,11 @@ type Props = {
   open: boolean;
   states?: State[];
   onClose : () => void;
-  onSave: (param: State[]) => void
+  onSave: (param: State[]) => void,
+  limit?: number
 }
 
-const LocationAddDialog : React.FC<Props> = ({open, states=[], onClose, onSave}) => {
+const LocationAddDialog : React.FC<Props> = ({open, states=[], onClose, onSave, limit=2}) => {
 
   const [ selectedStates, setSelectedStates ] = useState<State[]>(states);
 
@@ -47,7 +47,7 @@ const LocationAddDialog : React.FC<Props> = ({open, states=[], onClose, onSave})
     if(index >= 0){
       selectedStates.splice(index, 1);
     }else{
-      selectedStates.push(state);
+      size(selectedStates) < limit && selectedStates.push(state);
     }
     setSelectedStates([...selectedStates]);
   }
@@ -74,7 +74,10 @@ const LocationAddDialog : React.FC<Props> = ({open, states=[], onClose, onSave})
               <Button
                   variant='contained'
                   color='primary'
-                  onClick={() => onSave(selectedStates)}
+                  onClick={() => {
+                    onSave(selectedStates);
+                    onClose();
+                  }}
               >
                   Save
               </Button>

@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { styled } from '@mui/system';
 import CheckIcon from '@mui/icons-material/Check';
 import FmdGoodIcon from '@mui/icons-material/FmdGood';
+import { join, size, map } from 'lodash';
 
 import FilterButton from '../elements/FilterButton';
 import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import LocationAddDialog from '../dialogs/expert/LocationAddDialog';
+import { State } from '../utils/Constants';
 
 const Container = styled('div')({
     display: 'flex',
@@ -17,14 +19,16 @@ const Filter = () => {
 
     const [ sortBy, setSortBy ] = useState('1');
     const [ showLocationSelectDialog, setShowLocationSelectDialog ] = useState(false);
+    const [ searchingStates, setSearchingStates ] = useState<State []>([]);
 
     return (
         <Container>
             <FilterButton
-                text='Location'
+                text={size(searchingStates) ? join(map(searchingStates, state => state.code), ', ') : 'Location'}
                 startIcon={<FmdGoodIcon />}
                 containerStyle={{marginRight: 8}}
                 onClick={() => setShowLocationSelectDialog(true)}
+                active={size(searchingStates) > 0}
             />
             <FilterButton
                 text='Immediately'
@@ -54,7 +58,7 @@ const Filter = () => {
             <LocationAddDialog
                 open={showLocationSelectDialog}
                 onClose={() => setShowLocationSelectDialog(false)}
-                onSave={() => {}}
+                onSave={(states: State[]) => setSearchingStates(states)}
             />
         </Container>
     )
