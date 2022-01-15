@@ -1,13 +1,13 @@
 
 import { useState, useEffect } from 'react';
 import { Box, Breadcrumbs, Grid, styled, Tab, Tabs } from '@mui/material';
+import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined';
+
 import PriceCard from '../blocks/expert/PriceCard';
 import ProfileHeader from '../blocks/expert/ProfileHeader';
 import ServiceButtons from '../blocks/expert/ServiceButtons';
 import ShowMoreButton from '../elements/ShowMoreButton';
 import InfoCard from '../elements/InfoCard';
-import ContactInfo from '../blocks/expert/ContactInfo';
-import ServiceLocation from '../blocks/expert/ServiceLocation';
 import ExpertiseDetail from '../blocks/expert/ExpertiseDetail';
 import Link from 'next/link';
 import ServiceReview from '../blocks/expert/ServiceReview';
@@ -96,6 +96,10 @@ const ExpertServiceDetail = () => {
 
                     <Grid item xs={12} sm={4}>
                         <ColumnRight>
+                            <Horizontal style={{marginBottom: 8}}>
+                                <PaidOutlinedIcon />
+                                <span style={{fontWeight: '500', marginLeft: 4}}>Price</span>
+                            </Horizontal>
                             <PriceCard
                                 type='Basic consultant'
                                 matching={20}

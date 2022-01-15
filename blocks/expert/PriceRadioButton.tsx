@@ -7,7 +7,6 @@ const Container = styled('div')(props => ({
         border: 'solid 1px #C7C7C7',
         padding: 16,
         borderRadius: 4,
-        ...props.style
     })
 )
 
@@ -20,6 +19,7 @@ const Horizontal = styled('div')({
 const Column = styled('div')({
     display: 'flex',
     flexDirection: 'column',
+    flex: 1
 })
 
 const Detail = styled('div')({

@@ -129,7 +129,7 @@ const Reservation = ({}) => {
     return (
         <Container>
             <Header>
-                <Date>2021.8.11(Tus)</Date>
+                <Date>2021.8.11(Tue)</Date>
                 <Time>{`09:00 AM`}</Time>
                 <div style={{position: 'absolute', bottom: -50, textAlign: 'center', width: '100%'}}>
                     <Avatar
