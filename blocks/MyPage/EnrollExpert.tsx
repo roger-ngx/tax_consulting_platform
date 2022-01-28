@@ -4,9 +4,12 @@ import { Step, StepLabel, Stepper } from '@mui/material';
 
 import Profile from './Profile';
 import Service from './Service';
-import Price from './Price';
+import PriceView from './Price';
 import GradientButton from '../../elements/GradientButton';
 import ProfileModel from '../../models/ExpertProfile';
+import ExpertProfile from '../../models/ExpertProfile';
+import ExpertService from '../../models/ExpertService';
+import Price from '../../models/Price';
 
 const Container = styled('div')({
     display: 'flex',
@@ -29,9 +32,9 @@ const STEPS = [ 'Profile', 'Service', 'Price' ]
 const EnrollExpert = () => {
 
     const [ activeStep, setActiveStep ] = useState(1);
-    const [ profile, setProfile ] = useState<ProfileModel>();
-    const [ service, setService ] = useState();
-    const [ price, setPrice ] = useState();
+    const [ profile, setProfile ] = useState<ExpertProfile>();
+    const [ service, setService ] = useState<ExpertService>();
+    const [ price, setPrice ] = useState<Price[]>();
 
     const checkNextDisabled = () => {
         if(activeStep === 1 && profile){
@@ -75,7 +78,7 @@ const EnrollExpert = () => {
                 }
                 {
                     activeStep === 3 &&
-                    <Price
+                    <PriceView
                         onChange={setPrice}
                     />
                 }
