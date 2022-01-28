@@ -30,11 +30,19 @@ const CareerBox = styled('div')({
     height: 50
 })
 
-const ProfileCareerInput = () => {
+type Props = {
+    onChange: (param: Career[]) => void
+}
+
+const ProfileCareerInput: React.FC<Props> = ({onChange}) => {
 
     const [ inputCount, setInputCount ] = useState(1);
     const [ showInputDialog, setShowInputDialog ] = useState(-1);
     const [ careers, setCareers ] = useState<Career[]>([]);
+
+    useEffect(() => {
+        onChange(careers);
+    }, [careers]);
 
     const getCareer = (index: number) => {
         if(isEmpty(careers)){

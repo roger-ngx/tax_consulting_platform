@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { styled } from '@mui/system';
 import { map, findIndex } from 'lodash';
 
@@ -19,10 +19,18 @@ const Horizontal = styled('div')({
     marginTop: 8
 })
 
-const ProfileLocationInput = () => {
+type Props = {
+    onChange: (states: State[]) => void
+}
+
+const ProfileLocationInput: React.FC<Props> = ({onChange}) => {
 
     const [ openDialog, setOpenDialog ] = useState(false);
     const [ selectedStates, setSelectedStates ] = useState<State[]>([]);
+
+    useEffect(() => {
+        onChange(selectedStates);
+    }, [selectedStates]);
 
     const deleteState =   (state: State) => {
         const index = findIndex(selectedStates, selectedState => state.name === selectedState.name);

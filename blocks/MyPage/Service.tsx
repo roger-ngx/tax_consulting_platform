@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { styled } from '@mui/material/styles';
 import ProfileInput from './ProfileInput';
 import PhotosUploader from './PhotosUploader';
@@ -6,6 +6,8 @@ import TextArea from '../../elements/TextArea';
 import PriceAddDialog from '../../dialogs/expert/PriceAddDialog';
 import { SERVICE_CATEGORIES } from '../../models/EnrollService';
 import TFButtonBase from '../../elements/TFButtonBase';
+import ExpertService from '../../models/ExpertService';
+import { isEmpty } from 'lodash';
 
 const Container = styled('div')({
 
@@ -20,12 +22,24 @@ const Part = styled('div')({
     marginBottom: 32
 })
 
-const Service = () => {
+type Props = {
+    onChange: (param: ExpertService) => void
+}
+
+const Service: React.FC<Props> = ({onChange}) => {
 
     const [ category, setCategory ] = useState(SERVICE_CATEGORIES.TAX);
     const [ detail, setDetail ] = useState('');
     const [ photos, setPhotos ] = useState<string[]>([]);
     const [ videos, setVideos ] = useState<string[]>([]);
+
+    useEffect(() => {
+        if(isEmpty(category) || isEmpty(detail) || isEmpty(photos) || isEmpty(videos)){
+            return;
+        }
+
+        onChange(new ExpertService({category, detail, photos, videos}))
+    }, [category, detail, photos, videos])
 
     return (
         <Container>

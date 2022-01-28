@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import InfoIcon from '@mui/icons-material/Info';
+import { isEmpty } from 'lodash';
 
 import ProfileInput from './ProfileInput';
 import PriceAddDialog from '../../dialogs/expert/PriceAddDialog';
@@ -33,11 +34,25 @@ const Text = styled('span')({
     fontSize: 12
 })
 
-const PriceView = () => {
+type Props = {
+    onChange: (prices: Price[]) => void
+}
+
+const PriceView: React.FC<Props> = ({onChange}) => {
+    const [ prices, setPrices ] = useState<Price[]>([]);
+
+    useEffect(() => {
+        if(isEmpty(prices)){
+            return;
+        }
+        onChange(prices);
+    }, [prices]);
 
     return (
         <Container>
-            <ProfilePriceInput />
+            <ProfilePriceInput
+                onChange={setPrices}
+            />
             
             <FormControlLabel control={<Checkbox defaultChecked />} label="Negotiable" />
             <InfoCard />

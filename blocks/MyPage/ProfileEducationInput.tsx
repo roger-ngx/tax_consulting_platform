@@ -31,13 +31,18 @@ const InputBox = styled('div')({
 })
 
 type Props = {
+    onChange: (param: Education[]) => void
 }
 
-const ProfileEducationInput: React.FC<Props> = () => {
+const ProfileEducationInput: React.FC<Props> = ({onChange}) => {
 
     const [ inputCount, setInputCount ] = useState(1);
     const [ showInputDialog, setShowInputDialog ] = useState(-1);
     const [ educations, setEducations ] = useState<Education[]>([]);
+
+    useEffect(() => {
+        onChange(educations);
+    }, [educations]);
 
     const getEducation = (index: number) => {
         if(isEmpty(educations)){

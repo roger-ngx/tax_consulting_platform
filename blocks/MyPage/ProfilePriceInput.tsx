@@ -31,9 +31,10 @@ const InputBox = styled('div')({
 })
 
 type Props = {
+    onChange: (prices: Price[]) => void
 }
 
-const ProfilePriceInput: React.FC<Props> = () => {
+const ProfilePriceInput: React.FC<Props> = ({onChange}) => {
 
     const [ inputCount, setInputCount ] = useState(1);
     const [ showInputDialog, setShowInputDialog ] = useState(-1);
@@ -49,6 +50,10 @@ const ProfilePriceInput: React.FC<Props> = () => {
     const isEmptyInput = () => {
         return inputCount > size(prices) || isEmpty(prices) || findIndex(prices, isEmpty) >= 0;
     }
+
+    useEffect(() => {
+        onChange(prices);
+    }, [prices]);
 
     return (
         <Container>

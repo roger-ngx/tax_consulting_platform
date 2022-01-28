@@ -31,13 +31,18 @@ const InputBox = styled('div')({
 })
 
 type Props = {
+    onChange: (param: Certificate[]) => void
 }
 
-const ProfileCertificateInput: React.FC<Props> = () => {
+const ProfileCertificateInput: React.FC<Props> = ({onChange}) => {
 
     const [ inputCount, setInputCount ] = useState(1);
     const [ showInputDialog, setShowInputDialog ] = useState(-1);
     const [ certificates, setCertificates ] = useState<Certificate[]>([]);
+
+    useEffect(() => {
+        onChange(certificates);
+    }, [certificates]);
 
     const getCertificate = (index: number) => {
         if(isEmpty(certificates)){
