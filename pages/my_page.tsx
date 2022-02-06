@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { styled } from '@mui/system';
-import { Tabs, Tab } from '@mui/material';
+import { useFirestoreConnect } from 'react-redux-firebase';
+import { useSelector } from 'react-redux';
+import { get } from 'lodash'; 
 
 import MyPageSideMenu from '../blocks/MyPage/MyPageSideMenu';
-import Profile from '../blocks/MyPage/Profile';
-import Service from '../blocks/MyPage/Service';
-import Price from '../blocks/MyPage/Price';
 import Reservation from '../blocks/MyPage/Reservation';
 import EnrollExpert from '../blocks/MyPage/EnrollExpert';
 import TermsAndConditions from '../blocks/MyPage/TermsAndConditions';
@@ -24,10 +23,20 @@ const Title = styled('span')({
 const MyPage = () => {
 
     const [ selectedItem, setSelectedItem ] = useState<string>();
+    const uid = useSelector((state: any) => state.firebase.auth.uid);
 
     const handleTabChange = (event: Event, newValue: any) => {
         setSelectedItem(newValue);
     };
+
+    useFirestoreConnect([
+        {
+            collection: 'experts',
+            doc: uid
+        }
+    ]);
+
+    const expert = useSelector((state: any) => get(state, `firestore.data.experts.${uid}`));
 
     return (
         <Container>
@@ -44,8 +53,8 @@ const MyPage = () => {
                 }
 
                 {
-                    selectedItem === 'Enroll Expert' &&
-                    <EnrollExpert />
+                    selectedItem && ['Enroll Expert', 'Expert Profile'].includes(selectedItem) &&
+                    <EnrollExpert expert={expert}/>
                 }
 
                 {

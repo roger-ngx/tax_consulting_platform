@@ -38,10 +38,11 @@ const Duration = styled('span')({
 type Props = {
   open: boolean,
   onClose: (e: any, reason?: string) => void,
-  onSave: (param: Education) => void
+  onSave: (param: Education) => void,
+  data: Education
 }
 
-const EducationAddDialog : React.FC<Props> = ({open, onClose, onSave}) => {
+const EducationAddDialog : React.FC<Props> = ({open, data, onClose, onSave}) => {
 
   const [ university, setUniversity ] = React.useState('');
   const [ major, setMajor ] = React.useState('');
@@ -49,6 +50,17 @@ const EducationAddDialog : React.FC<Props> = ({open, onClose, onSave}) => {
   const [ startYear, setStartYear ] = React.useState();
   const [ endYear, setEndYear ] = React.useState();
   const [ isStudyNow, setStudyNow ] = React.useState(false);
+
+  React.useEffect(() => {
+    if(data){
+      setUniversity(data.university);
+      setMajor(data.major);
+      setDegree(data.degree);
+      setStartYear(data.startYear);
+      setEndYear(data.endYear);
+      setStudyNow(!!data.isStudyNow);
+    }
+  }, [data]);
 
   return (
     <div>
@@ -62,7 +74,7 @@ const EducationAddDialog : React.FC<Props> = ({open, onClose, onSave}) => {
               <IconButton
                   aria-label="close"
                   sx={{
-                      color: '#333'
+                    color: '#333'
                   }}
                   onClick={onClose}
               >
@@ -72,7 +84,8 @@ const EducationAddDialog : React.FC<Props> = ({open, onClose, onSave}) => {
               <Button
                   variant='contained'
                   color='primary'
-                  onClick={() => onSave(new Education({university, major, degree, startYear, endYear, isStudyNow}))}
+                  disabled={!university || !major || !degree || !startYear}
+                  onClick={() => university && major && degree && startYear && onSave(new Education({university, major, degree, startYear, endYear, isStudyNow}))}
               >
                   Save
               </Button>
@@ -86,7 +99,7 @@ const EducationAddDialog : React.FC<Props> = ({open, onClose, onSave}) => {
               variant='outlined'
               style={{width: 400}}
               value={university}
-              onChange={e=>setUniversity(e.target.value)}
+              onChange={(e:any)=>setUniversity(e.target.value)}
             />
 
             <Typography style={{marginTop: 24}}>
@@ -95,7 +108,8 @@ const EducationAddDialog : React.FC<Props> = ({open, onClose, onSave}) => {
             <TextField
               variant='outlined'
               style={{width: 400}}
-              onChange={e=>setMajor(e.target.value)}
+              onChange={(e: any)=>setMajor(e.target.value)}
+              value={major}
             />
 
             <Typography style={{marginTop: 24}}>
@@ -104,7 +118,7 @@ const EducationAddDialog : React.FC<Props> = ({open, onClose, onSave}) => {
             <Select
               style={{width: '100%'}}
               value={degree}
-              onChange={e=>e.target.value}
+              onChange={(e: any)=>setDegree(e.target.value)}
             >
                 <MenuItem value={EDUCATION_DEGREES.ASSOCIATE}>Associate’s degree</MenuItem>
                 <MenuItem value={EDUCATION_DEGREES.BACHELOR}>Bachelor’s degree</MenuItem>
@@ -119,6 +133,7 @@ const EducationAddDialog : React.FC<Props> = ({open, onClose, onSave}) => {
                 <Select
                   style={{flex: 1}}
                   onChange={(e: any) => setStartYear(e.target.value)}    
+                  value={startYear}
                 >
                   {
                     range(1990, endYear || 2023).map(year => (
@@ -132,6 +147,7 @@ const EducationAddDialog : React.FC<Props> = ({open, onClose, onSave}) => {
                     <Select
                       style={{flex: 1}}
                       onChange={(e: any) => setEndYear(e.target.value)}    
+                      value={endYear}
                     >
                       {
                         range(startYear || 1990, 2023).map(year => (
@@ -144,7 +160,10 @@ const EducationAddDialog : React.FC<Props> = ({open, onClose, onSave}) => {
             </Duration>
             <FormControlLabel
               control={
-                <Checkbox checked={isStudyNow} onChange={e => setStudyNow(e.target.checked)} />
+                <Checkbox
+                  checked={isStudyNow}
+                  onChange={e => setStudyNow(e.target.checked)}
+                />
               }
               label="Studying now"
             />

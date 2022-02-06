@@ -33,12 +33,13 @@ const CareerBox = styled('div')({
 type Props = {
     title: string;
     onChange: (values: string[]) => void;
+    data?: string[];
 }
 
-const ProfileInput: React.FC<Props> = ({title, onChange}) => {
+const ProfileInput: React.FC<Props> = ({data, title, onChange}) => {
 
     const [ inputCount, setInputCount ] = useState(1);
-    const [ values, setValues ] = useState<string[]>([]);
+    const [ values, setValues ] = useState<string[]>(data || []);
 
     useEffect(() => {
         onChange(values);

@@ -88,7 +88,7 @@ const PriceAddDialog: React.FC<Props> = ({open, onClose, onSave}) => {
               <Button
                   variant='contained'
                   color='primary'
-                  onClick={() => onSave(new Price({title, detail, price, unit: priceUnit}))}
+                  onClick={() => onSave(new Price({title, detail, value: price, unit: priceUnit}))}
                   disabled={!title || !detail || !price || !priceUnit}
               >
                   Save

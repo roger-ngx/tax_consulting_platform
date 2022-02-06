@@ -1,17 +1,13 @@
-interface ICertificate{
+export interface ICertificate{
     name?: string,
     authority?: string
 }
 export default class Certificate{
+    name?: string;
+    authority?: string;
+
     constructor(private certificate: ICertificate){
-
-    }
-
-    get name(){
-        return this.certificate.name;
-    }
-
-    get authority(){
-        return this.certificate.authority;
+        this.name = certificate.name;
+        this.authority = certificate.authority;
     }
 }

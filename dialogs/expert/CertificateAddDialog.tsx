@@ -56,13 +56,21 @@ const BootstrapDialogTitle: React.FC<Props> = ({ children, onClose, ...other }) 
 type CAD = {
   open: boolean,
   onClose: (e: any, reason?: string) => void,
-  onSave: (param: Certificate) => void
+  onSave: (param: Certificate) => void,
+  data?: Certificate
 }
 
-const CertificateAddDialog : React.FC<CAD> = ({open, onClose, onSave}) => {
+const CertificateAddDialog : React.FC<CAD> = ({open, data, onClose, onSave}) => {
 
   const [ certName, setCertName ] = React.useState();
   const [ certAuthority, setCertAuthority ] = React.useState();
+
+  React.useEffect(() => {
+    if(data){
+      setCertName(data.name);
+      setCertAuthority(data.authority);
+    }
+  }, [data]);
 
   return (
     <div>

@@ -31,17 +31,26 @@ const InputBox = styled('div')({
 })
 
 type Props = {
-    onChange: (param: Education[]) => void
+    onChange: (param: Education[]) => void,
+    data?: Education[] 
 }
 
-const ProfileEducationInput: React.FC<Props> = ({onChange}) => {
+const ProfileEducationInput: React.FC<Props> = ({data, onChange}) => {
 
+    const [ init, setInit ] = useState(true);
     const [ inputCount, setInputCount ] = useState(1);
     const [ showInputDialog, setShowInputDialog ] = useState(-1);
     const [ educations, setEducations ] = useState<Education[]>([]);
 
     useEffect(() => {
-        onChange(educations);
+        if(data){
+            const initEducations = map(data, e => new Education(e));
+            setEducations(initEducations);
+        }
+    }, [data]);
+
+    useEffect(() => {
+        !init && onChange(educations);
     }, [educations]);
 
     const getEducation = (index: number) => {
@@ -54,6 +63,7 @@ const ProfileEducationInput: React.FC<Props> = ({onChange}) => {
 
     const deleteEducation = (index: number, e: Event) => {
         e.stopPropagation();
+        init && setInit(false);
         
         educations.splice(index, 1);
         setEducations([...educations]);
@@ -100,11 +110,13 @@ const ProfileEducationInput: React.FC<Props> = ({onChange}) => {
                     setShowInputDialog(-1);
                 }}
                 onSave={(education: Education) => {
+                    init && setInit(false);
                     educations[showInputDialog] = education;
                     setEducations([...educations]);
 
                     setShowInputDialog(-1);
                 }}
+                data={educations[showInputDialog]}
             />
         </Container>
     )

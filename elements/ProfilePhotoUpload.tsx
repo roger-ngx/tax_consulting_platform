@@ -3,6 +3,7 @@ import { styled } from '@mui/system';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import Image from 'next/image';
 import { IconButton } from '@mui/material';
+import { StringIterator } from 'lodash';
 
 const Input = styled('input')({
     display: 'none',
@@ -21,21 +22,32 @@ const ImageContainer = styled('div')<ICProps>(({size}) => ({
 
 type Props = {
     size?: number,
-    onFileChanged: (URL: string) => void
+    onFileChanged: (file: string) => void
 }
 
 const ProfilePhotoUpload: React.FC<Props> = ({size=100, onFileChanged}) => {
 
-    const [ selectedPhotoURL, setSelectedPhotoURL ] = useState<string>()
+    const [ selectedPhoto, setSelectedPhoto ] = useState<any>();
 
     useEffect(() => {
-        selectedPhotoURL && onFileChanged(selectedPhotoURL);
-    }, [selectedPhotoURL])
+        selectedPhoto && onFileChanged(selectedPhoto);
+    }, [selectedPhoto])
 
     const uploadPhoto = (e: any) => {
-        const file = e.target.files[0];
 
-        file && setSelectedPhotoURL(URL.createObjectURL(file));
+        const file: File = e.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+
+            reader.addEventListener("load", function () {
+                // convert image file to base64 string
+                setSelectedPhoto(reader.result);
+            }, false);
+
+            reader.readAsDataURL(file);
+        }
+        e.target.value = null;
     }
 
     return (
@@ -48,7 +60,7 @@ const ProfilePhotoUpload: React.FC<Props> = ({size=100, onFileChanged}) => {
         >
             <ImageContainer size={size}>
                 <Image
-                    src={selectedPhotoURL || '/assets/icons/person.png'}
+                    src={selectedPhoto || '/assets/icons/person.png'}
                     width={size}
                     height={size}
                 />

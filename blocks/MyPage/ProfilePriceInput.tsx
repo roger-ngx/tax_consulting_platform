@@ -5,7 +5,7 @@ import AddBoxIcon from '@mui/icons-material/AddBox';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { map, range, isEmpty, findIndex, size } from 'lodash';
 
-import Price from '../../models/Price';
+import Price, { IPrice } from '../../models/Price';
 import PriceAddDialog from '../../dialogs/expert/PriceAddDialog';
 
 const Container = styled('div')({
@@ -31,14 +31,17 @@ const InputBox = styled('div')({
 })
 
 type Props = {
-    onChange: (prices: Price[]) => void
+    onChange: (prices: Price[]) => void,
+    data?: IPrice[]
 }
 
-const ProfilePriceInput: React.FC<Props> = ({onChange}) => {
+const ProfilePriceInput: React.FC<Props> = ({data, onChange}) => {
 
     const [ inputCount, setInputCount ] = useState(1);
     const [ showInputDialog, setShowInputDialog ] = useState(-1);
-    const [ prices, setPrices ] = useState<Price[]>([]);
+    const [ prices, setPrices ] = useState<Price[]>(data || []);
+
+    console.log('prices', data);
 
     const deletePrice = (index: number, e: Event) => {
         e.stopPropagation();

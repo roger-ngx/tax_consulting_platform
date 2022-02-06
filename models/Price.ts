@@ -1,27 +1,24 @@
 
-interface IPrice {
+export type ExpertPriceType = {
+    options: Price[],
+    isNegotiable: boolean
+}
+export interface IPrice {
     title?: string,
     detail?: string,
     unit?: string,
-    price?: number
+    value?: number
 }
 export default class Price{
-    constructor(private price: IPrice){
-    }
+    title?: string;
+    detail?: string;
+    unit?: string;
+    value?: number;
 
-    get title(){
-        return this.price.title;
-    }
-
-    get detail(){
-        return this.price.detail;
-    }
-
-    get unit(){
-        return this.price.unit;
-    }
-
-    get valueInDollar(){
-        return this.price.price;
+    constructor(price: IPrice){
+        this.title = price.title;
+        this.detail = price.detail;
+        this.unit = price.unit;
+        this.value = price.value;
     }
 }

@@ -11,12 +11,13 @@ const Container = styled('div')({
 })
 
 type Props = {
-    onChange: (param: string[]) => void
+    onChange: (param: string[]) => void,
+    data?: string[]
 }
 
-const PhotosUploader: React.FC<Props> = ({onChange}) => {
+const PhotosUploader: React.FC<Props> = ({data, onChange}) => {
 
-    const [ photoURIs, setPhotoURLs] = useState<string[]>([]);
+    const [ photoURIs, setPhotoURLs] = useState<string[]>(data || []);
 
     const onDeletePhoto = (src: string) => {
         remove(photoURIs, uri => uri === src);

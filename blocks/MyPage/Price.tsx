@@ -7,7 +7,7 @@ import { isEmpty } from 'lodash';
 
 import ProfileInput from './ProfileInput';
 import PriceAddDialog from '../../dialogs/expert/PriceAddDialog';
-import Price from '../../models/Price';
+import Price, { IPrice, ExpertPriceType } from '../../models/Price';
 import ProfilePriceInput from './ProfilePriceInput';
 import InfoCard from '../../elements/InfoCard';
 
@@ -35,26 +35,37 @@ const Text = styled('span')({
 })
 
 type Props = {
-    onChange: (prices: Price[]) => void
+    onChange: (prices: Price[], isNegotiable: boolean) => void,
+    data?: ExpertPriceType
 }
 
-const PriceView: React.FC<Props> = ({onChange}) => {
+const PriceView: React.FC<Props> = ({data, onChange}) => {
     const [ prices, setPrices ] = useState<Price[]>([]);
+    const [ isNegotiable, setNegotiable ] = useState(data ? data.isNegotiable : false);
 
     useEffect(() => {
         if(isEmpty(prices)){
             return;
         }
-        onChange(prices);
-    }, [prices]);
+        onChange(prices, isNegotiable);
+    }, [prices, isNegotiable]);
 
     return (
         <Container>
             <ProfilePriceInput
                 onChange={setPrices}
+                data={data && data.options}
             />
             
-            <FormControlLabel control={<Checkbox defaultChecked />} label="Negotiable" />
+            <FormControlLabel
+                control={
+                    <Checkbox
+                        checked={isNegotiable}
+                        onChange={(e: any) => setNegotiable(e.target.checked)}
+                    />
+                }
+                label="Negotiable"
+            />
             <InfoCard />
         </Container>
     )

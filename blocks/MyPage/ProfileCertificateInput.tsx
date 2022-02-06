@@ -6,7 +6,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import { map, range, isEmpty, findIndex, size } from 'lodash';
 
 import CertificateAddDialog from '../../dialogs/expert/CertificateAddDialog';
-import Certificate from '../../models/Certificate';
+import Certificate, { ICertificate } from '../../models/Certificate';
 
 const Container = styled('div')({
     display: 'flex',
@@ -31,14 +31,22 @@ const InputBox = styled('div')({
 })
 
 type Props = {
-    onChange: (param: Certificate[]) => void
+    onChange: (param: Certificate[]) => void,
+    data?: Certificate[]
 }
 
-const ProfileCertificateInput: React.FC<Props> = ({onChange}) => {
+const ProfileCertificateInput: React.FC<Props> = ({data, onChange}) => {
 
     const [ inputCount, setInputCount ] = useState(1);
     const [ showInputDialog, setShowInputDialog ] = useState(-1);
     const [ certificates, setCertificates ] = useState<Certificate[]>([]);
+
+    useEffect(() => {
+        if(data){
+            const initCerts = map(data, c => new Certificate(c));
+            setCertificates(initCerts);
+        }
+    }, [data]);
 
     useEffect(() => {
         onChange(certificates);
@@ -106,6 +114,7 @@ const ProfileCertificateInput: React.FC<Props> = ({onChange}) => {
 
                     setShowInputDialog(-1);
                 }}
+                data={certificates[showInputDialog]}
             />
         </Container>
     )

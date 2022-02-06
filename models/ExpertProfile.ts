@@ -3,15 +3,28 @@ import Career from "./Career";
 import Certificate from "./Certificate";
 import Education from "./Education";
 
-interface IProfile {
+export interface IProfile {
     introduction: string,
-    photoURL: string,
+    photo?: string,
     careers: Career[],
     educations: Education[],
     certificates: Certificate[],
-    availableStates: State[]
+    availableStates: State[],
 }
 export default class ExpertProfile{
-    constructor(private profile: IProfile){
+    introduction: string;
+    photo?: string;
+    careers: Career[];
+    educations: Education[];
+    certificates: Certificate[];
+    availableStates: State[];
+
+    constructor(profile: IProfile){
+        this.introduction = profile.introduction;
+        this.photo = profile.photo;
+        this.careers = profile.careers;
+        this.educations = profile.educations;
+        this.certificates = profile.certificates;
+        this.availableStates = profile.availableStates;
     }
 }

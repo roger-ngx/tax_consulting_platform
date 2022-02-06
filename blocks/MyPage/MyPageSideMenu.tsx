@@ -8,10 +8,16 @@ import ListItemText from '@mui/material/ListItemText';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import InboxIcon from '@mui/icons-material/Inbox';
 import DraftsIcon from '@mui/icons-material/Drafts';
+import { useSelector } from 'react-redux';
+import { get } from 'lodash';
 
 export default function MyPageSideMenu({onSelectedItemChanged} : {onSelectedItemChanged: (param: string) => void}) {
 
   const [ selectedItem, setSelectedItem ] = React.useState('Reservation');
+
+  const uid = useSelector((state: any) => state.firebase.auth.uid);
+  const profile = useSelector((state: any) => get(state, `firestore.data.experts.${uid}`));
+  const expertProfileMenu = profile ? 'Expert Profile' : 'Enroll Expert';
 
   React.useEffect(() => {
     onSelectedItemChanged(selectedItem);
@@ -34,13 +40,13 @@ export default function MyPageSideMenu({onSelectedItemChanged} : {onSelectedItem
           </ListItem>
           <ListItem disablePadding>
             <ListItemButton
-              selected={selectedItem==='Enroll Expert'}          
-              onClick={() => setSelectedItem('Enroll Expert')}
+              selected={selectedItem===expertProfileMenu}          
+              onClick={() => setSelectedItem(expertProfileMenu)}
             >
               <ListItemIcon>
                 <DraftsIcon />
               </ListItemIcon>
-              <ListItemText primary="Enroll Expert" />
+              <ListItemText primary={expertProfileMenu} />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>

@@ -7,15 +7,18 @@ interface ICarrer {
 }
 
 export default class Career {
+    company: string;
+    position: string;
+    startYear: number;
+    endYear?: number;
+    isWorkingNow?: boolean;
+
     constructor(private career: ICarrer){
-    }
-
-    get company(){
-        return this.career.company;
-    }
-
-    get position(){
-        return this.career.position;
+        this.company = career.company;
+        this.position = career.position;
+        this.startYear = career.startYear;
+        this.endYear = career.endYear;
+        this.isWorkingNow = career.isWorkingNow;
     }
 
     get duration(){

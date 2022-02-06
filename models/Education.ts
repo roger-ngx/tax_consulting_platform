@@ -1,34 +1,34 @@
 export enum EDUCATION_DEGREES {
-    ASSOCIATE,
-    BACHELOR,
-    MASTER,
-    DOCTOR
+    ASSOCIATE='ASSOCIATE',
+    BACHELOR='BACHELOR',
+    MASTER='MASTER',
+    DOCTOR='DOCTOR'
 }
 
 interface IEducation {
-    university?: string,
-    major?: string,
-    degree?: EDUCATION_DEGREES,
-    startYear?: number,
+    university: string,
+    major: string,
+    degree: EDUCATION_DEGREES,
+    startYear: number,
     endYear?: number,
     isStudyNow?: boolean
 }
 
 export default class Education{
+    university: string;
+    major: string;
+    degree: EDUCATION_DEGREES;
+    startYear: number;
+    endYear?: number;
+    isStudyNow?: boolean;
+
     constructor(private education: IEducation){
-
-    }
-
-    get university(){
-        return this.education.university;
-    }
-
-    get major(){
-        return this.education.major;
-    }
-
-    get degree(){
-        return this.education.degree;
+        this.university = education.university;
+        this.major = education.major;
+        this.degree = education.degree;
+        this.startYear = education.startYear;
+        this.endYear = education.endYear;
+        this.isStudyNow = education.isStudyNow;
     }
 
     get duration(){

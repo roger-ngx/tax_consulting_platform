@@ -31,17 +31,26 @@ const CareerBox = styled('div')({
 })
 
 type Props = {
-    onChange: (param: Career[]) => void
+    onChange: (param: Career[]) => void,
+    data?: Career[]
 }
 
-const ProfileCareerInput: React.FC<Props> = ({onChange}) => {
+const ProfileCareerInput: React.FC<Props> = ({data, onChange}) => {
 
+    const [ init, setInit ] = useState(true);
     const [ inputCount, setInputCount ] = useState(1);
     const [ showInputDialog, setShowInputDialog ] = useState(-1);
     const [ careers, setCareers ] = useState<Career[]>([]);
 
     useEffect(() => {
-        onChange(careers);
+        if(data){
+            const initCareers = map(data, c => new Career(c));
+            setCareers(initCareers);
+        }
+    }, [data]);
+    
+    useEffect(() => {
+        !init && onChange(careers);
     }, [careers]);
 
     const getCareer = (index: number) => {
@@ -49,12 +58,14 @@ const ProfileCareerInput: React.FC<Props> = ({onChange}) => {
             return;
         }
         const career = careers[index];
-        console.log(career);
+        // console.log(career);
         return career.company + ', ' + career.position + ', ' + career.duration;
     }
 
     const deleteCareer = (index: number, e: MouseEvent) => {
         e.stopPropagation();
+
+        init && setInit(false);
         
         careers.splice(index, 1);
         setCareers([...careers]);
@@ -98,11 +109,14 @@ const ProfileCareerInput: React.FC<Props> = ({onChange}) => {
                 open={showInputDialog>=0}
                 onClose={() => setShowInputDialog(-1)}
                 onSave={(career: Career) => {
+                    init && setInit(false);
+
                     careers[showInputDialog] = career;
                     setCareers([...careers]);
 
                     setShowInputDialog(-1);
                 }}
+                data={careers[showInputDialog]}
             />
         </Container>
     )

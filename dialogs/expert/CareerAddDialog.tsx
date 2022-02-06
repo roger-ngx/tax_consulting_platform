@@ -63,16 +63,29 @@ const Duration = styled('span')({
 type Props = {
   open: boolean;
   onClose: () => void,
-  onSave: (career: Career) => void
+  onSave: (career: Career) => void,
+  data?: Career
 }
 
-const CareerAddDialog: React.FC<Props> = ({open, onClose, onSave}) => {
+const CareerAddDialog: React.FC<Props> = ({open, data, onClose, onSave}) => {
 
   const [ company, setCompany ] = React.useState('');
   const [ position, setPosition ] = React.useState('');
   const [ startYear, setStartYear ] = React.useState<number>();
   const [ endYear, setEndYear ] = React.useState<number>();
   const [ isWorkingNow, setWorkingNow ] = React.useState(false);
+
+  console.log('career', data);
+
+  React.useEffect(() => {
+    if(data){
+      setCompany(data.company);
+      setPosition(data.position);
+      setStartYear(data.startYear);
+      setEndYear(data.endYear);
+      setWorkingNow(!!data.isWorkingNow);
+    }
+  }, [data]);
 
   return (
     <div>
@@ -117,7 +130,8 @@ const CareerAddDialog: React.FC<Props> = ({open, onClose, onSave}) => {
           <TextField
             variant='outlined'
             style={{width: 400}}
-            onChange={e => setCompany(e.target.value)}
+            onChange={(e: any) => setCompany(e.target.value)}
+            value={company}
           />
 
           <Typography style={{marginTop: 24}}>
@@ -126,7 +140,8 @@ const CareerAddDialog: React.FC<Props> = ({open, onClose, onSave}) => {
           <TextField
             variant='outlined'
             style={{width: 400}}
-            onChange={e => setPosition(e.target.value)}
+            onChange={(e: any) => setPosition(e.target.value)}
+            value={position}
           />
 
           <Typography style={{marginTop: 24}}>
@@ -136,6 +151,7 @@ const CareerAddDialog: React.FC<Props> = ({open, onClose, onSave}) => {
             <Select
               style={{flex: 1}}
               onChange={(e: any) => setStartYear(e.target.value)}
+              value={startYear}
             >
               {
                 range(1990, endYear || 2023).map(year => (
@@ -148,7 +164,8 @@ const CareerAddDialog: React.FC<Props> = ({open, onClose, onSave}) => {
                 <span style={{margin: '0 8px'}}>~</span>
                 <Select
                   style={{flex: 1}}
-                  onChange={(e: any) => setEndYear(e.target.value)}            
+                  onChange={(e: any) => setEndYear(e.target.value)} 
+                  value={endYear}           
                 >
                   {
                     range(startYear || 1990, 2023).map(year => (
@@ -164,7 +181,7 @@ const CareerAddDialog: React.FC<Props> = ({open, onClose, onSave}) => {
             }
           </Duration>
           <FormControlLabel
-            control={<Checkbox checked={isWorkingNow} onChange={e => setWorkingNow(e.target.checked)}/>}
+            control={<Checkbox checked={isWorkingNow} checked={isWorkingNow} onChange={e => setWorkingNow(e.target.checked)}/>}
             label="Working now"
           />
         </DialogContent>

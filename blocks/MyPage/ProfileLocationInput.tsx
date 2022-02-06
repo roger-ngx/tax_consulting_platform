@@ -20,13 +20,18 @@ const Horizontal = styled('div')({
 })
 
 type Props = {
-    onChange: (states: State[]) => void
+    onChange: (states: State[]) => void,
+    data?: State[]
 }
 
-const ProfileLocationInput: React.FC<Props> = ({onChange}) => {
+const ProfileLocationInput: React.FC<Props> = ({data, onChange}) => {
 
     const [ openDialog, setOpenDialog ] = useState(false);
     const [ selectedStates, setSelectedStates ] = useState<State[]>([]);
+
+    useEffect(() => {
+        setSelectedStates(data || []);
+    }, [data]);
 
     useEffect(() => {
         onChange(selectedStates);

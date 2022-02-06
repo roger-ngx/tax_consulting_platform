@@ -6,7 +6,7 @@ import TextArea from '../../elements/TextArea';
 import PriceAddDialog from '../../dialogs/expert/PriceAddDialog';
 import { SERVICE_CATEGORIES } from '../../models/EnrollService';
 import TFButtonBase from '../../elements/TFButtonBase';
-import ExpertService from '../../models/ExpertService';
+import ExpertService, { IService } from '../../models/ExpertService';
 import { isEmpty } from 'lodash';
 
 const Container = styled('div')({
@@ -24,9 +24,10 @@ const Part = styled('div')({
 
 type Props = {
     onChange: (param: ExpertService) => void
+    data?: IService
 }
 
-const Service: React.FC<Props> = ({onChange}) => {
+const Service: React.FC<Props> = ({data, onChange}) => {
 
     const [ category, setCategory ] = useState(SERVICE_CATEGORIES.TAX);
     const [ detail, setDetail ] = useState('');
@@ -34,7 +35,14 @@ const Service: React.FC<Props> = ({onChange}) => {
     const [ videos, setVideos ] = useState<string[]>([]);
 
     useEffect(() => {
-        if(isEmpty(category) || isEmpty(detail) || isEmpty(photos) || isEmpty(videos)){
+        if(data){
+            setCategory(data.category);
+            setDetail(data.detail);
+        }
+    }, [data]);
+
+    useEffect(() => {
+        if(isEmpty(detail) || isEmpty(photos) || isEmpty(videos)){
             return;
         }
 
@@ -90,12 +98,14 @@ const Service: React.FC<Props> = ({onChange}) => {
                 </Title>
                 <PhotosUploader
                     onChange={setPhotos}
+                    data={data && data.photos}
                 />
             </Part>
 
             <ProfileInput
                 title='Video link (Ad)'
                 onChange={setVideos}
+                data={data && data.videos}
             />
         </Container>
     )
