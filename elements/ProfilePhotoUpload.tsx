@@ -21,11 +21,12 @@ const ImageContainer = styled('div')<ICProps>(({size}) => ({
 }))
 
 type Props = {
+    photo?: string,
     size?: number,
     onFileChanged: (file: string) => void
 }
 
-const ProfilePhotoUpload: React.FC<Props> = ({size=100, onFileChanged}) => {
+const ProfilePhotoUpload: React.FC<Props> = ({size=100, photo, onFileChanged}) => {
 
     const [ selectedPhoto, setSelectedPhoto ] = useState<any>();
 
@@ -60,7 +61,7 @@ const ProfilePhotoUpload: React.FC<Props> = ({size=100, onFileChanged}) => {
         >
             <ImageContainer size={size}>
                 <Image
-                    src={selectedPhoto || '/assets/icons/person.png'}
+                    src={selectedPhoto || photo || '/assets/icons/person.png'}
                     width={size}
                     height={size}
                 />

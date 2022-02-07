@@ -1,9 +1,12 @@
 import React from 'react';
 import { styled } from '@mui/system';
+import { map } from 'lodash';
+
 import Profile from './Card/Profile';
 import Tag from './Card/Tag';
 import Location from './Card/Location';
 import AvailableTime from './Card/AvailableTime';
+import { SERVICE_CATEGORIES } from '../models/EnrollService';
 
 const Container = styled('div')({
     display: 'flex',
@@ -34,33 +37,47 @@ const Price = styled('span')({
 
 })
 
-const Card = () => {
+const Card = ({data}) => {
+    if(!data) return null;
+
+    const { service, profile } = data;
+
+    const locations = map(profile.availableStates, (state: any) => state.code);
 
     return (
         <Container style={{cursor: 'pointer'}}>
             <Profile />
             <Body>
                 <Horizontal>
-                    <Tag
-                        text='Tax'
-                        colors={['#0045D1', '#5185EE']}
-                    />
-                    <Tag
-                        text='Fund'
-                        colors={['#0075FF', '#74B4FF']}
-                        containerStyle={{margin: '0 4px'}}
-                    />
-                    <Tag
-                        text='Accountancy'
-                        colors={['#990002', '#E80000']}
-                    />
+                    {
+                        service.category === SERVICE_CATEGORIES.TAX &&
+                        <Tag
+                            text='Tax'
+                            colors={['#0045D1', '#5185EE']}
+                        />
+                    }
+                    {
+                        service.category === SERVICE_CATEGORIES.FUND &&
+                        <Tag
+                            text='Fund'
+                            colors={['#0075FF', '#74B4FF']}
+                            containerStyle={{margin: '0 4px'}}
+                        />
+                    }
+                    {
+                        service.category === SERVICE_CATEGORIES.ACCOUNTANCY &&
+                        <Tag
+                            text='Accountancy'
+                            colors={['#990002', '#E80000']}
+                        />
+                    }
                 </Horizontal>
                 <Horizontal>
-                    <Location locations={['NY', 'CA']} containerStyle={{marginRight: 12}}/>
+                    <Location locations={locations} containerStyle={{marginRight: 12}}/>
                     <AvailableTime />
                 </Horizontal>
                 <BodyContent>
-                    Solve difficult tax returns at once give!
+                    {service.detail}
                 </BodyContent>
                 <Price>
                     $50/hr

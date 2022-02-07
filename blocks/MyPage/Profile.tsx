@@ -62,6 +62,7 @@ const Profile: React.FC<Props> = ({data, onChange}) => {
         <Container>
             <div style={{margin: '24px auto', display: 'flex'}}>
                 <ProfilePhotoUpload
+                    photo={profilePhoto}
                     onFileChanged={setProfilePhoto}
                 />
             </div>

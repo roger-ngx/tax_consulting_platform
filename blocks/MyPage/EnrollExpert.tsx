@@ -92,15 +92,17 @@ const EnrollExpert = ({expert}) => {
 
     return (
         <Container>
+            {
+                expert &&
+                <Tabs value={activeStep} onChange={handleTabChange}>
+                    <Tab label="Profile" value={1}/>
+                    <Tab label="Service" value={2}/>
+                    <Tab label="Price" value={3}/>
+                </Tabs>
+            }
             <div style={{width: '100%', backgroundColor: '#F6F8FB', padding: 24}}>
                 {
-                    expert ?
-                    <Tabs value={activeStep} onChange={handleTabChange}>
-                        <Tab label="Profile" value={1}/>
-                        <Tab label="Service" value={2}/>
-                        <Tab label="Price" value={3}/>
-                    </Tabs>
-                    :
+                    !expert &&
                     <StepperContainer>
                         <Stepper activeStep={activeStep} alternativeLabel>
                             {STEPS.map((label) => (

@@ -88,7 +88,7 @@ const ProfilePriceInput: React.FC<Props> = ({data, onChange}) => {
                                         <div style={{display: 'inline-block'}}>
                                             <div>{prices[index].title}</div>
                                             <div>{prices[index].detail}</div>
-                                            <div style={{fontWeight: 'bold'}}>{prices[index].valueInDollar} {prices[index].unit}</div>
+                                            <div style={{fontWeight: 'bold'}}>${prices[index].value} {prices[index].unit}</div>
                                         </div>
                                     </>
                                 )

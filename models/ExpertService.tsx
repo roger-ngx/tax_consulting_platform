@@ -1,13 +1,13 @@
 import { SERVICE_CATEGORIES } from "./EnrollService";
 
 export interface IService {
-    category: SERVICE_CATEGORIES,
+    category: SERVICE_CATEGORIES[],
     detail: string,
     photos: string[],
     videos: string[],
 }
 export default class ExpertService{
-    category: SERVICE_CATEGORIES;
+    category: SERVICE_CATEGORIES[];
     detail: string;
     photos: string[];
     videos: string[];

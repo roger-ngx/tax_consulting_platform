@@ -1,9 +1,19 @@
 import { merge, forEach } from 'lodash';
+import { uuid } from 'uuidv4';
 
 import firebase from '../firebase/firebaseInit';
 import ExpertProfile from '../models/ExpertProfile';
 import ExpertService from '../models/ExpertService';
 import Price, { ExpertPriceType } from '../models/Price';
+import { map } from '@firebase/util';
+
+
+export type ExpertType = {
+    id: string,
+    profile: ExpertProfile,
+    service: ExpertService,
+    price: ExpertPriceType
+}
 
 export const getExpertById = async (uid: string) => {
     const expertDoc = await firebase.firestore().collection('experts').doc(uid).get();
@@ -12,13 +22,6 @@ export const getExpertById = async (uid: string) => {
     }
 
     return null;
-}
- 
-export type ExpertType = {
-    id: string,
-    profile: ExpertProfile,
-    service: ExpertService,
-    price: ExpertPriceType
 }
 
 export const addExpert = async (expert: ExpertType) => {
@@ -32,19 +35,18 @@ export const addExpert = async (expert: ExpertType) => {
         profilePhotoURL = await snapshot.ref.getDownloadURL();
     }
 
-    const servicePhotos = expert.service.photos;
+    const servicePhotos: any = expert.service.photos;
     let servicePhotoURLs = [];
 
-    if(photoDataUrl){
-        const promises = forEach(
-            servicePhotos, async photo => {
+    if(servicePhotos){
+        const promises: any = map(servicePhotos, async (photo:string) => {
                 const snapshot = await firebase.storage().ref()
-                .child(`profiles/${expert.id}.png`)
-                .putString(photoDataUrl, 'data_url');
+                .child(`services/${expert.id}/${uuid()}.png`)
+                .putString(photo, 'data_url');
                 return await snapshot.ref.getDownloadURL();
             }
         )
-        servicePhotoURLs.push(await Promise.all(promises));
+        servicePhotoURLs.push(...(await Promise.all(promises)));
     }
 
     const data = merge(
@@ -58,6 +60,8 @@ export const addExpert = async (expert: ExpertType) => {
             }
         }
     )
+
+    console.log(data);
 
     await firebase.firestore().collection('experts')
     .doc(expert.id)
@@ -75,4 +79,12 @@ export const updateExpert = async (uid: string, data: object) => {
         ...data,
         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     });
+}
+
+export const getAllExperts = async () => {
+    const expertDocs = await firebase.firestore().collection('experts').get();
+
+    const experts = map(expertDocs, (doc:any) => doc.data());
+
+    return experts;
 }

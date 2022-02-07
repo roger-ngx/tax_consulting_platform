@@ -1,5 +1,8 @@
 import { Grid } from '@mui/material';
 import Link from 'next/link';
+import { useFirestoreConnect } from 'react-redux-firebase';
+import { useSelector } from 'react-redux';
+import { map, size } from 'lodash';
 
 import styled from 'styled-components';
 import Banner from '../blocks/Banner';
@@ -16,6 +19,14 @@ const Container =styled.div`
 
 const Home = () => {
 
+  const experts = useSelector((state: any) => state.firestore.ordered.experts);
+
+  console.log('expert size', size(experts));
+
+  useFirestoreConnect([{
+    collection: 'experts'
+  }])
+
   return (
     <div>
       <div style={{margin: '0 -10vw'}}>
@@ -30,26 +41,15 @@ const Home = () => {
             <Filter />
           </div>
           <Grid container spacing={2}>
-            <Link href='/expert_detail'>
-              <Grid item xs={12} sm={6}>
-                  <Card />
-              </Grid>
-            </Link>
-            <Link href='/expert_detail'>
-              <Grid item xs={12} sm={6}>
-                <Card />
-              </Grid>
-            </Link>
-            <Link href='/expert_detail'>
-              <Grid item xs={12} sm={6}>
-                <Card />
-              </Grid>
-            </Link>
-            <Link href='/expert_detail' >
-              <Grid item xs={12} sm={6}>
-                <Card />
-              </Grid>
-            </Link>
+            {
+              map(experts, expert => (
+                <Link href='/expert_detail'>
+                  <Grid item xs={12} sm={6}>
+                      <Card data={expert}/>
+                  </Grid>
+                </Link>
+              ))
+            }
           </Grid>
         </div>
       </Container>

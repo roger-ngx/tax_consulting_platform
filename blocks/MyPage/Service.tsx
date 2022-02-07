@@ -29,7 +29,7 @@ type Props = {
 
 const Service: React.FC<Props> = ({data, onChange}) => {
 
-    const [ category, setCategory ] = useState(SERVICE_CATEGORIES.TAX);
+    const [ category, setCategory ] = useState<SERVICE_CATEGORIES[]>([]);
     const [ detail, setDetail ] = useState('');
     const [ photos, setPhotos ] = useState<string[]>([]);
     const [ videos, setVideos ] = useState<string[]>([]);
@@ -49,6 +49,16 @@ const Service: React.FC<Props> = ({data, onChange}) => {
         onChange(new ExpertService({category, detail, photos, videos}))
     }, [category, detail, photos, videos])
 
+    const onCheckCategory = (cat: SERVICE_CATEGORIES) => {
+        const index = category.indexOf(cat);
+        if(index < 0){
+            category.push(cat);
+        } else {
+            category.splice(index, 1)
+        }
+        setCategory([...category]);
+    }
+
     return (
         <Container>
             <Part>
@@ -58,25 +68,25 @@ const Service: React.FC<Props> = ({data, onChange}) => {
                 <div style={{display: 'flex', flexDirection: 'row', width: '100%'}}>
                     <TFButtonBase
                         containerStyle={{flex: 1}}
-                        onClick={() => setCategory(SERVICE_CATEGORIES.TAX)}
+                        onClick={() => onCheckCategory(SERVICE_CATEGORIES.TAX)}
                     >
-                        <div style={{flex: 1, padding: 8, backgroundImage: SERVICE_CATEGORIES.TAX===category ? 'linear-gradient(#0045D1, #5185EE)' : 'linear-gradient(#B7BECA, #B7BECAAA)', }}>
+                        <div style={{flex: 1, padding: 8, backgroundImage: category.includes(SERVICE_CATEGORIES.TAX) ? 'linear-gradient(#0045D1, #5185EE)' : 'linear-gradient(#B7BECA, #B7BECAAA)', }}>
                             <span style={{fontWeight: 'bold', color: 'white'}}>Tax</span>
                         </div>
                     </TFButtonBase>
                     <TFButtonBase
                         containerStyle={{flex: 1, margin: '0 8px'}}
-                        onClick={() => setCategory(SERVICE_CATEGORIES.FUND)}
+                        onClick={() => onCheckCategory(SERVICE_CATEGORIES.FUND)}
                     >
-                        <div style={{flex: 1, padding: 8, backgroundImage: SERVICE_CATEGORIES.FUND===category ? 'linear-gradient(#0045D1, #5185EE)' : 'linear-gradient(#B7BECA, #B7BECAAA)'}}>
+                        <div style={{flex: 1, padding: 8, backgroundImage: category.includes(SERVICE_CATEGORIES.FUND) ? 'linear-gradient(#0045D1, #5185EE)' : 'linear-gradient(#B7BECA, #B7BECAAA)'}}>
                             <span style={{fontWeight: 'bold', color: 'white'}}>Fund</span>
                         </div>
                     </TFButtonBase>
                     <TFButtonBase
                         containerStyle={{flex: 1}}
-                        onClick={() => setCategory(SERVICE_CATEGORIES.ACCOUNTANCY)}
+                        onClick={() => onCheckCategory(SERVICE_CATEGORIES.ACCOUNTANCY)}
                     >
-                        <div style={{flex: 1, padding: 8, backgroundImage: SERVICE_CATEGORIES.ACCOUNTANCY===category ? 'linear-gradient(#0045D1, #5185EE)' : 'linear-gradient(#B7BECA, #B7BECAAA)'}}>
+                        <div style={{flex: 1, padding: 8, backgroundImage: category.includes(SERVICE_CATEGORIES.ACCOUNTANCY) ? 'linear-gradient(#0045D1, #5185EE)' : 'linear-gradient(#B7BECA, #B7BECAAA)'}}>
                             <span style={{fontWeight: 'bold', color: 'white'}}>Accountance</span>
                         </div>
                     </TFButtonBase>
