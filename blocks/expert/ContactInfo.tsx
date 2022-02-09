@@ -13,7 +13,11 @@ const Column = styled('div')({
     alignItems: 'center'
 })
 
-const ContactInfo = ({data}) => {
+type Props = {
+    data: any
+}
+
+const ContactInfo : React.FC<Props> = ({data}) => {
 
     return (
         <Horizontal>

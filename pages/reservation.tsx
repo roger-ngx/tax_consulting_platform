@@ -148,7 +148,10 @@ const Reservation = ({}) => {
                         ))}
                     </Stepper>
                 </StepperContainer>
-                <ExpertInfo containerStyle={{marginBottom: 32, backgroundColor: '#F6F8FB'}}/>
+                <ExpertInfo
+                    data={{}}
+                    containerStyle={{marginBottom: 32, backgroundColor: '#F6F8FB'}}
+                />
                 <ButtonContainer>
                     <CalendarButton
                         variant='outlined'

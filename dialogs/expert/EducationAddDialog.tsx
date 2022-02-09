@@ -47,8 +47,8 @@ const EducationAddDialog : React.FC<Props> = ({open, data, onClose, onSave}) => 
   const [ university, setUniversity ] = React.useState('');
   const [ major, setMajor ] = React.useState('');
   const [ degree, setDegree ] = React.useState<EDUCATION_DEGREES>();
-  const [ startYear, setStartYear ] = React.useState();
-  const [ endYear, setEndYear ] = React.useState();
+  const [ startYear, setStartYear ] = React.useState<number|undefined>();
+  const [ endYear, setEndYear ] = React.useState<number|undefined>();
   const [ isStudyNow, setStudyNow ] = React.useState(false);
 
   React.useEffect(() => {

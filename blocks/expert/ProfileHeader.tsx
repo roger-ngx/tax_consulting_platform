@@ -22,7 +22,11 @@ const Horizontal = styled('div')({
     flexDirection: 'row'
 })
 
-const ProfileHeader = ({data}) => {
+type Props = {
+    data: any
+}
+
+const ProfileHeader : React.FC<Props> = ({data}) => {
 
     if(!data) return null;
 

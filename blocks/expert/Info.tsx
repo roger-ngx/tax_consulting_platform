@@ -11,7 +11,12 @@ const Info = styled('div')({
     padding: '20px 0',
 })
 
-const ExpertInfo = ({data, containerStyle={}}) => {
+type Props = {
+    data: any,
+    containerStyle?: object
+}
+
+const ExpertInfo : React.FC<Props>  = ({data, containerStyle={}}) => {
 
     return (
         <Info style={containerStyle}>

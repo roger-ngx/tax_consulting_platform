@@ -62,8 +62,8 @@ type CAD = {
 
 const CertificateAddDialog : React.FC<CAD> = ({open, data, onClose, onSave}) => {
 
-  const [ certName, setCertName ] = React.useState();
-  const [ certAuthority, setCertAuthority ] = React.useState();
+  const [ certName, setCertName ] = React.useState<string|undefined>();
+  const [ certAuthority, setCertAuthority ] = React.useState<string|undefined>();
 
   React.useEffect(() => {
     if(data){

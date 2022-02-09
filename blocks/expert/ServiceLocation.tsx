@@ -13,7 +13,11 @@ const Column = styled('div')({
     alignItems: 'center'
 })
 
-const ServiceLocation = ({data}) => {
+type Props = {
+    data: any
+}
+
+const ServiceLocation : React.FC<Props> = ({data}) => {
 
     return (
         <Horizontal>

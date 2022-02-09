@@ -181,7 +181,12 @@ const CareerAddDialog: React.FC<Props> = ({open, data, onClose, onSave}) => {
             }
           </Duration>
           <FormControlLabel
-            control={<Checkbox checked={isWorkingNow} checked={isWorkingNow} onChange={e => setWorkingNow(e.target.checked)}/>}
+            control={
+              <Checkbox
+                checked={isWorkingNow}
+                onChange={e => setWorkingNow(e.target.checked)}
+              />
+            }
             label="Working now"
           />
         </DialogContent>

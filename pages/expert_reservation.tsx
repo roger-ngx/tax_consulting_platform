@@ -83,7 +83,7 @@ const ExpertServiceReservation = () => {
             </Breadcrumbs>
 
             <Column>
-                <ProfileHeader />
+                <ProfileHeader data={{}}/>
                 <UnWrapHorizontal>
                     <PriceRadioButton
                         type='Basic consultant'

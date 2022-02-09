@@ -21,7 +21,11 @@ const Content = styled('span')({
     marginBottom: 32,
 })
 
-const ExpertiseDetail = ({data}) => {
+type Props = {
+    data: any
+}
+
+const ExpertiseDetail : React.FC<Props> = ({data}) => {
     if(!data) return null;
     const { introduction, careers, educations, certificates } = data;
 

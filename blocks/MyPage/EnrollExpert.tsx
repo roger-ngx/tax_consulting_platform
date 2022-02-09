@@ -32,7 +32,11 @@ const StepperContainer = styled('div')({
 
 const STEPS = [ 'Profile', 'Service', 'Price' ]
 
-const EnrollExpert = ({expert}) => {
+type Props = {
+    expert: any
+}
+
+const EnrollExpert: React.FC<Props> = ({expert}) => {
 
     const uid = useSelector((state: any) => state.firebase.auth.uid);
 

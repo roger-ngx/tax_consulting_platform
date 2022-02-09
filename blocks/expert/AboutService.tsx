@@ -19,7 +19,11 @@ const Title = styled('div')({
     marginBottom: 4
 })
 
-const AboutService = ({data}) => {
+type Props = {
+    data: any
+}
+
+const AboutService : React.FC<Props>= ({data}) => {
     if(!data) return null;
       
     const {photos, videos} = data;

@@ -2,7 +2,11 @@ import React from 'react';
 import { styled } from '@mui/system';
 import { ExpertReview } from '../ExpertReview';
 
-const ServiceReview = ({data}) => {
+type Props = {
+    data: any
+}
+
+const ServiceReview : React.FC<Props> = ({data}) => {
 
     return (
         <div style={{width: '100%'}}>

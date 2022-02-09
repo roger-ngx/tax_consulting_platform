@@ -37,7 +37,11 @@ const Price = styled('span')({
 
 })
 
-const Card = ({data}) => {
+type Props = {
+    data: any
+}
+
+const Card: React.FC<Props> = ({data}) => {
     if(!data) return null;
 
     const { service, profile } = data;
