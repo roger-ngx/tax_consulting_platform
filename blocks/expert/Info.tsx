@@ -11,12 +11,12 @@ const Info = styled('div')({
     padding: '20px 0',
 })
 
-const ExpertInfo = ({containerStyle={}}) => {
+const ExpertInfo = ({data, containerStyle={}}) => {
 
     return (
         <Info style={containerStyle}>
-            <ServiceLocation />
-            <ContactInfo />
+            <ServiceLocation data={data}/>
+            <ContactInfo  data={data}/>
         </Info>
     )
 }

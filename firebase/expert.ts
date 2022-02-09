@@ -1,11 +1,10 @@
-import { merge, forEach } from 'lodash';
+import { merge, map } from 'lodash';
 import { uuid } from 'uuidv4';
 
 import firebase from '../firebase/firebaseInit';
 import ExpertProfile from '../models/ExpertProfile';
 import ExpertService from '../models/ExpertService';
 import Price, { ExpertPriceType } from '../models/Price';
-import { map } from '@firebase/util';
 
 
 export type ExpertType = {

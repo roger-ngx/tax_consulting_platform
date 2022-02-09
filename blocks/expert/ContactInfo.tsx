@@ -13,7 +13,7 @@ const Column = styled('div')({
     alignItems: 'center'
 })
 
-const ContactInfo = () => {
+const ContactInfo = ({data}) => {
 
     return (
         <Horizontal>

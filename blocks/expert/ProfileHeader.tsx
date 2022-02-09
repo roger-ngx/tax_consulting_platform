@@ -7,6 +7,7 @@ import Tag from '../../elements/Card/Tag';
 import MatchingCount from '../../elements/MatchingCount';
 import ReviewCount from '../../elements/ReviewCount';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import { SERVICE_CATEGORIES } from '../../models/EnrollService';
 
 const Container = styled('div')({
     display: 'flex',
@@ -21,13 +22,19 @@ const Horizontal = styled('div')({
     flexDirection: 'row'
 })
 
-const ProfileHeader = () => {
+const ProfileHeader = ({data}) => {
+
+    if(!data) return null;
+
+    const { profile, service } = data;
+
+    const serviceCategories = service.category;
 
     return (
         <Container>
             <div>
                 <Avatar
-                    src='/assets/images/profile.png'
+                    src={profile.photo}
                     size={80}
                     active={true}
                     name='joker'
@@ -35,21 +42,30 @@ const ProfileHeader = () => {
             </div>
             <div style={{flex: 1, marginLeft: 24}}>
                 <div style={{display: 'flex', flexDirection: 'row', width: '100%', marginBottom: 24}}>
-                    <Tag
-                        text='Tax'
-                        colors={['#0045D1', '#5185EE']}
-                    />
-                    <Tag
-                        text='Fund'
-                        colors={['#0075FF', '#74B4FF']}
-                        containerStyle={{margin: '0 4px'}}
-                    />
-                    <Tag
-                        text='Accountancy'
-                        colors={['#990002', '#E80000']}
-                    />
+                    {
+                        serviceCategories.includes(SERVICE_CATEGORIES.TAX) &&
+                        <Tag
+                            text='Tax'
+                            colors={['#0045D1', '#5185EE']}
+                        />
+                    }
+                    {
+                        serviceCategories.includes(SERVICE_CATEGORIES.FUND) &&
+                        <Tag
+                            text='Fund'
+                            colors={['#0075FF', '#74B4FF']}
+                            containerStyle={{margin: '0 4px'}}
+                        />
+                    }
+                    {
+                        serviceCategories.includes(SERVICE_CATEGORIES.ACCOUNTANCY) &&
+                        <Tag
+                            text='Accountancy'
+                            colors={['#990002', '#E80000']}
+                        />
+                    }
                 </div>
-                <div style={{fontSize: 22, fontWeight: 'bold', marginBottom: 32}}>Solve difficult tax returns at once give!</div>
+                <div style={{fontSize: 22, fontWeight: 'bold', marginBottom: 32}}>{profile.introduction}</div>
                 <Horizontal>
                     <ReviewCount containerStyle={{marginRight: 24}} count={24} rate={4.2}/>
                     <MatchingCount count={32}/>

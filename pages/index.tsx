@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { useFirestoreConnect } from 'react-redux-firebase';
 import { useSelector } from 'react-redux';
 import { map, size } from 'lodash';
-
 import styled from 'styled-components';
+
 import Banner from '../blocks/Banner';
 import Filter from '../blocks/Filter';
 import MainSideMenu from '../blocks/MainSideMenu';
@@ -43,7 +43,7 @@ const Home = () => {
           <Grid container spacing={2}>
             {
               map(experts, expert => (
-                <Link href='/expert_detail'>
+                <Link href={`/expert_detail?id=${expert.id}`}>
                   <Grid item xs={12} sm={6}>
                       <Card data={expert}/>
                   </Grid>

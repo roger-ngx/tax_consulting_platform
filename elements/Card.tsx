@@ -50,14 +50,14 @@ const Card = ({data}) => {
             <Body>
                 <Horizontal>
                     {
-                        service.category === SERVICE_CATEGORIES.TAX &&
+                        service.category.includes(SERVICE_CATEGORIES.TAX) &&
                         <Tag
                             text='Tax'
                             colors={['#0045D1', '#5185EE']}
                         />
                     }
                     {
-                        service.category === SERVICE_CATEGORIES.FUND &&
+                        service.category.includes(SERVICE_CATEGORIES.FUND) &&
                         <Tag
                             text='Fund'
                             colors={['#0075FF', '#74B4FF']}
@@ -65,7 +65,7 @@ const Card = ({data}) => {
                         />
                     }
                     {
-                        service.category === SERVICE_CATEGORIES.ACCOUNTANCY &&
+                        service.category.includes(SERVICE_CATEGORIES.ACCOUNTANCY) &&
                         <Tag
                             text='Accountancy'
                             colors={['#990002', '#E80000']}

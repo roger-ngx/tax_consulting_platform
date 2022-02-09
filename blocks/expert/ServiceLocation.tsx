@@ -13,7 +13,7 @@ const Column = styled('div')({
     alignItems: 'center'
 })
 
-const ServiceLocation = () => {
+const ServiceLocation = ({data}) => {
 
     return (
         <Horizontal>

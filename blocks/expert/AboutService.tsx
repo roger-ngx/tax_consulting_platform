@@ -1,5 +1,8 @@
 import React from 'react';
 import { styled } from '@mui/system';
+import { map } from 'lodash';
+import "react-image-gallery/styles/css/image-gallery.css";
+import ImageGallery from 'react-image-gallery';
 
 const Container = styled('div')({
 
@@ -16,16 +19,28 @@ const Title = styled('div')({
     marginBottom: 4
 })
 
-const AboutService = () => {
+const AboutService = ({data}) => {
+    if(!data) return null;
+      
+    const {photos, videos} = data;
 
     return (
         <Container>
             <Column>
                 <Title>About</Title>
                 <div>
-                A freelancer with an acquired experience of more than 5 years in the field of data entry and web research, specializes in Microsoft Word and Excel and converting data from pdf to word to excel.
+                    {data.detail}
                 </div>
             </Column>
+            <ImageGallery
+                items={
+                    map(photos, photo => ({original: photo}))
+                }
+                showThumbnails={false}
+                showFullscreenButton={false}
+                showPlayButton={false}
+            />
+            
         </Container>
     )
 }

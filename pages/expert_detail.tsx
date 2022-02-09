@@ -2,6 +2,9 @@
 import { useState, useEffect } from 'react';
 import { Box, Breadcrumbs, Grid, styled, Tab, Tabs } from '@mui/material';
 import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined';
+import { get, map } from 'lodash';
+import { useSelector } from 'react-redux';
+import Link from 'next/link';
 
 import PriceCard from '../blocks/expert/PriceCard';
 import ProfileHeader from '../blocks/expert/ProfileHeader';
@@ -9,7 +12,6 @@ import ServiceButtons from '../blocks/expert/ServiceButtons';
 import ShowMoreButton from '../elements/ShowMoreButton';
 import InfoCard from '../elements/InfoCard';
 import ExpertiseDetail from '../blocks/expert/ExpertiseDetail';
-import Link from 'next/link';
 import ServiceReview from '../blocks/expert/ServiceReview';
 import { useRouter } from 'next/router';
 import ExpertInfo from '../blocks/expert/Info';
@@ -41,6 +43,9 @@ const ExpertServiceDetail = () => {
 
     const router = useRouter();
 
+    const expert = useSelector((state: any) => get(state, `firestore.data.experts[${router.query.id}]`));
+    console.log('ExpertServiceDetail', get(expert, 'price.options'));
+
     const [ selectedTab, setSelectedTab ] = useState(0);
 
     const handleTabChange = (event: any, newValue: any) => {
@@ -51,8 +56,6 @@ const ExpertServiceDetail = () => {
         <Container>
             <Breadcrumbs separator=">" aria-label="breadcrumb" style={{marginBottom: 24}}>
                 <Link
-                    // underline="hover"
-                    // color="inherit"
                     href="/"
                 >
                     Find Expert
@@ -66,8 +69,8 @@ const ExpertServiceDetail = () => {
                 <Grid container spacing={2}>
                     <Grid item xs={12} sm={8}>
                         <ColumnLeft>
-                            <ProfileHeader />
-                            <ExpertInfo />
+                            <ProfileHeader data={expert}/>
+                            <ExpertInfo data={expert}/>
 
                             <Box sx={{ borderBottom: 1, borderColor: 'divider' }} style={{marginBottom: 24}}>
                                 <Tabs
@@ -81,15 +84,15 @@ const ExpertServiceDetail = () => {
                             </Box>
                             {
                                 selectedTab === 0 &&
-                                <AboutService />
+                                <AboutService data={expert.service}/>
                             }
                             {
                                 selectedTab === 1 &&
-                                <ExpertiseDetail />
+                                <ExpertiseDetail data={expert.profile}/>
                             }
                             {
                                 selectedTab === 2 &&
-                                <ServiceReview />
+                                <ServiceReview data={expert}/>
                             }
                         </ColumnLeft>
                     </Grid>
@@ -100,19 +103,20 @@ const ExpertServiceDetail = () => {
                                 <PaidOutlinedIcon />
                                 <span style={{fontWeight: '500', marginLeft: 4}}>Price</span>
                             </Horizontal>
-                            <PriceCard
-                                type='Basic consultant'
-                                matching={20}
-                                detail='Solve difficult tax returns at once give!'
-                                price='$50/hr'
-                                containerStyle={{marginBottom: 20}}
-                            />
-                            <PriceCard
-                                type='Basic consultant'
-                                matching={20}
-                                detail='Solve difficult tax returns at once give!'
-                                price='$50/hr'
-                            />
+                            <>
+                            {
+                                expert && map(expert.price?.options, (option:any) => (
+                                    <PriceCard
+                                        key={option.value + option.unit}
+                                        type={option.title}
+                                        matching={20}
+                                        detail={option.detail}
+                                        price={`$${option.value} ${option.unit}`}
+                                        containerStyle={{marginBottom: 20}}
+                                    />
+                                ))
+                            }
+                            </>
                             <div style={{textAlign: 'center', margin: '20px 0'}}>
                                 <ShowMoreButton />
                             </div>

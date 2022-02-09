@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Checkbox from '@mui/material/Checkbox';
-import { FormControlLabel } from '@mui/material';
-import { isEmpty, map } from 'lodash';
+import { FormControlLabel, Select, MenuItem } from '@mui/material';
+import { isEmpty, map, range } from 'lodash';
 
 import ProfilePhotoUpload from '../../elements/ProfilePhotoUpload';
 import ProfileCareerInput from './ProfileCareerInput';
@@ -20,6 +20,12 @@ const Container = styled('div')({
 
 })
 
+const Horizontal = styled('div')({
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center'
+})
+
 type Props = {
     onChange: (param: ExpertProfile) => void,
     data?: IProfile
@@ -33,6 +39,9 @@ const Profile: React.FC<Props> = ({data, onChange}) => {
     const [ educations, setEducations ] = useState<Education[]>([])
     const [ certificates, setCertificates ] = useState<Certificate[]>([]);
     const [ states, setStates ] = useState<State[]>([]);
+    const [ contactTimes, setContactTimes ] = useState<number[]>([])
+    const [ startTime, setStartTime ] = useState(0)
+    const [ endTime, setEndTime ] = useState(24)
 
     useEffect(() => {
         if(data){
@@ -78,6 +87,45 @@ const Profile: React.FC<Props> = ({data, onChange}) => {
                 value={introduction}
                 onChange={(e: any) => setIntroduction(e.target.value)}
             />
+
+            <div style={{marginTop: '8px'}}>
+                <span style={{marginBottom: '4px'}}>
+                    Contact time
+                </span>
+                <Horizontal>
+                    <Select
+                        style={{flex: 1}}
+                        onChange={(e: any) => setStartTime(e.target.value)} 
+                        value={startTime}           
+                    >
+                        {
+                            range(0, endTime).map(time => (
+                            <MenuItem
+                                value={time}
+                            >
+                                {`0${time}:00`.slice(-5)}
+                            </MenuItem>
+                            ))
+                        }
+                    </Select>
+                    <div style={{margin: '0 8px'}}>~</div>
+                    <Select
+                        style={{flex: 1}}
+                        onChange={(e: any) => setEndTime(e.target.value)} 
+                        value={endTime}           
+                    >
+                        {
+                            range(startTime + 1, 25).map(time => (
+                                <MenuItem
+                                    value={time}
+                                >
+                                    {`0${time}:00`.slice(-5)}
+                                </MenuItem>
+                                ))
+                        }
+                    </Select>
+                </Horizontal>
+            </div>
 
             <ProfileCareerInput
                 data={data && data.careers}
