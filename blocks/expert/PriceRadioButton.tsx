@@ -2,6 +2,7 @@ import { Radio } from '@mui/material';
 import { styled } from '@mui/system';
 import React from 'react';
 import TFButtonBase from '../../elements/TFButtonBase';
+import Price from '../../models/Price';
 
 const Container = styled('div')(props => ({
         border: 'solid 1px #C7C7C7',
@@ -33,14 +34,17 @@ const Price = styled('div')({
 })
 
 type Props = {
-    type: string;
-    matching: number;
-    detail: string;
-    price: string;
-    containerStyle?: object
+    price: Price,
+    containerStyle?: object,
+    matching?: number,
+    checked: boolean,
+    onChange: (value: number) => void
 }
 
-const PriceRadioButton: React.FC<Props> =({type, matching, detail, price, containerStyle={}}) => {
+const PriceRadioButton: React.FC<Props> =({price, matching, containerStyle={}, checked, onChange}) => {
+
+    const {title, detail, value, unit } = price;
+    const priceText =`$${value} ${unit}`.replace(' per ', '/');
 
     return (
         <TFButtonBase containerStyle={containerStyle}>
@@ -48,13 +52,19 @@ const PriceRadioButton: React.FC<Props> =({type, matching, detail, price, contai
                 <Horizontal>
                     <Column>
                         <Horizontal>
-                            <span style={{fontSize: 16, fontWeight: '500'}}>{type}</span>
-                            <span style={{color: '#0075FF', marginLeft: 4}}>Matching {matching}</span>
+                            <span style={{fontSize: 16, fontWeight: '500'}}>{title}</span>
+                            {
+                                matching &&
+                                <span style={{color: '#0075FF', marginLeft: 4}}>Matching {matching}</span>
+                            }
                         </Horizontal>
                         <Detail>{detail}</Detail>
-                        <Price>{price}</Price>
+                        <Price>{priceText}</Price>
                     </Column>
-                    <Radio />
+                    <Radio
+                        checked={checked}
+                        onChange={onChange}
+                    />
                 </Horizontal>
             </Container>
         </TFButtonBase>

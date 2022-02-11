@@ -5,18 +5,19 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import StaticDatePicker from '@mui/lab/StaticDatePicker';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
-import { includes, map, remove } from 'lodash';
+import { includes, map, remove, get, omit } from 'lodash';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useSelector } from 'react-redux';
+import dayjs from 'dayjs';
 
 import ProfileHeader from '../blocks/expert/ProfileHeader';
 import InfoCard from '../elements/InfoCard';
-import ContactInfo from '../blocks/expert/ContactInfo';
-import ServiceLocation from '../blocks/expert/ServiceLocation';
-import ExpertiseDetail from '../blocks/expert/ExpertiseDetail';
-import ServiceReview from '../blocks/expert/ServiceReview';
 import PriceRadioButton from '../blocks/expert/PriceRadioButton';
 import GradientButton from '../elements/GradientButton';
 import TimePicker from '../elements/TimePicker';
+import Price from '../models/Price';
+import { completeResevation } from '../firebase/reservation';
 
 const Container = styled('div')({
     display: 'flex',
@@ -60,9 +61,32 @@ const Group = styled('div')({
 
 const ExpertServiceReservation = () => {
 
-    const [ selectedTab, setSelectedTab ] = useState(0);
-    const [selectedDate, setSelectedDate] = useState(new Date());
-    const [ selectedTimes, setSelectedTimes ] = useState<string[]>([])
+    const router = useRouter();
+    const user = useSelector((state: any) => state.firebase.auth)
+
+    
+    const [ question, setQuestion ] = useState();
+    const [ selectedPriceIndex, setSelectedPriceIndex ] = useState(0);
+    const [ selectedDate, setSelectedDate] = useState(new Date());
+    const [ selectedTime, setSelectedTime ] = useState<string>();
+    
+    const expert = useSelector((state: any) => get(state, `firestore.data.experts[${router.query.id}]`));
+    if(!expert) return null;
+    
+    const { profile, service, price } = expert;
+
+    const doReservation = () => {
+        const reservationTime = dayjs(selectedDate).format('YYYY-MM-DD') + ' ' + selectedTime;
+        const selectedPrice = omit(price.options[selectedPriceIndex], ['title', 'detail']);
+
+        completeResevation({
+            userId: user.uid,
+            expertId: expert.id,
+            question,
+            price: selectedPrice,
+            reservationTime
+        })
+    }
 
     return (
         <Container>
@@ -73,7 +97,7 @@ const ExpertServiceReservation = () => {
                     Find Expert
                 </Link>
                 <Link
-                    href="/expert_detail"
+                    href={`/expert_detail?id=${expert.id}`}
                 >
                     Expert Profile
                 </Link>
@@ -83,29 +107,19 @@ const ExpertServiceReservation = () => {
             </Breadcrumbs>
 
             <Column>
-                <ProfileHeader data={{}}/>
+                <ProfileHeader data={null}/>
                 <UnWrapHorizontal>
-                    <PriceRadioButton
-                        type='Basic consultant'
-                        matching={20}
-                        detail='Solve difficult tax returns at once give!'
-                        price='$50/hr'
-                        containerStyle={{marginRight: 20, textAlign: 'left', minWidth: 360}}
-                    />
-                    <PriceRadioButton
-                        type='Basic consultant'
-                        matching={20}
-                        detail='Solve difficult tax returns at once give!'
-                        price='$50/hr'
-                        containerStyle={{marginRight: 20, textAlign: 'left', minWidth: 360}}
-                    />
-                    <PriceRadioButton
-                        type='Basic consultant'
-                        matching={20}
-                        detail='Solve difficult tax returns at once give!'
-                        price='$50/hr'
-                        containerStyle={{textAlign: 'left', minWidth: 360}}
-                    />
+                    {
+                        map(price.options, (option, index:number) => (
+                            <PriceRadioButton
+                                key={index}
+                                price={option}
+                                checked={selectedPriceIndex===index}
+                                onChange={() => setSelectedPriceIndex(index)}
+                                containerStyle={{marginRight: 20, textAlign: 'left', minWidth: 360}}
+                            />
+                        ))
+                    }
                 </UnWrapHorizontal>
                 <Group>
                     <Horizontal>
@@ -121,12 +135,15 @@ const ExpertServiceReservation = () => {
                                         value={selectedDate}
                                         onChange={(date: any) => setSelectedDate(date)}
                                         openTo="day"
-                                        renderInput={(params) => <TextField {...params} />}
+                                        renderInput={(params: any) => <TextField {...params} />}
+                                        minDate={new Date()}
                                     />
                                 </LocalizationProvider>
                             </Paper>
                         </Column>
-                        <TimePicker />
+                        <TimePicker
+                            onChange={setSelectedTime}
+                        />
                     </Horizontal>
                 </Group>
                 <Group>
@@ -135,12 +152,15 @@ const ExpertServiceReservation = () => {
                         rows={4}
                         multiline
                         placeholder='Type any questions'
+                        value={question}
+                        onChange={(e:any) => setQuestion(e.target.value)}
                     />
                 </Group>
                 <InfoCard containerStyle={{marginTop: 20}}/>
                 <GradientButton
                     text='complete'
                     containerStyle={{marginTop: 20}}
+                    onClick={doReservation}
                 />
             </Column>
                 

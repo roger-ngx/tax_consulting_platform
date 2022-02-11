@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { styled } from '@mui/system';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { includes, map, remove } from 'lodash';
@@ -29,20 +29,28 @@ const TIMES = {
     'PM': ['12:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00'],
 }
 
-const TimePicker = () => {
-    const [ selectedTimes, setSelectedTimes ] = useState<string[]>([])
+type Props = {
+    onChange: (time: string) => void
+}
 
-    const onSelectTime = (time: string) => {
-        const currentSelected = includes(selectedTimes, time);
+const TimePicker: React.FC<Props> = ({onChange}) => {
+    const [ selectedTime, setSelectedTime ] = useState()
 
-        if(currentSelected){
-            remove(selectedTimes, t => t === time);
-        }else{
-            selectedTimes.push(time);
-        }
+    useEffect(() => {
+        onChange(selectedTime);
+    }, [selectedTime])
 
-        setSelectedTimes([...selectedTimes])
-    }
+    // const onSelectTime = (time: string) => {
+    //     const currentSelected = includes(selectedTimes, time);
+
+    //     if(currentSelected){
+    //         remove(selectedTimes, t => t === time);
+    //     }else{
+    //         selectedTimes.push(time);
+    //     }
+
+    //     setSelectedTimes([...selectedTimes])
+    // }
 
     return (
         <Column>
@@ -64,8 +72,8 @@ const TimePicker = () => {
                     {
                         map(TIMES.AM, time => (
                             <TimeButton
-                                selected={includes(selectedTimes, time)}
-                                onClick={() => onSelectTime(time)}
+                                selected={selectedTime===time}
+                                onClick={() => setSelectedTime(time)}
                             >
                                 {time}
                             </TimeButton>
@@ -85,8 +93,8 @@ const TimePicker = () => {
                     {
                         map(TIMES.PM, time => (
                             <TimeButton
-                                selected={includes(selectedTimes, time)}
-                                onClick={() => onSelectTime(time)}
+                                selected={selectedTime===time}
+                                onClick={() => setSelectedTime(time)}
                             >
                                 {time}
                             </TimeButton>

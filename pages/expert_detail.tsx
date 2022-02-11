@@ -123,7 +123,7 @@ const ExpertServiceDetail = () => {
                             <InfoCard />
                             <ServiceButtons
                                 containerStyle={{marginTop: 20}}
-                                goToReservation={() => router.push('/expert_reservation')}
+                                goToReservation={() => router.push(`/expert_reservation?id=${expert.id}`)}
                                 goToChat={() => router.push('/messages')}
                             />
                         </ColumnRight>
