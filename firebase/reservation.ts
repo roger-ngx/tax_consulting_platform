@@ -15,6 +15,17 @@ export const completeResevation = async ({
             createdAt: firebase.firestore.FieldValue.serverTimestamp()
         })
 
+        await firebase.firestore().collection('experts').doc(expertId)
+        .collection('reservations').doc()
+        .set({
+            question,
+            reservationTime,
+            price,
+            userId,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        })
+
         await firebase.firestore().collection('experts').doc(expertId).update({
             updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
             reservedTimes: firebase.firestore.FieldValue.arrayUnion(reservationTime)

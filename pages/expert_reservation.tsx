@@ -84,7 +84,7 @@ const ExpertServiceReservation = () => {
             expertId: expert.id,
             question,
             price: selectedPrice,
-            reservationTime
+            reservationTime: dayjs(reservationTime).toDate()
         })
     }
 
