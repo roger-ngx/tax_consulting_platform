@@ -56,7 +56,7 @@ const ReservationsView: React.FC<Props> = ({isExpert}) => {
                 filter(reservations, reservation => [RESERVATION_STATUS.COMPLETE, RESERVATION_STATUS.CANCEL].includes(reservation.status))
             )
         }
-    }, [selectedTab, reservations]);
+    }, [selectedTab]);
 
     isExpert ? useFirestoreConnect([{
         collection: 'experts',
