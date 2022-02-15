@@ -5,10 +5,10 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import StaticDatePicker from '@mui/lab/StaticDatePicker';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
-import { includes, map, remove, get, omit } from 'lodash';
+import { map, get, omit } from 'lodash';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import dayjs from 'dayjs';
 
 import ProfileHeader from '../blocks/expert/ProfileHeader';
@@ -16,8 +16,8 @@ import InfoCard from '../elements/InfoCard';
 import PriceRadioButton from '../blocks/expert/PriceRadioButton';
 import GradientButton from '../elements/GradientButton';
 import TimePicker from '../elements/TimePicker';
-import Price from '../models/Price';
 import { completeResevation } from '../firebase/reservation';
+import { setOpenLoginModal } from '../stores/userInfoSlide';
 
 const Container = styled('div')({
     display: 'flex',
@@ -61,6 +61,7 @@ const Group = styled('div')({
 
 const ExpertServiceReservation = () => {
 
+    const dispatch = useDispatch();
     const router = useRouter();
     const user = useSelector((state: any) => state.firebase.auth)
 
@@ -69,23 +70,38 @@ const ExpertServiceReservation = () => {
     const [ selectedPriceIndex, setSelectedPriceIndex ] = useState(0);
     const [ selectedDate, setSelectedDate] = useState(new Date());
     const [ selectedTime, setSelectedTime ] = useState<string>();
+
+    const [ processing, setProcessing ] = useState(false);
     
     const expert = useSelector((state: any) => get(state, `firestore.data.experts[${router.query.id}]`));
     if(!expert) return null;
     
-    const { profile, service, price } = expert;
+    const { price } = expert;
 
-    const doReservation = () => {
-        const reservationTime = dayjs(selectedDate).format('YYYY-MM-DD') + ' ' + selectedTime;
-        const selectedPrice = omit(price.options[selectedPriceIndex], ['title', 'detail']);
+    const doReservation = async () => {
+        if(!!user.uid){
+            dispatch(setOpenLoginModal(true));
+            return;
+        }
 
-        completeResevation({
-            userId: user.uid,
-            expertId: expert.id,
-            question,
-            price: selectedPrice,
-            reservationTime: dayjs(reservationTime).toDate()
-        })
+        setProcessing(true);
+
+        try{
+            const reservationTime = dayjs(selectedDate).format('YYYY-MM-DD') + ' ' + selectedTime;
+            const selectedPrice = omit(price.options[selectedPriceIndex], ['title', 'detail']);
+    
+            await completeResevation({
+                userId: user.uid,
+                expertId: expert.id,
+                question,
+                price: selectedPrice,
+                reservationTime: dayjs(reservationTime).toDate()
+            })
+        }catch(ex){
+            console.log('doReservation', ex);
+        }
+
+        setProcessing(false);
     }
 
     return (
@@ -161,6 +177,7 @@ const ExpertServiceReservation = () => {
                     text='complete'
                     containerStyle={{marginTop: 20}}
                     onClick={doReservation}
+                    processing={processing}
                 />
             </Column>
                 

@@ -42,13 +42,15 @@ type Props = {
     time: string,
     content: string,
     status?: string,
-    isFinished: boolean
+    isFinished: boolean,
+    isExpert?: boolean,
+    containerStyle?: object
 }
 
-const ReservationItem : React.FC<Props> = ({date, time, content, status, isFinished}) => {
+const ReservationItem : React.FC<Props> = ({date, time, content, status, isFinished, isExpert, containerStyle={}}) => {
 
     return (
-        <Container>
+        <Container style={containerStyle}>
             <Avatar
                 size={80}
                 src='/assets/images/profile.png'
@@ -74,7 +76,7 @@ const ReservationItem : React.FC<Props> = ({date, time, content, status, isFinis
                     {status}
                 </Status>
                 :
-                <Link href='/reservation' passHref>
+                <Link href={isExpert ? '/reservation' : '/reserved_expert'} passHref>
                     <RightButton>
                         Request
                     </RightButton>

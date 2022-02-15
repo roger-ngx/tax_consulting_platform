@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { styled } from '@mui/system';
 import { Tabs, Tab } from '@mui/material';
 import Link from 'next/link';
+import { map } from 'lodash';
+import { useSelector } from 'react-redux';
+import { useFirestoreConnect } from 'react-redux-firebase';
 
 import Profile from './Profile';
 import Service from './Service';
@@ -24,9 +27,37 @@ const Title = styled('span')({
     marginBottom: 24
 })
 
-const Reservation = () => {
+type Props = {
+    isExpert?: boolean
+}
+
+const Reservation: React.FC<Props> = ({isExpert}) => {
 
     const [ selectedTab, setSelectedTab ] = useState('inprogress');
+
+    const userId = useSelector((state: any) => state.firebase.auth.uid);
+
+    const reservations = useSelector((state: any) => state.firestore.ordered.reservations);
+
+    isExpert ? useFirestoreConnect([{
+        collection: 'experts',
+        doc: userId,
+        subcollections: [{
+            collection: 'reservations',
+            orderBy: ['createdAt', 'desc'],
+        }],
+        storeAs: 'reservations',
+        orderBy: ['updatedAt', 'desc'],
+        limit: 10
+    }])
+    :
+    useFirestoreConnect([{
+        collection: 'reservations',
+        doc: userId,
+        storeAs: 'reservations',
+        orderBy: ['updatedAt', 'desc'],
+        limit: 10
+    }])
 
     const handleTabChange = (event: any, newValue: string) => {
         setSelectedTab(newValue);
@@ -42,12 +73,18 @@ const Reservation = () => {
                 {
                     selectedTab === 'inprogress' &&
                     <Column>
-                        <ReservationItem
-                            date='8.11 (wed)'
-                            time='AM 9:00'
-                            content='Booked with Jhon.'
-                            isFinished={false}
-                        />
+                        {
+                            map(reservations, reservation => (
+                                <ReservationItem
+                                    key={reservation.id}
+                                    date='8.11 (wed)'
+                                    time='AM 9:00'
+                                    content='Booked with Jhon.'
+                                    isFinished={false}
+                                    containerStyle={{marginBottom: 20}}
+                                />
+                            ))
+                        }
                     </Column>
                 }
                 {

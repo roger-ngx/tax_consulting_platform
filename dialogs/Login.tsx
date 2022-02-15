@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 
 import ButtonBase from '../elements/TFButtonBase';
 import { loginWithGoogle } from '../firebase/login';
+import { setOpenLoginModal } from '../stores/userInfoSlide';
 
 const Content = styled('div')({
     display: 'flex',
@@ -16,22 +17,23 @@ const Content = styled('div')({
 
 type Props = {
     open: boolean, 
-    onClose: () => void
 }
 
-const Login : React.FC<Props> = ({open, onClose}) => {
+const Login : React.FC<Props> = ({open}) => {
 
     const dispatch = useDispatch();
     const [ processing, setProcessing ] = useState(false);
 
     const doLogin = () => {
         loginWithGoogle({dispatch}).then(data => {
-            onClose();
+            dispatch(setOpenLoginModal(false));
             console.log(data);
         }).catch(ex => {
             console.log(ex);
         }).finally(() => setProcessing(false));
     }
+
+    const onClose = () => dispatch(setOpenLoginModal(false));
 
     return (
         <Dialog open={open} onClose={onClose}>

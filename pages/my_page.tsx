@@ -49,7 +49,7 @@ const MyPage = () => {
                 <Title>{selectedItem}</Title>
                 {
                     selectedItem === 'Reservation' &&
-                    <Reservation />
+                    <Reservation isExpert={!!expert}/>
                 }
 
                 {

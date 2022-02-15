@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 
 import Login from '../dialogs/Login';
 import Avatar from '../elements/Avatar';
+import { setOpenLoginModal } from '../stores/userInfoSlide';
 
 const Horizontal = styled.div`
     display: flex;
@@ -28,10 +29,8 @@ const Anchor = styled.a`
 `
 
 const NavigationBar = () => {
-    const [ openLogin, setOpenLogin ] = useState(false);
-
+    const openLoginModal = useSelector((state: any) => state.user.openLoginModal);
     const user = useSelector((state: any) => state.firebase.auth);
-    console.log('user', user);
 
     return (
         <Container>
@@ -49,8 +48,8 @@ const NavigationBar = () => {
             </Horizontal>
             <Horizontal>
                 {
-                    user?.isEmpty ? 
-                    <a onClick={() => setOpenLogin(true)}>
+                    user!.isEmpty ? 
+                    <a onClick={() => setOpenLoginModal(true)}>
                         <Anchor>Login</Anchor>
                     </a>
                     :
@@ -71,10 +70,9 @@ const NavigationBar = () => {
                 }
             </Horizontal>
             {
-                openLogin &&
+                openLoginModal &&
                 <Login
-                    open={openLogin}
-                    onClose={() => setOpenLogin(false)}
+                    open={openLoginModal}
                 />
             }
         </Container>

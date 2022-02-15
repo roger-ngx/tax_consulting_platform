@@ -1,7 +1,7 @@
 import React from 'react';
 import { styled } from '@mui/system';
 import TFButtonBase from './TFButtonBase';
-import { ButtonProps } from '@mui/material';
+import { ButtonProps, CircularProgress } from '@mui/material';
 
 type BCProps = {
     disabled: boolean
@@ -15,16 +15,23 @@ const ButtonContainer = styled('div')<BCProps>(props => ({
 
 type Props = ButtonProps & {
     text: string,
-    containerStyle?: object
+    containerStyle?: object,
+    processing?: boolean
 }
 
-const GradientButton: React.FC<Props> = ({text, containerStyle={}, ...props}) => (
+const GradientButton: React.FC<Props> = ({text, processing, containerStyle={}, ...props}) => (
     <TFButtonBase
         containerStyle={containerStyle}
         {...props}
+        disabled={processing}
     >
         <ButtonContainer disabled={!!props.disabled}>
-            <span style={{color: 'white', textAlign: 'center'}}>{text}</span>
+            {
+                processing ?
+                <CircularProgress sx={{color:'white', fontSize: 0}} size={16}/>
+                :
+                <span style={{color: 'white', textAlign: 'center'}}>{text}</span>
+            }
         </ButtonContainer>
     </TFButtonBase>
 )

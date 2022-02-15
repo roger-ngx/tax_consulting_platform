@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Box, Breadcrumbs, Grid, styled, Tab, Tabs } from '@mui/material';
 import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined';
 import { get, map } from 'lodash';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Link from 'next/link';
 
 import PriceCard from '../blocks/expert/PriceCard';
@@ -16,6 +16,7 @@ import ServiceReview from '../blocks/expert/ServiceReview';
 import { useRouter } from 'next/router';
 import ExpertInfo from '../blocks/expert/Info';
 import AboutService from '../blocks/expert/AboutService';
+import { setOpenLoginModal } from '../stores/userInfoSlide';
 
 const Container = styled('div')({
     display: 'flex',
@@ -41,16 +42,35 @@ const ColumnRight = styled('div')({
 
 const ExpertServiceDetail = () => {
 
+    const dispatch = useDispatch();
     const router = useRouter();
+    const user = useSelector((state: any) => state.firebase.auth)
 
     const expert = useSelector((state: any) => get(state, `firestore.data.experts[${router.query.id}]`));
-    console.log('ExpertServiceDetail', get(expert, 'price.options'));
+    // console.log('ExpertServiceDetail', get(expert, 'price.options'));
 
     const [ selectedTab, setSelectedTab ] = useState(0);
 
     const handleTabChange = (event: any, newValue: any) => {
         setSelectedTab(newValue);
     };
+
+    const goToReservation = () => {
+        if(!user.uid){
+            dispatch(setOpenLoginModal(true));
+            return;
+        }
+        router.push(`/expert_reservation?id=${expert.id}`)
+    }
+
+    const goToChat = () => {
+        if(!user.uid){
+            dispatch(setOpenLoginModal(true));
+            return;
+        }
+
+        router.push('/messages')
+    }
 
     return (
         <Container>
@@ -123,8 +143,8 @@ const ExpertServiceDetail = () => {
                             <InfoCard />
                             <ServiceButtons
                                 containerStyle={{marginTop: 20}}
-                                goToReservation={() => router.push(`/expert_reservation?id=${expert.id}`)}
-                                goToChat={() => router.push('/messages')}
+                                goToReservation={goToReservation}
+                                goToChat={goToChat}
                             />
                         </ColumnRight>
                     </Grid>
