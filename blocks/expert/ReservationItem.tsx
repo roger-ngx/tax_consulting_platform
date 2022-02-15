@@ -3,6 +3,7 @@ import { styled } from '@mui/system';
 import Link from 'next/link';
 import Avatar from '../../elements/Avatar';
 import GradientButton from '../../elements/GradientButton';
+import { Reservation, RESERVATION_STATUS } from '../../models/Reservation';
 
 const Container = styled('div')({
     border: 'solid 1px #C7C7C7',
@@ -38,16 +39,15 @@ const RightButton = styled(Button)(props => ({
 }))
 
 type Props = {
-    date: string,
-    time: string,
-    content: string,
-    status?: string,
-    isFinished: boolean,
+    item: Reservation,
     isExpert?: boolean,
     containerStyle?: object
 }
 
-const ReservationItem : React.FC<Props> = ({date, time, content, status, isFinished, isExpert, containerStyle={}}) => {
+const ReservationItem : React.FC<Props> = ({item, isExpert, containerStyle={}}) => {
+    if(!item) return null;
+
+    const { date, time, status } = item;
 
     return (
         <Container style={containerStyle}>
@@ -59,9 +59,9 @@ const ReservationItem : React.FC<Props> = ({date, time, content, status, isFinis
             <Body>
                 <span style={{fontWeight: 'bold'}}>{date}</span>
                 <span>{time}</span>
-                <span style={{margin: '16px 0'}}>{content}</span>
+                {/* <span style={{margin: '16px 0'}}>{detail}</span> */}
                 {
-                    status==='Completed' &&
+                    !isExpert && status===RESERVATION_STATUS.COMPLETE &&
                     <Link href='/reservation?isFinished=true' passHref>
                         <GradientButton
                             text='Leave a review'
@@ -69,18 +69,28 @@ const ReservationItem : React.FC<Props> = ({date, time, content, status, isFinis
                         />
                     </Link>
                 }
+
+                {
+                    isExpert && status===RESERVATION_STATUS.REQUEST &&
+                    <Link href='/reservation?isFinished=true' passHref>
+                        <GradientButton
+                            text='Approve'
+                            containerStyle={{textAlign: 'center', maxWidth: 200}}
+                        />
+                    </Link>
+                }
             </Body>
             {
-                isFinished ?
-                <Status color={status==='Canceled' ? 'red' : '#989FAD'}>
-                    {status}
-                </Status>
-                :
+                status===RESERVATION_STATUS.REQUEST ?
                 <Link href={isExpert ? '/reservation' : '/reserved_expert'} passHref>
                     <RightButton>
                         Request
                     </RightButton>
                 </Link>
+                :
+                <Status color={status===RESERVATION_STATUS.CANCEL ? 'red' : '#989FAD'}>
+                    {status}
+                </Status>
             }
         </Container>
     )

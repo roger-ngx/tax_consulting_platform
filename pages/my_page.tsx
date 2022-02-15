@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { get } from 'lodash'; 
 
 import MyPageSideMenu from '../blocks/MyPage/MyPageSideMenu';
-import Reservation from '../blocks/MyPage/Reservation';
+import ReservationsView from '../blocks/MyPage/ReservationsView';
 import EnrollExpert from '../blocks/MyPage/EnrollExpert';
 import TermsAndConditions from '../blocks/MyPage/TermsAndConditions';
 
@@ -49,7 +49,7 @@ const MyPage = () => {
                 <Title>{selectedItem}</Title>
                 {
                     selectedItem === 'Reservation' &&
-                    <Reservation isExpert={!!expert}/>
+                    <ReservationsView isExpert={!!expert}/>
                 }
 
                 {
