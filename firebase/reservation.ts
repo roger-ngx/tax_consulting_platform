@@ -1,8 +1,17 @@
 import firebase from '../firebase/firebaseInit';
 
-export const completeResevation = async ({
-    userId, expertId, question, price, reservationTime
-}) => {
+type Props = {
+    userId: string,
+    expertId: string,
+    question?: string,
+    price: object,
+    reservationTime: Date
+}
+
+export const completeResevation = async (props : Props) => {
+
+    const { userId, expertId, question, price, reservationTime } = props;
+
     try{
         await firebase.firestore().collection('reservations').doc(userId)
         .collection('items')

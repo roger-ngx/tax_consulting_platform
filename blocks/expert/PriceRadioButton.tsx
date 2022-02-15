@@ -28,7 +28,7 @@ const Detail = styled('div')({
     marginBottom: 16
 })
 
-const Price = styled('div')({
+const PriceText = styled('div')({
     color: '#0045D1',
     textAlign: 'left'
 })
@@ -38,7 +38,7 @@ type Props = {
     containerStyle?: object,
     matching?: number,
     checked: boolean,
-    onChange: (value: number) => void
+    onChange: (e: any) => void
 }
 
 const PriceRadioButton: React.FC<Props> =({price, matching, containerStyle={}, checked, onChange}) => {
@@ -59,7 +59,7 @@ const PriceRadioButton: React.FC<Props> =({price, matching, containerStyle={}, c
                             }
                         </Horizontal>
                         <Detail>{detail}</Detail>
-                        <Price>{priceText}</Price>
+                        <PriceText>{priceText}</PriceText>
                     </Column>
                     <Radio
                         checked={checked}

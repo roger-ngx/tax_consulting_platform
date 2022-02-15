@@ -34,10 +34,10 @@ type Props = {
 }
 
 const TimePicker: React.FC<Props> = ({onChange}) => {
-    const [ selectedTime, setSelectedTime ] = useState()
+    const [ selectedTime, setSelectedTime ] = useState<string>()
 
     useEffect(() => {
-        onChange(selectedTime);
+        selectedTime && onChange(selectedTime);
     }, [selectedTime])
 
     // const onSelectTime = (time: string) => {
