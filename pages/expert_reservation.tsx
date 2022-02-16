@@ -5,11 +5,11 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import StaticDatePicker from '@mui/lab/StaticDatePicker';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
-import { map, get, omit } from 'lodash';
+import { map, get, omit, filter } from 'lodash';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useSelector, useDispatch } from 'react-redux';
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 
 import ProfileHeader from '../blocks/expert/ProfileHeader';
 import InfoCard from '../elements/InfoCard';
@@ -71,12 +71,23 @@ const ExpertServiceReservation = () => {
     const [ selectedDate, setSelectedDate] = useState(new Date());
     const [ selectedTime, setSelectedTime ] = useState<string>();
 
+    const [ reserved, setReserved ] = useState<string[]>();
+
     const [ processing, setProcessing ] = useState(false);
     
+    useEffect(() => {
+        const times = filter(reservedTimes, reservedTime => convertTime(dayjs(reservedTime.seconds * 1000)) === convertTime(dayjs(selectedDate)));
+        setReserved(map(times, time => dayjs(time.seconds * 1000).format('hh:mm').toString()))
+    }, [selectedDate]);
+
     const expert = useSelector((state: any) => get(state, `firestore.data.experts[${router.query.id}]`));
     if(!expert) return null;
     
-    const { price } = expert;
+    const { price, reservedTimes } = expert;
+
+    const convertTime = (time: Dayjs) => {
+        return time.format('YYYY-MM-DD').toString();
+    }
 
     const doReservation = async () => {
         if(!!user.uid){
@@ -87,11 +98,11 @@ const ExpertServiceReservation = () => {
         setProcessing(true);
 
         try{
-            const reservationTime = dayjs(selectedDate).format('YYYY-MM-DD') + ' ' + selectedTime;
-            const selectedPrice = omit(price.options[selectedPriceIndex], ['title', 'detail']);
+            const reservationTime = selectedDate + ' ' + selectedTime;
+            const selectedPrice = price.options[selectedPriceIndex];
     
             await completeResevation({
-                userId: user.uid,
+                user,
                 expertId: expert.id,
                 question,
                 price: selectedPrice,
@@ -159,6 +170,7 @@ const ExpertServiceReservation = () => {
                         </Column>
                         <TimePicker
                             onChange={setSelectedTime}
+                            reserved={reserved}
                         />
                     </Horizontal>
                 </Group>

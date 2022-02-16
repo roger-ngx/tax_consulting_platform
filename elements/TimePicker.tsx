@@ -30,10 +30,11 @@ const TIMES = {
 }
 
 type Props = {
-    onChange: (time: string) => void
+    onChange: (time: string) => void,
+    reserved?: string[],
 }
 
-const TimePicker: React.FC<Props> = ({onChange}) => {
+const TimePicker: React.FC<Props> = ({onChange, reserved=[]}) => {
     const [ selectedTime, setSelectedTime ] = useState<string>()
 
     useEffect(() => {
@@ -72,6 +73,7 @@ const TimePicker: React.FC<Props> = ({onChange}) => {
                     {
                         map(TIMES.AM, time => (
                             <TimeButton
+                                disabled={reserved.includes(time)}
                                 selected={selectedTime===time}
                                 onClick={() => setSelectedTime(time)}
                             >
@@ -93,6 +95,7 @@ const TimePicker: React.FC<Props> = ({onChange}) => {
                     {
                         map(TIMES.PM, time => (
                             <TimeButton
+                                disabled={reserved.includes(time)}
                                 selected={selectedTime===time}
                                 onClick={() => setSelectedTime(time)}
                             >

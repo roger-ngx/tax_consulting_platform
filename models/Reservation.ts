@@ -34,6 +34,6 @@ export class Reservation {
     }
 
     get time(){
-        return dayjs(this.reservationTime.seconds * 1000).format('a HH:mm');
+        return dayjs(this.reservationTime.seconds * 1000).format('HH:mm A');
     }
 }

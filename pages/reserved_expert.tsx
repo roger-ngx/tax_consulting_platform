@@ -4,13 +4,16 @@ import Avatar from '../elements/Avatar';
 import { Step, Stepper, StepLabel, Button } from '@mui/material';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import InsertCommentIcon from '@mui/icons-material/InsertComment';
+import { useSelector } from 'react-redux';
+import { get } from 'lodash';
+import { useRouter } from 'next/router';
 
 import ExpertInfo from '../blocks/expert/Info';
 import CancelReservationDialog from '../dialogs/user/CancelReservationDialog';
 import ReservationTimeChangingDialog from '../dialogs/user/ReservationTimeChangingDialog';
 import ExpertReviewDialog from '../dialogs/user/ExpertReviewDialog';
-import { useRouter } from 'next/router';
 import PriceCard from '../blocks/expert/PriceCard';
+import { Reservation } from '../models/Reservation';
 
 const Container = styled('div')({
     display: 'flex',
@@ -125,13 +128,23 @@ const ReservedExpert = ({}) => {
     const [ openReviewDialog, setOpenReviewDialog ] = useState(false);
 
     const router = useRouter();
-    const { isFinished } = router.query;
+    const { isFinished, id } = router.query;
+
+    const item = useSelector(state => get(state, `firestore.data.reservations[${id}]`));
+
+    if(!item){
+        return null;
+    }
+
+    const reservation = new Reservation(item);
+
+    const { title, detail, value, unit } = reservation.price;
 
     return (
         <Container>
             <Header>
-                <Date>2021.8.11(Tue)</Date>
-                <Time>{`09:00 AM`}</Time>
+                <Date>{reservation.date}</Date>
+                <Time>{reservation.time}</Time>
                 <div style={{position: 'absolute', bottom: -50, textAlign: 'center', width: '100%'}}>
                     <Avatar
                         size={100}
@@ -171,35 +184,45 @@ const ReservedExpert = ({}) => {
                 <TextContainer>
                     <TextTitle>Price</TextTitle>
                     <PriceCard
-                        type='Basic consultant'
+                        type={title!}
                         matching={20}
-                        detail='Solve difficult tax returns at once give!'
-                        price='$50/h'
+                        detail={detail!}
+                        price={`$${value} ${unit}`}
                         containerStyle={{marginBottom: 20}}
                     />
                 </TextContainer>
 
-                <TextContainer>
-                    <TextTitle>My inquiry</TextTitle>
-                    <TextBox>
-                        adfjkahsfjhasjh haskdhfkash jsahfkashk
-                    </TextBox>
-                    <div style={{textAlign: 'right', marginTop: 8}}>
-                        <Button
-                            variant='outlined'
-                            color='primary'
-                        >
-                            Answer
-                        </Button>
-                    </div>
-                </TextContainer>
+                {
+                    reservation.question && <>
+                        <TextContainer>
+                            <TextTitle>Inquiry</TextTitle>
+                            <TextBox>
+                                {reservation.question}
+                            </TextBox>
+                            {
+                                !reservation.answer &&
+                                <div style={{textAlign: 'right', marginTop: 8}}>
+                                    <Button
+                                        variant='outlined'
+                                        color='primary'
+                                    >
+                                        Answer
+                                    </Button>
+                                </div>
+                            }
+                        </TextContainer>
 
-                <TextContainer>
-                    <TextTitle>Answer</TextTitle>
-                    <TextBox>
-                        kashfkjashkj ahfsdhkasdfh ashdfkjash
-                    </TextBox>
-                </TextContainer>
+                        {
+                            reservation.answer &&
+                            <TextContainer>
+                                <TextTitle>Answer</TextTitle>
+                                <TextBox>
+                                    {reservation.answer}
+                                </TextBox>
+                            </TextContainer>
+                        }
+                    </>
+                }
                 <CancelButton
                     onClick={() => setOpenCancelDialog(true)}
                 >

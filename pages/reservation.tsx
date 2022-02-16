@@ -4,12 +4,15 @@ import Avatar from '../elements/Avatar';
 import { Step, Stepper, StepLabel, Button } from '@mui/material';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import InsertCommentIcon from '@mui/icons-material/InsertComment';
+import { useRouter } from 'next/router';
+import { useSelector } from 'react-redux';
+import { get } from 'lodash';
 
 import ExpertInfo from '../blocks/expert/Info';
 import CancelReservationDialog from '../dialogs/user/CancelReservationDialog';
 import ReservationTimeChangingDialog from '../dialogs/user/ReservationTimeChangingDialog';
 import ExpertReviewDialog from '../dialogs/user/ExpertReviewDialog';
-import { useRouter } from 'next/router';
+import { Reservation } from '../models/Reservation';
 
 const Container = styled('div')({
     display: 'flex',
@@ -117,20 +120,28 @@ const steps = [
     'Complete'
 ]
 
-const Reservation = ({}) => {
+const ReservationView = ({}) => {
 
     const [ openCancelDialog, setOpenCancelDialog ] = useState(false);
     const [ openDatetimeChangingDialog, setOpenDatetimeChangingDialog ] = useState(false);
     const [ openReviewDialog, setOpenReviewDialog ] = useState(false);
 
     const router = useRouter();
-    const { isFinished } = router.query;
+    const { isFinished, id } = router.query;
+
+    const item = useSelector(state => get(state, `firestore.data.reservations[${id}]`));
+
+    if(!item){
+        return null;
+    }
+
+    const reservation = new Reservation(item);
 
     return (
         <Container>
             <Header>
-                <Date>2021.8.11(Tue)</Date>
-                <Time>{`09:00 AM`}</Time>
+                <Date>{reservation.date}</Date>
+                <Time>{reservation.time}</Time>
                 <div style={{position: 'absolute', bottom: -50, textAlign: 'center', width: '100%'}}>
                     <Avatar
                         size={100}
@@ -167,19 +178,23 @@ const Reservation = ({}) => {
                     </ChattingButton>
                 </ButtonContainer>
 
-                <TextContainer>
-                    <TextTitle>My inquiry</TextTitle>
-                    <TextBox>
-                        adfjkahsfjhasjh haskdhfkash jsahfkashk
-                    </TextBox>
-                </TextContainer>
+                {
+                    reservation.question && <>
+                        <TextContainer>
+                            <TextTitle>My inquiry</TextTitle>
+                            <TextBox>
+                                {reservation.question}
+                            </TextBox>
+                        </TextContainer>
 
-                <TextContainer>
-                    <TextTitle>Answer</TextTitle>
-                    <TextBox>
-                        kashfkjashkj ahfsdhkasdfh ashdfkjash
-                    </TextBox>
-                </TextContainer>
+                        <TextContainer>
+                            <TextTitle>Answer</TextTitle>
+                            <TextBox>
+                                {reservation.answer}
+                            </TextBox>
+                        </TextContainer>
+                    </>
+                }
                 <CancelButton
                     onClick={() => setOpenCancelDialog(true)}
                 >
@@ -205,4 +220,4 @@ const Reservation = ({}) => {
     )
 }
 
-export default Reservation;
+export default ReservationView;

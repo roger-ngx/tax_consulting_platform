@@ -1,7 +1,7 @@
 import firebase from '../firebase/firebaseInit';
 
 type Props = {
-    userId: string,
+    user: any,
     expertId: string,
     question?: string,
     price: object,
@@ -10,10 +10,10 @@ type Props = {
 
 export const completeResevation = async (props : Props) => {
 
-    const { userId, expertId, question, price, reservationTime } = props;
+    const { user, expertId, question, price, reservationTime } = props;
 
     try{
-        await firebase.firestore().collection('reservations').doc(userId)
+        await firebase.firestore().collection('reservations').doc(user.id)
         .collection('items')
         .add({
             expertId,
@@ -31,7 +31,7 @@ export const completeResevation = async (props : Props) => {
             question,
             reservationTime,
             price,
-            userId,
+            userId: user.id,
             status: 'REQUESTED',
             updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
             createdAt: firebase.firestore.FieldValue.serverTimestamp()

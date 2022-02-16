@@ -62,7 +62,16 @@ const ReservationItem : React.FC<Props> = ({item, isExpert, containerStyle={}}) 
                 {/* <span style={{margin: '16px 0'}}>{detail}</span> */}
                 {
                     !isExpert && status===RESERVATION_STATUS.COMPLETE &&
-                    <Link href='/reservation?isFinished=true' passHref>
+                    <Link
+                        href={{
+                            pathname: `${isExpert ? '/reserved_expert' : '/reservation'}`,
+                            query: {
+                                isFinished:true,
+                                id: item.id
+                            }
+                        }}
+                        passHref
+                    >
                         <GradientButton
                             text='Leave a review'
                             containerStyle={{textAlign: 'center', maxWidth: 200}}
@@ -72,7 +81,15 @@ const ReservationItem : React.FC<Props> = ({item, isExpert, containerStyle={}}) 
 
                 {
                     isExpert && status===RESERVATION_STATUS.REQUEST &&
-                    <Link href='/reservation?isFinished=true' passHref>
+                    <Link
+                        href={{
+                            pathname: isExpert ? '/reserved_expert' : '/reservation',
+                            query: {
+                                id: item.id
+                            }
+                        }}
+                        passHref
+                    >
                         <GradientButton
                             text='Approve'
                             containerStyle={{textAlign: 'center', maxWidth: 200}}
@@ -82,7 +99,15 @@ const ReservationItem : React.FC<Props> = ({item, isExpert, containerStyle={}}) 
             </Body>
             {
                 status===RESERVATION_STATUS.REQUEST ?
-                <Link href={isExpert ? '/reservation' : '/reserved_expert'} passHref>
+                <Link
+                    href={{
+                        pathname: isExpert ? '/reserved_expert' : '/reservation',
+                        query: {
+                            id: item.id
+                        }
+                    }}
+                    passHref
+                >
                     <RightButton>
                         Request
                     </RightButton>
