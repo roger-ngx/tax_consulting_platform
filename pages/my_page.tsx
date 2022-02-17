@@ -23,7 +23,11 @@ const Title = styled('span')({
 const MyPage = () => {
 
     const [ selectedItem, setSelectedItem ] = useState<string>();
-    const uid = useSelector((state: any) => state.firebase.auth.uid);
+    const uid = useSelector((state: any) => get(state, 'firebase.auth.uid'));
+
+    if(!uid){
+        return null;
+    }
 
     const handleTabChange = (event: Event, newValue: any) => {
         setSelectedItem(newValue);

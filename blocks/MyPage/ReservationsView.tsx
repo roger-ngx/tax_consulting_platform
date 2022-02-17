@@ -6,9 +6,6 @@ import { map, filter } from 'lodash';
 import { useSelector } from 'react-redux';
 import { useFirestoreConnect } from 'react-redux-firebase';
 
-import Profile from './Profile';
-import Service from './Service';
-import Price from './Price';
 import ReservationItem from '../expert/ReservationItem';
 import { Reservation, RESERVATION_STATUS } from '../../models/Reservation';
 
@@ -58,6 +55,10 @@ const ReservationsView: React.FC<Props> = ({isExpert}) => {
         }
     }, [selectedTab]);
 
+    if(!userId){
+        return null;
+    }
+
     isExpert ? useFirestoreConnect([{
         collection: 'experts',
         doc: userId,
@@ -66,16 +67,17 @@ const ReservationsView: React.FC<Props> = ({isExpert}) => {
             orderBy: ['createdAt', 'desc'],
         }],
         storeAs: 'reservations',
-        orderBy: ['updatedAt', 'desc'],
-        limit: 10
+        orderBy: ['updatedAt', 'desc']
     }])
     :
     useFirestoreConnect([{
         collection: 'reservations',
         doc: userId,
+        subcollections: [{
+            collection: 'items',
+            orderBy: ['updatedAt', 'desc'],
+        }],
         storeAs: 'reservations',
-        orderBy: ['updatedAt', 'desc'],
-        limit: 10
     }])
 
     const handleTabChange = (event: any, newValue: TABS) => {
