@@ -207,6 +207,7 @@ const ReservationView = ({}) => {
                 onSave={() => {}}
             />
             <ReservationTimeChangingDialog
+                dateTime={reservation.dateTime}
                 open={openDatetimeChangingDialog}
                 onClose={() => setOpenDatetimeChangingDialog(false)}
                 onSave={() => {}}

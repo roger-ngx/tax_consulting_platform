@@ -98,7 +98,7 @@ const ReservationItem : React.FC<Props> = ({item, isExpert, containerStyle={}}) 
                 }
             </Body>
             {
-                status===RESERVATION_STATUS.REQUEST ?
+                // status===RESERVATION_STATUS.REQUEST ?
                 <Link
                     href={{
                         pathname: isExpert ? '/reserved_expert' : '/reservation',
@@ -109,13 +109,13 @@ const ReservationItem : React.FC<Props> = ({item, isExpert, containerStyle={}}) 
                     passHref
                 >
                     <RightButton>
-                        Request
+                        {status}
                     </RightButton>
                 </Link>
-                :
-                <Status color={status===RESERVATION_STATUS.CANCEL ? 'red' : '#989FAD'}>
-                    {status}
-                </Status>
+                // :
+                // <Status color={status===RESERVATION_STATUS.CANCEL ? 'red' : '#989FAD'}>
+                //     {status}
+                // </Status>
             }
         </Container>
     )

@@ -30,11 +30,15 @@ export class Reservation {
     }
 
     get date(){
-        return dayjs(this.reservationTime.seconds * 1000).format('MM/DD (ddd)');
+        return this.dateTime.format('MM/DD (ddd)');
     }
 
     get time(){
-        return dayjs(this.reservationTime.seconds * 1000).format('HH:mm A');
+        return this.dateTime.format('HH:mm A');
+    }
+
+    get dateTime(){
+        return dayjs(this.reservationTime.seconds * 1000);
     }
 
     get step(){

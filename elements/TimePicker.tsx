@@ -32,9 +32,10 @@ const TIMES = {
 type Props = {
     onChange: (time: string) => void,
     reserved?: string[],
+    showIcon?: boolean
 }
 
-const TimePicker: React.FC<Props> = ({onChange, reserved=[]}) => {
+const TimePicker: React.FC<Props> = ({onChange, showIcon=true, reserved=[]}) => {
     const [ selectedTime, setSelectedTime ] = useState<string>()
 
     useEffect(() => {
@@ -55,10 +56,13 @@ const TimePicker: React.FC<Props> = ({onChange, reserved=[]}) => {
 
     return (
         <Column>
-            <Horizontal style={{marginBottom: 4}}>
-                <AccessTimeIcon style={{marginRight: 4}}/>
-                <span>Time</span>
-            </Horizontal>
+            {
+                showIcon &&
+                <Horizontal style={{marginBottom: 4}}>
+                    <AccessTimeIcon style={{marginRight: 4}}/>
+                    <span>Time</span>
+                </Horizontal>
+            }
             <div>
                 <div>
                     AM

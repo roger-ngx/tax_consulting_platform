@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
@@ -13,6 +13,8 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import { DialogActions, Divider, TextField } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 
@@ -21,6 +23,8 @@ import Career from '../../models/Career';
 import TFButtonBase from '../../elements/TFButtonBase';
 import InfoCard from '../../elements/InfoCard';
 import { LocalizationProvider, StaticDatePicker } from '@mui/lab';
+import TimePicker from '../../elements/TimePicker';
+import dayjs = require('dayjs');
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -64,18 +68,26 @@ const HeaderContainer = styled('div')({
     padding: '16px 0',
 })
 
-const Header = () => {
+type HeaderProps = {
+    title: string;
+    subTitle: string;
+    onClick: () => void;
+    icon: any,
+    close: boolean
+}
+
+const Header: React.FC<HeaderProps> = ({onClick, title, subTitle, icon, close}) => {
     
     return (
-        <TFButtonBase containerStyle={{width: '100%'}}>
+        <TFButtonBase containerStyle={{width: '100%'}} onClick={onClick}>
             <HeaderContainer>
                 <Horizontal>
-                    <EventAvailableIcon />
-                    <span style={{fontWeight: '500', fontSize: 18}}>Calendar</span>
+                    {icon}
+                    <span style={{fontWeight: '500', fontSize: 18}}>{title}</span>
                 </Horizontal>
                 <Horizontal>
-                    <span style={{fontWeight: '500', fontSize: 18, color: '#0045D1'}}>8.11(Tus)</span>
-                    <KeyboardArrowDownIcon />
+                    <span style={{fontWeight: '500', fontSize: 18, color: '#0045D1'}}>{subTitle}</span>
+                    { close ? <KeyboardArrowDownIcon /> : <KeyboardArrowUpIcon />}
                 </Horizontal>
             </HeaderContainer>
         </TFButtonBase>
@@ -85,11 +97,21 @@ const Header = () => {
 type Props = {
   open: boolean;
   onClose: () => void,
-  onSave: () => void
+  onSave: () => void,
+  dateTime: dayjs.Dayjs
 }
 
-const ReservationTimeChangingDialog: React.FC<Props> = ({open, onClose, onSave}) => {
+const ReservationTimeChangingDialog: React.FC<Props> = ({open, dateTime, onClose, onSave}) => {
     const [selectedDate, setSelectedDate] = useState(new Date());
+    const [selectedTime, setSelectedTime] = useState();
+    const [ selectedHeader, setSelectedHeader ] = useState(0);
+
+    useEffect(() => {
+        if(dateTime){
+            setSelectedDate(dateTime.toDate());
+            setSelectedTime(dateTime.format('HH:mm A'));
+        }
+    }, [dateTime]);
 
     return (
         <BootstrapDialog
@@ -125,21 +147,43 @@ const ReservationTimeChangingDialog: React.FC<Props> = ({open, onClose, onSave})
                         scrollbarWidth: 'none' 
                     }}
                 >
-                    <Header />
-                    <div style={{flex: 1}}>
-                        <LocalizationProvider dateAdapter={AdapterDateFns}>
-                            <StaticDatePicker
-                                displayStaticWrapperAs="desktop"
-                                value={selectedDate}
-                                onChange={(value: any) => setSelectedDate(value)}
-                                openTo="day"
-                                renderInput={(params) => <TextField {...params} />}
-                            />
-                        </LocalizationProvider>
-                    </div>
+                    <Header
+                        close={selectedHeader !== 1}
+                        title='Calendar'
+                        icon={<EventAvailableIcon />}
+                        subTitle={dayjs(selectedDate).format('DD-MM(ddd)')}
+                        onClick={() => setSelectedHeader(selectedHeader===1 ? 0 : 1)}
+                    />
+                    {
+                        selectedHeader === 1 &&
+                        <div style={{flex: 1}}>
+                            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                <StaticDatePicker
+                                    displayStaticWrapperAs="desktop"
+                                    value={selectedDate}
+                                    onChange={(value: any) => setSelectedDate(value)}
+                                    openTo="day"
+                                    renderInput={(params) => <TextField {...params} />}
+                                />
+                            </LocalizationProvider>
+                        </div>
+                    }
                     <Divider/>
-                    <Header />
-
+                    <Header
+                        title='Time'
+                        subTitle={selectedTime}
+                        icon={<AccessTimeIcon />}
+                        onClick={() => setSelectedHeader(selectedHeader===2 ? 0 : 2)}
+                        close={selectedHeader !== 2}
+                    />
+                    {
+                        selectedHeader === 2 &&
+                        <TimePicker
+                            onChange={setSelectedTime}
+                            // reserved={reserved}
+                            showIcon={false}
+                        />
+                    }
                     <InfoCard containerStyle={{marginTop: 32, marginBottom: 16, width: '100%'}}/>
                 </div>
 
