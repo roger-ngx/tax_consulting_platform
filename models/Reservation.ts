@@ -36,4 +36,20 @@ export class Reservation {
     get time(){
         return dayjs(this.reservationTime.seconds * 1000).format('HH:mm A');
     }
+
+    get step(){
+        switch(this.status){
+            case RESERVATION_STATUS.REQUEST: 
+                return 1;
+            
+            case RESERVATION_STATUS.APPROVE: 
+                return 2;
+
+            case RESERVATION_STATUS.PROGRESS: 
+                return 3;
+
+            case RESERVATION_STATUS.COMPLETE: 
+                return 4;
+        }
+    }
 }

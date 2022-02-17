@@ -151,7 +151,7 @@ const ReservationView = ({}) => {
             </Header>
             <Body>
                 <StepperContainer>
-                    <Stepper activeStep={1} alternativeLabel>
+                    <Stepper activeStep={reservation.step} alternativeLabel>
                         {steps.map((label) => (
                             <Step key={label}>
                                 <StepLabel>{label}</StepLabel>

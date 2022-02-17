@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Link from 'next/link';
 import { isEmpty } from 'lodash';
 import Image from 'next/image';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import Login from '../dialogs/Login';
 import Avatar from '../elements/Avatar';
@@ -32,6 +32,8 @@ const NavigationBar = () => {
     const openLoginModal = useSelector((state: any) => state.user.openLoginModal);
     const user = useSelector((state: any) => state.firebase.auth);
 
+    const dispatch = useDispatch();
+
     return (
         <Container>
             <Horizontal>
@@ -49,7 +51,7 @@ const NavigationBar = () => {
             <Horizontal>
                 {
                     user!.isEmpty ? 
-                    <a onClick={() => setOpenLoginModal(true)}>
+                    <a onClick={() => dispatch(setOpenLoginModal(true))}>
                         <Anchor>Login</Anchor>
                     </a>
                     :

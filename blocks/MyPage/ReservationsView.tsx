@@ -41,19 +41,22 @@ const ReservationsView: React.FC<Props> = ({isExpert}) => {
 
     const userId = useSelector((state: any) => state.firebase.auth.uid);
 
-    const reservations = map(useSelector((state: any) => state.firestore.ordered.reservations), data => new Reservation(data));
+    const reservations = useSelector((state: any) => state.firestore.ordered.reservations);
 
     useEffect(() => {
         if(selectedTab === TABS.IN_PROGRESS){
+            const items = filter(reservations, reservation => [RESERVATION_STATUS.REQUEST, RESERVATION_STATUS.APPROVE, RESERVATION_STATUS.PROGRESS].includes(reservation.status))
             setSelectedReservations(
-                filter(reservations, reservation => [RESERVATION_STATUS.REQUEST, RESERVATION_STATUS.APPROVE, RESERVATION_STATUS.PROGRESS].includes(reservation.status))
+                map(items, item => new Reservation(item))
             )
         }else{
+            const items = filter(reservations, reservation => [RESERVATION_STATUS.COMPLETE, RESERVATION_STATUS.CANCEL].includes(reservation.status))
+            
             setSelectedReservations(
-                filter(reservations, reservation => [RESERVATION_STATUS.COMPLETE, RESERVATION_STATUS.CANCEL].includes(reservation.status))
+                map(items, item => new Reservation(item))
             )
         }
-    }, [selectedTab]);
+    }, [selectedTab, reservations]);
 
     if(!userId){
         return null;
@@ -77,7 +80,7 @@ const ReservationsView: React.FC<Props> = ({isExpert}) => {
             collection: 'items',
             orderBy: ['updatedAt', 'desc'],
         }],
-        storeAs: 'reservations',
+        storeAs: `reservations`,
     }])
 
     const handleTabChange = (event: any, newValue: TABS) => {

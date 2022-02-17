@@ -96,7 +96,6 @@ const ThreadList = () => {
         where: ['userIDs', 'array-contains', userId],
         storeAs: 'chats',
         orderBy: ['updatedAt', 'desc'],
-        limit: 10
     }])
 
     const chats = map(useSelector((state: any) => state.firestore.ordered.chats), chat => new ChatThread(chat));
