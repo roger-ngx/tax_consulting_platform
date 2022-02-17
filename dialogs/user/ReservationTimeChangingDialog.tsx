@@ -6,25 +6,22 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
-import { DialogActions, Divider, TextField } from '@mui/material';
+import { Divider, TextField } from '@mui/material';
+
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
+
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import { LocalizationProvider, StaticDatePicker } from '@mui/lab';
+import dayjs from 'dayjs';
 
 import GradientButton from '../../elements/GradientButton';
 import Career from '../../models/Career';
 import TFButtonBase from '../../elements/TFButtonBase';
 import InfoCard from '../../elements/InfoCard';
-import { LocalizationProvider, StaticDatePicker } from '@mui/lab';
 import TimePicker from '../../elements/TimePicker';
-import dayjs = require('dayjs');
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -70,7 +67,7 @@ const HeaderContainer = styled('div')({
 
 type HeaderProps = {
     title: string;
-    subTitle: string;
+    subTitle?: string;
     onClick: () => void;
     icon: any,
     close: boolean
@@ -103,7 +100,7 @@ type Props = {
 
 const ReservationTimeChangingDialog: React.FC<Props> = ({open, dateTime, onClose, onSave}) => {
     const [selectedDate, setSelectedDate] = useState(new Date());
-    const [selectedTime, setSelectedTime] = useState();
+    const [selectedTime, setSelectedTime] = useState<string>();
     const [ selectedHeader, setSelectedHeader ] = useState(0);
 
     useEffect(() => {
