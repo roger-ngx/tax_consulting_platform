@@ -91,7 +91,12 @@ const MyPage = () => {
                 }
                 <AskQuestionDialog
                     open={helpInquiryShow}
-                    onClose={() => setHelpInquiryShow(false)}
+                    onClose={(e: any, reason?: string) => {
+                        if(reason==='backdropClick'){
+                            return;
+                        }
+                        setHelpInquiryShow(false)
+                    }}
                 />
             </div>
         </Container>

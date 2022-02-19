@@ -54,17 +54,26 @@ const Duration = styled('span')({
     alignItems: 'center'
 })
 
-type Props = {
-  open: boolean;
-  onClose: () => void,
-  onSave: (inquiry: Inquiry) => void,
+type Inquiry = {
+	title: string;
+	inquiry: string;
+	attachedFiles: string[]
 }
 
-const AskQuestionDialog: React.FC<Props> = ({open, onClose, onSave}) => {
+type Props = {
+  open: boolean;
+  onClose: (e: any, reason?: string) => void,
+}
+
+const AskQuestionDialog: React.FC<Props> = ({open, onClose}) => {
 
   const [ title, setTiitle ] = React.useState('');
 	const [ inquiry, setInquiry ] = React.useState('');
 	const [ attachedFiles, setAttachedFiles ] = React.useState<string[]>([]);
+
+	const saveInquiry = () => {
+		
+	}
 
   return (
     <div>
@@ -89,8 +98,9 @@ const AskQuestionDialog: React.FC<Props> = ({open, onClose, onSave}) => {
             <span>Register an inquiry</span>
             <Button
                 variant='contained'
-                color='primary'
-                onClick={() => title && inquiry && onSave({title, inquiry, attachedFiles})}
+								color='primary'
+								disabled={!title || !inquiry}
+                onClick={saveInquiry}
             >
                 Save
             </Button>
@@ -120,7 +130,7 @@ const AskQuestionDialog: React.FC<Props> = ({open, onClose, onSave}) => {
           />
 
           <UploadFileInput
-						onChange={() => {}}
+						onChange={(base64Strings: any[]) => setAttachedFiles(base64Strings) }
 					/>
         </DialogContent>
       </BootstrapDialog>

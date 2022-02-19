@@ -39,9 +39,12 @@ type Props = {
 const UploadFileInput: React.FC<Props> = ({onChange}) => {
 
     const [ inputCount, setInputCount ] = useState(1);
-    const [ showInputDialog, setShowInputDialog ] = useState(-1);
     const [ files, setFiles ] = useState<File[]>([]);
+    const [ filebase64Strings, setFilebase64Strings ] = useState<any>([]);
     
+    useEffect(() => {
+        onChange(filebase64Strings);
+    }, [filebase64Strings]);
 
     const getFileInput = (index: number) => {
         if(size(files)< index + 1){
@@ -63,13 +66,24 @@ const UploadFileInput: React.FC<Props> = ({onChange}) => {
         return inputCount > size(files) || isEmpty(files) || findIndex(files, file => size(file) > 0) >= 0;
     }
 
-    const handleFileInputChanged = (e:any, index: number) => {
-        const file = e.target.files[0];
-        if(file){
-            files[index] = file;
-            setFiles([...files]);
-        }
+    const handleFileInputChanged = (e: any, index: number) => {
 
+        const file: File = e.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+
+            reader.addEventListener("load", function () {
+                // convert image file to base64 string
+                filebase64Strings[index] = reader.result;
+                setFilebase64Strings(reader.result);
+
+                files[index] = file;
+                setFiles([...files]);
+            }, false);
+
+            reader.readAsDataURL(file);
+        }
         e.target.value = null;
     }
 
@@ -90,7 +104,7 @@ const UploadFileInput: React.FC<Props> = ({onChange}) => {
                     range(0, inputCount), 
                     index => (
                         <label htmlFor={`contained-button-file-${index}`} key={index}>
-                            <Input
+                            <input
                                 accept="image/*"
                                 id={`contained-button-file-${index}`}
                                 multiple
@@ -100,7 +114,6 @@ const UploadFileInput: React.FC<Props> = ({onChange}) => {
                             />
                             <FileInputBox
                                 style={{marginTop: index > 0 ? 8 : 0}}
-                                onClick={() => setShowInputDialog(index)}
                             >
                                 {
                                     !isEmpty(files[index]) &&
