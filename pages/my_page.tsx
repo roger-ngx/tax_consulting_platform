@@ -3,11 +3,15 @@ import { styled } from '@mui/system';
 import { useFirestoreConnect } from 'react-redux-firebase';
 import { useSelector } from 'react-redux';
 import { get } from 'lodash'; 
+import Button from '@mui/material/Button';
 
 import MyPageSideMenu from '../blocks/MyPage/MyPageSideMenu';
 import ReservationsView from '../blocks/MyPage/ReservationsView';
 import EnrollExpert from '../blocks/MyPage/EnrollExpert';
 import TermsAndConditions from '../blocks/MyPage/TermsAndConditions';
+import QnA from '../blocks/MyPage/QnA';
+import Help from '../blocks/MyPage/Help';
+import AskQuestionDialog from '../dialogs/AskQuestionDialog';
 
 const Container = styled('div')({
     display: 'flex',
@@ -17,13 +21,21 @@ const Container = styled('div')({
 const Title = styled('span')({
     fontSize: 22,
     fontWeight: 'bold',
-    marginBottom: 24
+})
+
+const Horizontal = styled('div')({
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
 })
 
 const MyPage = () => {
 
     const [ selectedItem, setSelectedItem ] = useState<string>();
     const uid = useSelector((state: any) => get(state, 'firebase.auth.uid'));
+    const [ helpInquiryShow, setHelpInquiryShow ] = useState(false);
 
     const handleTabChange = (event: Event, newValue: any) => {
         setSelectedItem(newValue);
@@ -46,7 +58,13 @@ const MyPage = () => {
                 />
             </div>
             <div style={{flex: 1, marginLeft: 24}}>
-                <Title>{selectedItem}</Title>
+                <Horizontal>
+                    <Title>{selectedItem}</Title>
+                    {
+                        selectedItem === 'Help' &&
+                        <Button variant='contained' onClick={() => setHelpInquiryShow(true)}>Write</Button>
+                    }
+                </Horizontal>
                 {
                     selectedItem === 'Reservation' &&
                     <ReservationsView isExpert={!!expert}/>
@@ -61,6 +79,20 @@ const MyPage = () => {
                     selectedItem === 'Terms and conditions' &&
                     <TermsAndConditions />
                 }
+
+                {
+                    selectedItem === 'QnA' &&
+                    <QnA />
+                }
+
+                {
+                    selectedItem === 'Help' &&
+                    <Help />
+                }
+                <AskQuestionDialog
+                    open={helpInquiryShow}
+                    onClose={() => setHelpInquiryShow(false)}
+                />
             </div>
         </Container>
     )

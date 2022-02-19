@@ -65,17 +65,27 @@ export default function MyPageSideMenu({onSelectedItemChanged} : {onSelectedItem
       <nav aria-label="secondary mailbox folders">
         <List>
           <ListItem disablePadding sx={{marginBottom: 0}}>
-            <ListItemButton sx={{backgroundColor: '#EAEDF2'}}>
-              <ListItemText primary="Qna" />
+            <ListItemButton
+              sx={{backgroundColor: '#EAEDF2'}}
+              onClick={() => setSelectedItem('QnA')}
+            >
+              <ListItemText primary="QnA" />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding sx={{marginBottom: 0}}>
-            <ListItemButton component="a" href="#simple-list" sx={{backgroundColor: '#EAEDF2'}}>
+            <ListItemButton
+              component="a"
+              onClick={() => setSelectedItem('Help')}
+              sx={{backgroundColor: '#EAEDF2'}}
+            >
               <ListItemText primary="Help" />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding sx={{marginBottom: 0}}>
-            <ListItemButton sx={{backgroundColor: '#EAEDF2'}}>
+            <ListItemButton
+              sx={{backgroundColor: '#EAEDF2'}}
+              onClick={() => setSelectedItem('Notice')}
+            >
               <ListItemText primary="Notice" />
             </ListItemButton>
           </ListItem>

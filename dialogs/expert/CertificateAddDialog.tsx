@@ -30,29 +30,6 @@ type Props = {
   onClose: () => void
 }
 
-const BootstrapDialogTitle: React.FC<Props> = ({ children, onClose, ...other }) => {
-
-  return (
-    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
-      {children}
-      {onClose ? (
-        <IconButton
-          aria-label="close"
-          onClick={onClose}
-          sx={{
-            position: 'absolute',
-            right: 8,
-            top: 8,
-            color: (theme) => theme.palette.grey[500],
-          }}
-        >
-          <CloseIcon />
-        </IconButton>
-      ) : null}
-    </DialogTitle>
-  );
-};
-
 type CAD = {
   open: boolean,
   onClose: (e: any, reason?: string) => void,
