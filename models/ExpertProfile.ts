@@ -10,6 +10,7 @@ export interface IProfile {
     educations: Education[],
     certificates: Certificate[],
     availableStates: State[],
+    contactTime: number[]
 }
 export default class ExpertProfile{
     introduction: string;
@@ -18,6 +19,7 @@ export default class ExpertProfile{
     educations: Education[];
     certificates: Certificate[];
     availableStates: State[];
+    contactTime: number[]
 
     constructor(profile: IProfile){
         this.introduction = profile.introduction;
@@ -26,5 +28,6 @@ export default class ExpertProfile{
         this.educations = profile.educations;
         this.certificates = profile.certificates;
         this.availableStates = profile.availableStates;
+        this.contactTime = profile.contactTime;
     }
 }

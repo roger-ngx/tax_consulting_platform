@@ -1,7 +1,7 @@
 import { Dispatch } from '@reduxjs/toolkit';
 import dayjs from 'dayjs';
 import firebase from './firebaseInit';
-import { setUserCredential } from '../stores/userInfoSlide';
+import { setUserCredential, setUserType } from '../stores/userInfoSlide';
 
 export const loginWithGoogle = ({dispatch}) => {
 
@@ -32,18 +32,50 @@ export const loginWithGoogle = ({dispatch}) => {
                 if(uid){
                     resolve(uid);
 
-                    await firebase.firestore().collection('users').doc(uid).set({
-                        displayName,
-                        email,
-                        emailVerified,
-                        lastLoginAt: dayjs(lastLoginAt).toDate(),
-                        phoneNumber,
-                        photoURL,
-                        uid,
-                        token,
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                    })
+                    const expertDoc = await firebase.firestore().collection('experts').doc(uid).get();
+                    if(expertDoc.exists){
+                        const expert = userexpertDocDoc.data();
+                        if(expert.active){
+                            await firebase.firestore().collection('experts').doc(uid).set({
+                                lastLoginAt: dayjs(lastLoginAt).toDate(),
+                                token,
+                                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                            });
+                            dispatch(setUserType('expert'));
+                            return;
+                        }
+                    }
+
+                    const userDoc = await firebase.firestore().collection('users').doc(uid).get();
+                    if(userDoc.exists){
+                        const user = userDoc.data();
+                        if(user.active){
+                            await firebase.firestore().collection('users').doc(uid).set({
+                                lastLoginAt: dayjs(lastLoginAt).toDate(),
+                                token,
+                                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                            });
+                        }else{
+                            alert('user is not active or withdrew');
+                            return;
+                        }
+                    }else{
+                        await firebase.firestore().collection('users').doc(uid).set({
+                            displayName,
+                            email,
+                            emailVerified,
+                            lastLoginAt: dayjs(lastLoginAt).toDate(),
+                            phoneNumber,
+                            photoURL,
+                            uid,
+                            token,
+                            active: true,
+                            withdrewAt: null,
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                        });
+                    }
                     // console.log(user);
+                    dispatch(setUserType('user'));
                     dispatch(setUserCredential(credential));
                 }else{
                     reject('uid is null');

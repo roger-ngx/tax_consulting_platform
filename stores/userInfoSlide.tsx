@@ -3,7 +3,8 @@ import firebase from 'firebase';
 
 export interface UserInfoState {
     credential: firebase.auth.UserCredential|null,
-    openLoginModal: boolean
+    openLoginModal: boolean,
+    userType: string //user, expert
 }
 
 export interface UserInfo {
@@ -13,7 +14,8 @@ export interface UserInfo {
 
 const initialState : UserInfoState = {
     credential: null,
-    openLoginModal: false
+    openLoginModal: false,
+    userType: 'user'
 }
 
 export const userInfoSlice = createSlice({
@@ -25,10 +27,13 @@ export const userInfoSlice = createSlice({
         },
         setOpenLoginModal: (state: UserInfoState, action: PayloadAction<boolean>) => {
             state.openLoginModal = action.payload;
+        },
+        setUserType: (state: UserInfoState, action: PayloadAction<string>) => {
+            state.userType = action.payload;
         }
     }
 })
 
-export const { setUserCredential, setOpenLoginModal } = userInfoSlice.actions;
+export const { setUserCredential, setOpenLoginModal, setUserType } = userInfoSlice.actions;
 
 export default userInfoSlice.reducer;

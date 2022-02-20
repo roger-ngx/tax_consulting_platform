@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Checkbox from '@mui/material/Checkbox';
 import { FormControlLabel, Select, MenuItem } from '@mui/material';
-import { isEmpty, map, range } from 'lodash';
+import { isEmpty, size, range,  } from 'lodash';
 
 import ProfilePhotoUpload from '../../elements/ProfilePhotoUpload';
 import ProfileCareerInput from './ProfileCareerInput';
@@ -39,15 +39,22 @@ const Profile: React.FC<Props> = ({data, onChange}) => {
     const [ educations, setEducations ] = useState<Education[]>([])
     const [ certificates, setCertificates ] = useState<Certificate[]>([]);
     const [ states, setStates ] = useState<State[]>([]);
-    const [ contactTimes, setContactTimes ] = useState<number[]>([])
+    const [ contactTime, setContactTime ] = useState<number[]>([])
     const [ startTime, setStartTime ] = useState(0)
     const [ endTime, setEndTime ] = useState(24)
 
     useEffect(() => {
         if(data){
+            const { introduction, photo, contactTime } = data; 
             console.log('data', data);
-            setIntroduction(data.introduction);
-            setProfilePhoto(data.photo);
+            setIntroduction(introduction);
+            setProfilePhoto(photo);
+
+            if(size(contactTime)===2){
+                setContactTime(contactTime);
+                setStartTime(contactTime[0]);
+                setEndTime(contactTime[1]);
+            }
             // setCareers(map(data.careers, career => new Career(career)));
             // setEducations(map(data.educations, education => new Education(education)));
             // setCertificates(map(data.certificates, certificate => new Certificate(certificate)));
@@ -63,7 +70,8 @@ const Profile: React.FC<Props> = ({data, onChange}) => {
         onChange(new ExpertProfile({
             introduction, photo: profilePhoto,
             careers, educations, certificates,
-            availableStates: states
+            availableStates: states,
+            contactTime: [startTime, endTime]
         }))
     }, [introduction, profilePhoto, careers, educations, certificates, states]);
 

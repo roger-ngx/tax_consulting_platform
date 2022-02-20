@@ -23,50 +23,87 @@ export const getExpertById = async (uid: string) => {
     return null;
 }
 
+/* 
+* enroll expert
+* use the same id
+* copy all data from an users doc to an experts doc
+*/
 export const addExpert = async (expert: ExpertType) => {
-    const photoDataUrl = expert.profile.photo;
-    let profilePhotoURL = null;
+    try{
+        const photoDataUrl = expert.profile.photo;
+        let profilePhotoURL = null;
+    
+        if(photoDataUrl){
+            const snapshot = await firebase.storage().ref()
+                .child(`profiles/${expert.id}.png`)
+                .putString(photoDataUrl, 'data_url');
+            profilePhotoURL = await snapshot.ref.getDownloadURL();
+        }
+    
+        const servicePhotos: any = expert.service.photos;
+        let servicePhotoURLs = [];
+    
+        if(servicePhotos){
+            const promises: any = map(servicePhotos, async (photo:string) => {
+                    const snapshot = await firebase.storage().ref()
+                    .child(`services/${expert.id}/${uuid()}.png`)
+                    .putString(photo, 'data_url');
+                    return await snapshot.ref.getDownloadURL();
+                }
+            )
+            servicePhotoURLs.push(...(await Promise.all(promises)));
+        }
+    
+        const userDoc = await firebase.firestore().collection('users').doc(expert.id).get();
+    
+        const data = merge(
+            JSON.parse(JSON.stringify(expert)),
+            {
+                profile: {
+                    photo: profilePhotoURL
+                },
+                service: {
+                    photos: servicePhotoURLs
+                }
+            },
+            userDoc.data()
+        )
 
-    if(photoDataUrl){
-        const snapshot = await firebase.storage().ref()
-            .child(`profiles/${expert.id}.png`)
-            .putString(photoDataUrl, 'data_url');
-        profilePhotoURL = await snapshot.ref.getDownloadURL();
-    }
-
-    const servicePhotos: any = expert.service.photos;
-    let servicePhotoURLs = [];
-
-    if(servicePhotos){
-        const promises: any = map(servicePhotos, async (photo:string) => {
-                const snapshot = await firebase.storage().ref()
-                .child(`services/${expert.id}/${uuid()}.png`)
-                .putString(photo, 'data_url');
-                return await snapshot.ref.getDownloadURL();
+        const batch = firebase.firestore().batch();
+    
+        batch.set(
+            firebase.firestore().collection('experts').doc(expert.id),
+            {
+                ...data,
+                active: true,
+                withdrewAt: null,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            }
+        );
+        batch.update(
+            firebase.firestore().collection('users').doc(expert.id),
+            {
+                enrollExpert: true,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
             }
         )
-        servicePhotoURLs.push(...(await Promise.all(promises)));
+
+        await batch.commit();
+
+        return true;
+    }catch(ex){
+        console.log('addExpert', ex);
     }
+    return false;
+}
 
-    const data = merge(
-        JSON.parse(JSON.stringify(expert)),
-        {
-            profile: {
-                photo: profilePhotoURL
-            },
-            service: {
-                photos: servicePhotoURLs
-            }
-        }
-    )
-
-    console.log(data);
-
+export const withDraw = async (expertId: string) => {
     await firebase.firestore().collection('experts')
-    .doc(expert.id)
-    .set({
-        ...data,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    .doc(expertId)
+    .update({
+        active: false,
+        withdrewAt: firebase.firestore.FieldValue.serverTimestamp(),
         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     });
 }

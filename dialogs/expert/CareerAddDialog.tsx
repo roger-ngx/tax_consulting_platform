@@ -118,12 +118,6 @@ const CareerAddDialog: React.FC<Props> = ({open, data, onClose, onSave}) => {
           </div>
         </DialogTitle>
         <DialogContent dividers>
-          <div style={{margin: '24px auto', display: 'flex', justifyContent: 'center'}}>
-            <ProfilePhotoUpload
-              onFileChanged={url => {}}
-            />
-          </div>
-
           <Typography>
               Company
           </Typography>

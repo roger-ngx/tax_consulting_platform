@@ -75,15 +75,14 @@ const ExpertServiceReservation = () => {
 
     const [ processing, setProcessing ] = useState(false);
     
+    const expert = useSelector((state: any) => get(state, `firestore.data.experts[${router.query.id}]`)) || {};
+    
+    const { price, reservedTimes } = expert;
+    
     useEffect(() => {
         const times = filter(reservedTimes, reservedTime => convertTime(dayjs(reservedTime.seconds * 1000)) === convertTime(dayjs(selectedDate)));
         setReserved(map(times, time => dayjs(time.seconds * 1000).format('hh:mm').toString()))
     }, [selectedDate]);
-
-    const expert = useSelector((state: any) => get(state, `firestore.data.experts[${router.query.id}]`));
-    if(!expert) return null;
-    
-    const { price, reservedTimes } = expert;
 
     const convertTime = (time: Dayjs) => {
         return time.format('YYYY-MM-DD').toString();

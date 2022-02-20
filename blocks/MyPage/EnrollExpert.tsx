@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { styled } from '@mui/system';
 import { Step, StepLabel, Stepper, Tabs, Tab } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { map } from 'lodash';
 
 import Profile from './Profile';
@@ -13,6 +13,7 @@ import ExpertProfile from '../../models/ExpertProfile';
 import ExpertService from '../../models/ExpertService';
 import Price, { ExpertPriceType } from '../../models/Price';
 import { addExpert } from '../../firebase/expert';
+import { setUserType } from '../../stores/userInfoSlide';
 
 const Container = styled('div')({
     display: 'flex',
@@ -38,12 +39,16 @@ type Props = {
 
 const EnrollExpert: React.FC<Props> = ({expert}) => {
 
+    const dispatch = useDispatch();
+
     const uid = useSelector((state: any) => state.firebase.auth.uid);
 
     const [ activeStep, setActiveStep ] = useState(1);
     const [ profile, setProfile ] = useState<ExpertProfile>();
     const [ service, setService ] = useState<ExpertService>();
     const [ price, setPrice ] = useState<ExpertPriceType>();
+
+    const [ processing, setProcessing ] = useState(false);
     
 
     useEffect(() => {
@@ -75,13 +80,17 @@ const EnrollExpert: React.FC<Props> = ({expert}) => {
         return true;
     }
 
-    const enrollExpert = () => {
+    const enrollExpert = async () => {
         if(activeStep < 3){
             setActiveStep(activeStep + 1);
         } else {
             if(profile && service && price){
+                setProcessing(true);
                 // console.log(profile, service, price);
-                addExpert({id: uid, profile, service, price})
+                const ret = await addExpert({id: uid, profile, service, price})
+                setActiveStep(1);
+                setProcessing(false);
+                dispatch(setUserType('expert'));
             }
         }
     }
@@ -155,8 +164,9 @@ const EnrollExpert: React.FC<Props> = ({expert}) => {
                         :
                         <GradientButton
                             text={activeStep <= 2 ? 'Save and Next' : 'Enroll Expert'}
-                            disabled={checkNextDisabled()}
+                            disabled={checkNextDisabled() || processing}
                             onClick={enrollExpert}
+                            processing={processing}
                         />
                     }
                 </div>

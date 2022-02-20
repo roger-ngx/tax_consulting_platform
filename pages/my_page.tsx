@@ -45,6 +45,10 @@ const MyPage = () => {
         {
             collection: 'experts',
             doc: uid
+        },
+        {
+            collection: 'users',
+            doc: uid
         }
     ]);
 

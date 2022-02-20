@@ -23,6 +23,13 @@ const Container = styled('div')({
     width: '100%'
 })
 
+const Horizontal = styled('div')({
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+})
+
 const ButtonContainer = styled('div')({
     display: 'flex',
     flexDirection: 'row',
@@ -162,10 +169,6 @@ const ReservedExpert = ({}) => {
                         ))}
                     </Stepper>
                 </StepperContainer>
-                <ExpertInfo
-                    data={{}}
-                    containerStyle={{marginBottom: 32, backgroundColor: '#F6F8FB'}}
-                />
                 <ButtonContainer>
                     <CalendarButton
                         variant='outlined'
@@ -223,11 +226,17 @@ const ReservedExpert = ({}) => {
                         }
                     </>
                 }
-                <CancelButton
-                    onClick={() => setOpenCancelDialog(true)}
-                >
-                    Cancel
-                </CancelButton>
+                <Horizontal>
+                    <ChattingButton style={{flex: 1, marginRight: 12}}>
+                        Approve
+                    </ChattingButton>
+                    <CancelButton
+                        style={{flex: 1}}
+                        onClick={() => setOpenCancelDialog(true)}
+                    >
+                        Cancel
+                    </CancelButton>
+                </Horizontal>
             </Body>
             <CancelReservationDialog
                 open={openCancelDialog}
