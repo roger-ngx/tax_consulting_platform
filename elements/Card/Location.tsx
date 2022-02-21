@@ -3,13 +3,11 @@ import { join } from 'lodash';
 import FmdGoodIcon from '@mui/icons-material/FmdGood';
 
 type Props = {
-    locations: string[],
+    location: string,
     containerStyle?: object
 }
 
-const Location: React.FC<Props> = ({locations, containerStyle}) => {
-
-    const loc = join(locations, ', ');
+const Location: React.FC<Props> = ({location, containerStyle}) => {
 
     return (
         <div
@@ -22,7 +20,7 @@ const Location: React.FC<Props> = ({locations, containerStyle}) => {
             }}
         >
             <FmdGoodIcon sx={{color: '#838383', fontSize: '14px'}} />
-            <span style={{fontSize: 12, color: '#959595', lineHeight: '12px', marginLeft: 4}}>{loc}</span>
+            <span style={{fontSize: 12, color: '#959595', lineHeight: '12px', marginLeft: 4}}>{location}</span>
         </div>
     )
 }

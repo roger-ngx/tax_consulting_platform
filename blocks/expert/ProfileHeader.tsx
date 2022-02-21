@@ -30,7 +30,7 @@ const ProfileHeader : React.FC<Props> = ({data}) => {
 
     if(!data) return null;
 
-    const { profile, service } = data;
+    const { displayName, photoURL, profile, service } = data;
 
     const serviceCategories = service.category;
 
@@ -38,10 +38,10 @@ const ProfileHeader : React.FC<Props> = ({data}) => {
         <Container>
             <div>
                 <Avatar
-                    src={profile.photo}
+                    src={photoURL}
                     size={80}
                     active={true}
-                    name='joker'
+                    name={displayName}
                 />
             </div>
             <div style={{flex: 1, marginLeft: 24}}>

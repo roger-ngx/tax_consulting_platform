@@ -7,6 +7,7 @@ import Tag from './Card/Tag';
 import Location from './Card/Location';
 import AvailableTime from './Card/AvailableTime';
 import { SERVICE_CATEGORIES } from '../models/EnrollService';
+import ExpertProfile from '../models/ExpertProfile';
 
 const Container = styled('div')({
     display: 'flex',
@@ -44,14 +45,14 @@ type Props = {
 const Card: React.FC<Props> = ({data}) => {
     if(!data) return null;
 
-    const { service, profile, price, photoURL, displayName } = data;
+    const { service, price, photoURL, displayName } = data;
 
-    const locations = map(profile.availableStates, (state: any) => state.code);
+    const profile = new ExpertProfile(data.profile);
 
     const {value, unit} = price.options[0];
 
     return (
-        <Container style={{cursor: 'pointer'}}>
+        <Container style={{width: '100%', cursor: 'pointer'}}>
             <Profile
                 src={photoURL}
                 name={displayName}
@@ -82,8 +83,8 @@ const Card: React.FC<Props> = ({data}) => {
                     }
                 </Horizontal>
                 <Horizontal>
-                    <Location locations={locations} containerStyle={{marginRight: 12}}/>
-                    <AvailableTime contactTime={profile.contactTime}/>
+                    <Location location={profile.locationsString} containerStyle={{marginRight: 12}}/>
+                    <AvailableTime contactTime={profile.contactTimeString}/>
                 </Horizontal>
                 <BodyContent>
                     {service.detail}

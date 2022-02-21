@@ -22,8 +22,8 @@ const ServiceLocation : React.FC<Props> = ({data}) => {
     return (
         <Horizontal>
             <Column>
-                <LocationOnIcon sx={{textAlign: 'center'}}/>
-                <span>Service Location</span>
+                <LocationOnIcon sx={{textAlign: 'center', color: '#838383'}}/>
+                <span>{data}</span>
             </Column>
         </Horizontal>
     )

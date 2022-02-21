@@ -13,7 +13,6 @@ import Card from '../elements/Card';
 const Container =styled.div`
   display: flex;
   flex-direction: row;
-  padding: 0 10%;
   height: 100vh;
 `
 
@@ -43,7 +42,7 @@ const Home = () => {
               map(experts, expert => (
                 <Link href={`/expert_detail?id=${expert.id}`}>
                   <Grid item xs={12} sm={6}>
-                      <Card data={expert}/>
+                      <Card data={expert} />
                   </Grid>
                 </Link>
               ))
