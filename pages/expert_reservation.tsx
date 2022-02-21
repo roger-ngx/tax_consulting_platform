@@ -108,7 +108,7 @@ const ExpertServiceReservation = () => {
                 reservationTime: dayjs(reservationTime).toDate()
             })
             alert('Reservation is completed');
-            router.navigate('/');
+            router.replace('/');
         }catch(ex){
             console.log('doReservation', ex);
         }
