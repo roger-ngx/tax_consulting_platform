@@ -4,6 +4,8 @@ import Link from 'next/link';
 import Avatar from '../../elements/Avatar';
 import GradientButton from '../../elements/GradientButton';
 import { Reservation, RESERVATION_STATUS } from '../../models/Reservation';
+import { useSelector } from 'react-redux';
+import { get } from 'lodash';
 
 const Container = styled('div')({
     border: 'solid 1px #C7C7C7',
@@ -47,13 +49,18 @@ type Props = {
 const ReservationItem : React.FC<Props> = ({item, isExpert, containerStyle={}}) => {
     if(!item) return null;
 
-    const { date, time, status } = item;
+    const { date, time, status, expertId } = item;
+    const expert = useSelector((state: any) => get(state, `firestore.data.experts[${expertId}]`)); 
+
+    if(!expert){
+        return null;
+    }
 
     return (
         <Container style={containerStyle}>
             <Avatar
                 size={80}
-                src='/assets/images/profile.png'
+                src={expert.photoURL}
                 containerStyle={{alignSelf: 'flex-start'}}
             />
             <Body>

@@ -18,6 +18,7 @@ export class Reservation {
     price: Price;
     status: RESERVATION_STATUS;
     detail?:string;
+    expertId: string;
 
     constructor(data: any){
         this.id = data.id;
@@ -27,6 +28,7 @@ export class Reservation {
         this.price = data.price;
         this.status = data.status;
         this.detail = data.detail;
+        this.expertId = data.expertId;
     }
 
     get date(){

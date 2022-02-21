@@ -47,7 +47,7 @@ const Name = styled.span`
 
 type Props = {
     size: number;
-    src: string;
+    src?: string;
     active?: boolean;
     name?: string,
     containerStyle?: object

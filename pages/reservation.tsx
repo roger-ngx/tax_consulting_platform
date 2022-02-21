@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { styled } from '@mui/system';
 import Avatar from '../elements/Avatar';
-import { Step, Stepper, StepLabel, Button } from '@mui/material';
+import { Step, Stepper, StepLabel, Button, CircularProgress } from '@mui/material';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import InsertCommentIcon from '@mui/icons-material/InsertComment';
 import { useRouter } from 'next/router';
@@ -126,6 +126,7 @@ const ReservationView = ({}) => {
     const [ openCancelDialog, setOpenCancelDialog ] = useState(false);
     const [ openDatetimeChangingDialog, setOpenDatetimeChangingDialog ] = useState(false);
     const [ openReviewDialog, setOpenReviewDialog ] = useState(false);
+    const [ processing, setProcessing ] = useState(false);
 
     const router = useRouter();
     const { isFinished, id } = router.query;
@@ -142,7 +143,9 @@ const ReservationView = ({}) => {
     const reservation = new Reservation(item);
 
     const startChatting = async () => {
+        setProcessing(true);
         const res = await createMessageThread({srcUserId: userId, desUserId: item.expertId})
+        setProcessing(false);
         if(res){
             router.push('/messages');
         }else{
@@ -188,8 +191,14 @@ const ReservationView = ({}) => {
                     <ChattingButton
                         startIcon={<InsertCommentIcon />}
                         onClick={startChatting}
+                        disabled={processing}
                     >
-                        Chatting
+                        {
+                            processing ? 
+                            <CircularProgress sx={{color:'white', fontSize: 0}} size={16} />
+                            :
+                            'Chatting'
+                        }
                     </ChattingButton>
                 </ButtonContainer>
 
