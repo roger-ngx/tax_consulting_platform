@@ -1,5 +1,5 @@
 import { styled } from '@mui/system';
-import { map } from 'lodash';
+import { map, isEmpty } from 'lodash';
 
 import ContactInfo from './ContactInfo';
 import ServiceLocation from './ServiceLocation';
@@ -20,7 +20,7 @@ type Props = {
 }
 
 const ExpertInfo : React.FC<Props>  = ({data, containerStyle={}}) => {
-    if(!data) return null;
+    if(isEmpty(data)) return null;
 
     const { profile } = data;
     const serviceLocation = map(profile.availableStates, state => state.code).join(', ');

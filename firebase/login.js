@@ -34,7 +34,7 @@ export const loginWithGoogle = ({dispatch}) => {
 
                     const expertDoc = await firebase.firestore().collection('experts').doc(uid).get();
                     if(expertDoc.exists){
-                        const expert = userexpertDocDoc.data();
+                        const expert = expertDoc.data();
                         if(expert.active){
                             await firebase.firestore().collection('experts').doc(uid).set({
                                 lastLoginAt: dayjs(lastLoginAt).toDate(),
@@ -50,7 +50,7 @@ export const loginWithGoogle = ({dispatch}) => {
                     if(userDoc.exists){
                         const user = userDoc.data();
                         if(user.active){
-                            await firebase.firestore().collection('users').doc(uid).set({
+                            await firebase.firestore().collection('users').doc(uid).update({
                                 lastLoginAt: dayjs(lastLoginAt).toDate(),
                                 token,
                                 updatedAt: firebase.firestore.FieldValue.serverTimestamp()

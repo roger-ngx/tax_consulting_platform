@@ -6,7 +6,7 @@ import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import InsertCommentIcon from '@mui/icons-material/InsertComment';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
-import { get } from 'lodash';
+import { get, isEmpty } from 'lodash';
 
 import ExpertInfo from '../blocks/expert/Info';
 import CancelReservationDialog from '../dialogs/user/CancelReservationDialog';
@@ -129,9 +129,11 @@ const ReservationView = ({}) => {
     const router = useRouter();
     const { isFinished, id } = router.query;
 
-    const item = useSelector(state => get(state, `firestore.data.reservations[${id}]`));
+    const item = useSelector(state => get(state, `firestore.data.reservations[${id}]`)) || {};
+    const expert = useSelector((state: any) => get(state, `firestore.data.experts[${item.expertId}]`)) || {};
 
-    if(!item){
+
+    if(isEmpty(item)){
         return null;
     }
 
@@ -145,7 +147,8 @@ const ReservationView = ({}) => {
                 <div style={{position: 'absolute', bottom: -50, textAlign: 'center', width: '100%'}}>
                     <Avatar
                         size={100}
-                        src='/assets/images/profile.png'
+                        src={expert.photoURL}
+                        name={expert.displayName}
                     />
                 </div>
             </Header>
@@ -160,7 +163,7 @@ const ReservationView = ({}) => {
                     </Stepper>
                 </StepperContainer>
                 <ExpertInfo
-                    data={{}}
+                    data={expert}
                     containerStyle={{marginBottom: 32, backgroundColor: '#F6F8FB'}}
                 />
                 <ButtonContainer>
