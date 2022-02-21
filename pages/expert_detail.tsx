@@ -17,6 +17,7 @@ import { useRouter } from 'next/router';
 import ExpertInfo from '../blocks/expert/Info';
 import AboutService from '../blocks/expert/AboutService';
 import { setOpenLoginModal } from '../stores/userInfoSlide';
+import { createMessageThread } from '../firebase/messageController';
 
 const Container = styled('div')({
     display: 'flex',
@@ -63,13 +64,18 @@ const ExpertServiceDetail = () => {
         router.push(`/expert_reservation?id=${expert.id}`)
     }
 
-    const goToChat = () => {
+    const goToChat = async () => {
         if(!user.uid){
             dispatch(setOpenLoginModal(true));
             return;
         }
 
-        router.push('/messages')
+        const res = await createMessageThread({srcUserId: user.uid, desUserId: expert.id})
+        if(res){
+            router.push('/messages');
+        }else{
+            alert('There are something wrong. See the browser logs');
+        }
     }
 
     return (

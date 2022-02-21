@@ -3,7 +3,6 @@ import dayjs from 'dayjs';
 import { FileUpload, setFileStatus } from '../stores/fileTranferSlice';
 import { Dispatch } from 'redux';
 import { merge } from 'lodash';
-import { idea } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
 
 export const addMessage = async ({srcUserId, desUserId, message, type='text', name, size} : {srcUserId: string, desUserId: string, message: string, type?: string, name?: string, size?: string}) => {
@@ -20,7 +19,7 @@ export const addMessage = async ({srcUserId, desUserId, message, type='text', na
                 lastMessageType: type,
                 srcUserId,
                 unReadCount: firebase.firestore.FieldValue.increment(1),
-                users: [srcUserId, desUserId],
+                userIDs: [srcUserId, desUserId],
             },
             {
                 merge: true
@@ -44,6 +43,28 @@ export const addMessage = async ({srcUserId, desUserId, message, type='text', na
         await batch.commit();
     }catch(ex){
         console.log('addMessage', ex);
+    }
+}
+
+export const createMessageThread = async ({srcUserId, desUserId}:{srcUserId: string, desUserId: string}) => {
+    try{
+        const docId = srcUserId.localeCompare(desUserId) === -1 ? (srcUserId + desUserId) : (desUserId + srcUserId);
+
+
+        await firebase.firestore().collection('chats').doc(docId).set(
+            {
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                srcUserId,
+                userIDs: [srcUserId, desUserId],
+            },
+            {
+                merge: true
+            }
+        )
+        return true;
+    }catch(ex){
+        console.log('addMessage', ex);
+        return false;
     }
 }
 

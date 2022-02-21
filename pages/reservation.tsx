@@ -13,6 +13,7 @@ import CancelReservationDialog from '../dialogs/user/CancelReservationDialog';
 import ReservationTimeChangingDialog from '../dialogs/user/ReservationTimeChangingDialog';
 import ExpertReviewDialog from '../dialogs/user/ExpertReviewDialog';
 import { Reservation } from '../models/Reservation';
+import { createMessageThread } from '../firebase/messageController';
 
 const Container = styled('div')({
     display: 'flex',
@@ -132,12 +133,22 @@ const ReservationView = ({}) => {
     const item = useSelector(state => get(state, `firestore.data.reservations[${id}]`)) || {};
     const expert = useSelector((state: any) => get(state, `firestore.data.experts[${item.expertId}]`)) || {};
 
+    const userId = useSelector(state => get(state, 'firebase.auth.uid'));
 
     if(isEmpty(item)){
         return null;
     }
 
     const reservation = new Reservation(item);
+
+    const startChatting = async () => {
+        const res = await createMessageThread({srcUserId: userId, desUserId: item.expertId})
+        if(res){
+            router.push('/messages');
+        }else{
+            alert('There are something wrong. See the browser logs');
+        }
+    }
 
     return (
         <Container>
@@ -176,6 +187,7 @@ const ReservationView = ({}) => {
                     </CalendarButton>
                     <ChattingButton
                         startIcon={<InsertCommentIcon />}
+                        onClick={startChatting}
                     >
                         Chatting
                     </ChattingButton>
