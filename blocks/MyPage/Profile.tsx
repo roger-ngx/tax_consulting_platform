@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
-import Checkbox from '@mui/material/Checkbox';
-import { FormControlLabel, Select, MenuItem } from '@mui/material';
+import { Select, MenuItem } from '@mui/material';
 import { isEmpty, size, range,  } from 'lodash';
 
 import ProfilePhotoUpload from '../../elements/ProfilePhotoUpload';

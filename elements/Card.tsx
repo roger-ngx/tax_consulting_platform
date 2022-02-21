@@ -44,13 +44,18 @@ type Props = {
 const Card: React.FC<Props> = ({data}) => {
     if(!data) return null;
 
-    const { service, profile } = data;
+    const { service, profile, price, photoURL, displayName } = data;
 
     const locations = map(profile.availableStates, (state: any) => state.code);
 
+    const {value, unit} = price.options[0];
+
     return (
         <Container style={{cursor: 'pointer'}}>
-            <Profile />
+            <Profile
+                src={photoURL}
+                name={displayName}
+            />
             <Body>
                 <Horizontal>
                     {
@@ -78,13 +83,13 @@ const Card: React.FC<Props> = ({data}) => {
                 </Horizontal>
                 <Horizontal>
                     <Location locations={locations} containerStyle={{marginRight: 12}}/>
-                    <AvailableTime />
+                    <AvailableTime contactTime={profile.contactTime}/>
                 </Horizontal>
                 <BodyContent>
                     {service.detail}
                 </BodyContent>
                 <Price>
-                    $50/hr
+                    {`$${value} ${unit}`.replace(' per ', '/')}
                 </Price>
             </Body>
         </Container>

@@ -21,8 +21,6 @@ const Home = () => {
 
   const experts = useSelector((state: any) => state.firestore.ordered.experts);
 
-  console.log('expert size', size(experts));
-
   useFirestoreConnect([{
     collection: 'experts'
   }])

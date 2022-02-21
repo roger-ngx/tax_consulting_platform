@@ -19,7 +19,14 @@ const Rate = styled('span')({
     alignItems: 'center'
 })
 
-const Profile = ({src='/assets/images/profile.png', name='Roger', rate=0, rateCount=0}) => {
+type Props = {
+    src: string,
+    name: string,
+    rate?: number,
+    rateCount?: number
+}
+
+const Profile: React.FC<Props> = ({src='/assets/images/profile.png', name='Roger', rate=0, rateCount=0}) => {
 
     return (
         <Container>
@@ -31,11 +38,14 @@ const Profile = ({src='/assets/images/profile.png', name='Roger', rate=0, rateCo
                 />
             </div>
             <Name>{name}</Name>
-            <Rate>
-                <StarIcon sx={{color: '#0045D1'}} />
-                <span>{rate}</span>
-                <span>({rateCount})</span>
-            </Rate>
+            {
+                rate > 0 &&
+                <Rate>
+                    <StarIcon sx={{color: '#0045D1'}} />
+                    <span>{rate}</span>
+                    <span>({rateCount})</span>
+                </Rate>
+            }
         </Container>
     )
 }
