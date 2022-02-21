@@ -13,14 +13,14 @@ export const completeResevation = async (props : AddProps) => {
     const { user, expertId, question, price, reservationTime } = props;
 
     try{
-        const reservationDoc = await firebase.firestore().collection('reservations').doc(user.id)
+        const reservationDoc = await firebase.firestore().collection('reservations').doc(user.uid)
         .collection('items')
         .add({
             expertId,
             question,
             reservationTime,
             price,
-            status: 'REQUESTED',
+            status: 'REQUEST',
             updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
             createdAt: firebase.firestore.FieldValue.serverTimestamp()
         })
@@ -32,8 +32,8 @@ export const completeResevation = async (props : AddProps) => {
             question,
             reservationTime,
             price,
-            userId: user.id,
-            status: 'REQUESTED',
+            userId: user.uid,
+            status: 'REQUEST',
             updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
             createdAt: firebase.firestore.FieldValue.serverTimestamp()
         })

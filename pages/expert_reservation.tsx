@@ -89,7 +89,7 @@ const ExpertServiceReservation = () => {
     }
 
     const doReservation = async () => {
-        if(!!user.uid){
+        if(!user.uid){
             dispatch(setOpenLoginModal(true));
             return;
         }
@@ -97,9 +97,9 @@ const ExpertServiceReservation = () => {
         setProcessing(true);
 
         try{
-            const reservationTime = selectedDate + ' ' + selectedTime;
+            const reservationTime = dayjs(selectedDate).format('YYYY-MM-DD').toString() + ' ' + selectedTime;
             const selectedPrice = price.options[selectedPriceIndex];
-    
+
             await completeResevation({
                 user,
                 expertId: expert.id,
@@ -107,6 +107,8 @@ const ExpertServiceReservation = () => {
                 price: selectedPrice,
                 reservationTime: dayjs(reservationTime).toDate()
             })
+            alert('Reservation is completed');
+            router.navigate('/');
         }catch(ex){
             console.log('doReservation', ex);
         }

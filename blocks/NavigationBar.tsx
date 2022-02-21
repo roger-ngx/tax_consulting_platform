@@ -25,7 +25,6 @@ const Container = styled.div`
 const Anchor = styled.a`
     margin-left: 24px;
     color: #000;
-    cursor: pointer;
 `
 
 const NavigationBar = () => {
@@ -59,8 +58,8 @@ const NavigationBar = () => {
                         <Link href='/messages'>
                             <Anchor>Message</Anchor>
                         </Link>
-                        <Link href='/my_page'>
-                            <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+                        <Link href='/my_page' passHref>
+                            <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', cursor: 'pointer'}}>
                                 <Anchor style={{marginRight: 4}}>My</Anchor>
                                 <Avatar
                                     src={user.photoURL}
