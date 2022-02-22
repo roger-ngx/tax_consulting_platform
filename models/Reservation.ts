@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
 
 import Price from "./Price";
+import User from "./User";
 
 export enum RESERVATION_STATUS {
     REQUEST='REQUEST',
@@ -18,7 +19,8 @@ export class Reservation {
     price: Price;
     status: RESERVATION_STATUS;
     detail?:string;
-    expertId: string;
+    expertId?: string;
+    user?: User;
 
     constructor(data: any){
         this.id = data.id;
@@ -29,6 +31,7 @@ export class Reservation {
         this.status = data.status;
         this.detail = data.detail;
         this.expertId = data.expertId;
+        this.user = data.user;
     }
 
     get date(){

@@ -5,7 +5,7 @@ import { Step, Stepper, StepLabel, Button, CircularProgress } from '@mui/materia
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import InsertCommentIcon from '@mui/icons-material/InsertComment';
 import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { get, isEmpty } from 'lodash';
 
 import ExpertInfo from '../blocks/expert/Info';
@@ -14,6 +14,7 @@ import ReservationTimeChangingDialog from '../dialogs/user/ReservationTimeChangi
 import ExpertReviewDialog from '../dialogs/user/ExpertReviewDialog';
 import { Reservation } from '../models/Reservation';
 import { createMessageThread } from '../firebase/messageController';
+import { setCurrentThreadId } from '../stores/messageSlide';
 
 const Container = styled('div')({
     display: 'flex',
@@ -128,6 +129,8 @@ const ReservationView = ({}) => {
     const [ openReviewDialog, setOpenReviewDialog ] = useState(false);
     const [ processing, setProcessing ] = useState(false);
 
+    const dispatch = useDispatch();
+
     const router = useRouter();
     const { isFinished, id } = router.query;
 
@@ -144,9 +147,10 @@ const ReservationView = ({}) => {
 
     const startChatting = async () => {
         setProcessing(true);
-        const res = await createMessageThread({srcUserId: userId, desUserId: item.expertId})
+        const threadId = await createMessageThread({srcUserId: userId, desUserId: item.expertId})
         setProcessing(false);
-        if(res){
+        if(threadId){
+            dispatch(setCurrentThreadId(threadId));
             router.push('/messages');
         }else{
             alert('There are something wrong. See the browser logs');

@@ -62,6 +62,8 @@ const ReservationsView: React.FC<Props> = ({isExpert}) => {
         return null;
     }
 
+    console.log(selectedReservations);
+
     isExpert ? useFirestoreConnect([{
         collection: 'experts',
         doc: userId,
@@ -70,7 +72,6 @@ const ReservationsView: React.FC<Props> = ({isExpert}) => {
             orderBy: ['createdAt', 'desc'],
         }],
         storeAs: 'reservations',
-        orderBy: ['updatedAt', 'desc']
     }])
     :
     useFirestoreConnect([{
@@ -99,7 +100,6 @@ const ReservationsView: React.FC<Props> = ({isExpert}) => {
                         map(selectedReservations, reservation => (
                             <ReservationItem
                                 key={reservation.id}
-                                isExpert={isExpert}
                                 item={reservation}
                                 containerStyle={{marginBottom: 20}}
                             />

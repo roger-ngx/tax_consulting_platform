@@ -3,7 +3,7 @@ import firebase from '../firebase/firebaseInit';
 type AddProps = {
     user: any,
     expertId: string,
-    question?: string,
+    question: string|null,
     price: object,
     reservationTime: Date
 }
@@ -11,6 +11,8 @@ type AddProps = {
 export const completeResevation = async (props : AddProps) => {
 
     const { user, expertId, question, price, reservationTime } = props;
+
+    console.log('user', user);
 
     try{
         const reservationDoc = await firebase.firestore().collection('reservations').doc(user.uid)
@@ -29,10 +31,10 @@ export const completeResevation = async (props : AddProps) => {
         .collection('reservations')
         .doc(reservationDoc.id)
         .set({
+            user,
             question,
             reservationTime,
             price,
-            userId: user.uid,
             status: 'REQUEST',
             updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
             createdAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -42,8 +44,11 @@ export const completeResevation = async (props : AddProps) => {
             updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
             reservedTimes: firebase.firestore.FieldValue.arrayUnion(reservationTime)
         })
+
+        return true;
     }catch(ex){
         console.log('completeResevation', ex);
+        return false;
     }
 }
 

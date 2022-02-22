@@ -66,7 +66,7 @@ const ExpertServiceReservation = () => {
     const user = useSelector((state: any) => state.firebase.auth)
 
     
-    const [ question, setQuestion ] = useState();
+    const [ question, setQuestion ] = useState(null);
     const [ selectedPriceIndex, setSelectedPriceIndex ] = useState(0);
     const [ selectedDate, setSelectedDate] = useState(new Date());
     const [ selectedTime, setSelectedTime ] = useState<string>();
@@ -94,21 +94,30 @@ const ExpertServiceReservation = () => {
             return;
         }
 
+        if(!selectedTime){
+            alert('please select the time');
+            return;
+        }
+
         setProcessing(true);
 
         try{
             const reservationTime = dayjs(selectedDate).format('YYYY-MM-DD').toString() + ' ' + selectedTime;
             const selectedPrice = price.options[selectedPriceIndex];
 
-            await completeResevation({
+            const ret = await completeResevation({
                 user,
                 expertId: expert.id,
                 question,
                 price: selectedPrice,
                 reservationTime: dayjs(reservationTime).toDate()
             })
-            alert('Reservation is completed');
-            router.replace('/');
+            if(ret){
+                alert('Reservation is completed');
+                router.replace('/');
+            }else{
+                alert('There are something wrong');
+            }
         }catch(ex){
             console.log('doReservation', ex);
         }

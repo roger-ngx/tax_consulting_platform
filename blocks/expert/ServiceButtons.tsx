@@ -21,21 +21,24 @@ const ButtonContainer = styled('div')({
 type Props = {
     containerStyle?:object,
     goToReservation: () => void,
-    goToChat: () => void
+    goToChat: () => void,
+    disabled?: boolean
 }
 
-const ServiceButtons: React.FC<Props> = ({containerStyle, goToReservation, goToChat}) => {
+const ServiceButtons: React.FC<Props> = ({containerStyle, goToReservation, goToChat, disabled=false}) => {
 
     return (
         <Container style={containerStyle}>
             <IconButton
                 onClick={goToChat}
+                disabled={disabled}
             >
                 <ChatBubbleOutlineIcon />
             </IconButton>
             <TFButtonBase
                 containerStyle={{flex: 1, marginLeft: 16}}
                 onClick={goToReservation}
+                disabled={disabled}
             >
                 <ButtonContainer>
                     <span style={{color: 'white', textAlign: 'center'}}>make a reservation</span>

@@ -6,6 +6,7 @@ import GradientButton from '../../elements/GradientButton';
 import { Reservation, RESERVATION_STATUS } from '../../models/Reservation';
 import { useSelector } from 'react-redux';
 import { get } from 'lodash';
+import { useState, useEffect } from 'react';
 
 const Container = styled('div')({
     border: 'solid 1px #C7C7C7',
@@ -46,21 +47,28 @@ type Props = {
     containerStyle?: object
 }
 
-const ReservationItem : React.FC<Props> = ({item, isExpert, containerStyle={}}) => {
+const ReservationItem : React.FC<Props> = ({item, containerStyle={}}) => {
     if(!item) return null;
 
-    const { date, time, status, expertId } = item;
-    const expert = useSelector((state: any) => get(state, `firestore.data.experts[${expertId}]`)); 
+    const { date, time, status, user, expertId } = item;
 
-    if(!expert){
-        return null;
-    }
+    const [ photoURL, setPhotoURL ] = useState();
+
+    
+    useEffect(() => {
+        if(expertId){
+            const expert = useSelector((state: any) => get(state, `firestore.data.experts[${expertId}]`)); 
+            setPhotoURL(expert.photoURL);
+        }else{
+            setPhotoURL(user!.photoURL);
+        }
+    }, [user, expertId]);
 
     return (
         <Container style={containerStyle}>
             <Avatar
                 size={80}
-                src={expert.photoURL}
+                src={photoURL}
                 containerStyle={{alignSelf: 'flex-start'}}
             />
             <Body>
@@ -68,10 +76,10 @@ const ReservationItem : React.FC<Props> = ({item, isExpert, containerStyle={}}) 
                 <span>{time}</span>
                 {/* <span style={{margin: '16px 0'}}>{detail}</span> */}
                 {
-                    !isExpert && status===RESERVATION_STATUS.COMPLETE &&
+                    !expertId && status===RESERVATION_STATUS.COMPLETE &&
                     <Link
                         href={{
-                            pathname: `${isExpert ? '/reserved_expert' : '/reservation'}`,
+                            pathname: `${expertId ? '/reserved_expert' : '/reservation'}`,
                             query: {
                                 isFinished:true,
                                 id: item.id
@@ -87,10 +95,10 @@ const ReservationItem : React.FC<Props> = ({item, isExpert, containerStyle={}}) 
                 }
 
                 {
-                    isExpert && status===RESERVATION_STATUS.REQUEST &&
+                    expertId && status===RESERVATION_STATUS.REQUEST &&
                     <Link
                         href={{
-                            pathname: isExpert ? '/reserved_expert' : '/reservation',
+                            pathname: expertId ? '/reserved_expert' : '/reservation',
                             query: {
                                 id: item.id
                             }
@@ -108,7 +116,7 @@ const ReservationItem : React.FC<Props> = ({item, isExpert, containerStyle={}}) 
                 // status===RESERVATION_STATUS.REQUEST ?
                 <Link
                     href={{
-                        pathname: isExpert ? '/reserved_expert' : '/reservation',
+                        pathname: expertId ? '/reserved_expert' : '/reservation',
                         query: {
                             id: item.id
                         }

@@ -61,7 +61,7 @@ export const createMessageThread = async ({srcUserId, desUserId}:{srcUserId: str
                 merge: true
             }
         )
-        return true;
+        return docId;
     }catch(ex){
         console.log('addMessage', ex);
         return false;

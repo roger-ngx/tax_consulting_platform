@@ -18,6 +18,7 @@ import ExpertInfo from '../blocks/expert/Info';
 import AboutService from '../blocks/expert/AboutService';
 import { setOpenLoginModal } from '../stores/userInfoSlide';
 import { createMessageThread } from '../firebase/messageController';
+import { setCurrentThreadId } from '../stores/messageSlide';
 
 const Container = styled('div')({
     display: 'flex',
@@ -51,6 +52,7 @@ const ExpertServiceDetail = () => {
     // console.log('ExpertServiceDetail', get(expert, 'price.options'));
 
     const [ selectedTab, setSelectedTab ] = useState(0);
+    const [ processing, setProcessing ] = useState(false);
 
     const handleTabChange = (event: any, newValue: any) => {
         setSelectedTab(newValue);
@@ -70,8 +72,11 @@ const ExpertServiceDetail = () => {
             return;
         }
 
-        const res = await createMessageThread({srcUserId: user.uid, desUserId: expert.id})
-        if(res){
+        setProcessing(true);
+        const threadId = await createMessageThread({srcUserId: user.uid, desUserId: expert.id})
+        setProcessing(false);
+        if(threadId){
+            dispatch(setCurrentThreadId(threadId));
             router.push('/messages');
         }else{
             alert('There are something wrong. See the browser logs');
@@ -151,6 +156,7 @@ const ExpertServiceDetail = () => {
                                 containerStyle={{marginTop: 20}}
                                 goToReservation={goToReservation}
                                 goToChat={goToChat}
+                                disabled={processing}
                             />
                         </ColumnRight>
                     </Grid>
