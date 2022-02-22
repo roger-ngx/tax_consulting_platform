@@ -50,19 +50,23 @@ type Props = {
 const ReservationItem : React.FC<Props> = ({item, containerStyle={}}) => {
     if(!item) return null;
 
+    console.log(item);
+
     const { date, time, status, user, expertId } = item;
+
+    const pathname = expertId ? '/reservation' : '/reserved_expert';
 
     const [ photoURL, setPhotoURL ] = useState();
 
+    const expert = expertId && useSelector((state: any) => get(state, `firestore.data.experts[${expertId}]`)); 
     
     useEffect(() => {
-        if(expertId){
-            const expert = useSelector((state: any) => get(state, `firestore.data.experts[${expertId}]`)); 
-            setPhotoURL(expert.photoURL);
+        if(user){
+            setPhotoURL(user.photoURL);
         }else{
-            setPhotoURL(user!.photoURL);
+            expert && setPhotoURL(expert.photoURL);
         }
-    }, [user, expertId]);
+    }, [user, expert]);
 
     return (
         <Container style={containerStyle}>
@@ -76,10 +80,10 @@ const ReservationItem : React.FC<Props> = ({item, containerStyle={}}) => {
                 <span>{time}</span>
                 {/* <span style={{margin: '16px 0'}}>{detail}</span> */}
                 {
-                    !expertId && status===RESERVATION_STATUS.COMPLETE &&
+                    expertId && status===RESERVATION_STATUS.COMPLETE &&
                     <Link
                         href={{
-                            pathname: `${expertId ? '/reserved_expert' : '/reservation'}`,
+                            pathname,
                             query: {
                                 isFinished:true,
                                 id: item.id
@@ -95,10 +99,10 @@ const ReservationItem : React.FC<Props> = ({item, containerStyle={}}) => {
                 }
 
                 {
-                    expertId && status===RESERVATION_STATUS.REQUEST &&
+                    !expertId && status===RESERVATION_STATUS.REQUEST &&
                     <Link
                         href={{
-                            pathname: expertId ? '/reserved_expert' : '/reservation',
+                            pathname,
                             query: {
                                 id: item.id
                             }
@@ -116,7 +120,7 @@ const ReservationItem : React.FC<Props> = ({item, containerStyle={}}) => {
                 // status===RESERVATION_STATUS.REQUEST ?
                 <Link
                     href={{
-                        pathname: expertId ? '/reserved_expert' : '/reservation',
+                        pathname,
                         query: {
                             id: item.id
                         }

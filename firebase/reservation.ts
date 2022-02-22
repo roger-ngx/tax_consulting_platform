@@ -1,4 +1,5 @@
 import firebase from '../firebase/firebaseInit';
+import { pick } from 'lodash';
 
 type AddProps = {
     user: any,
@@ -11,8 +12,6 @@ type AddProps = {
 export const completeResevation = async (props : AddProps) => {
 
     const { user, expertId, question, price, reservationTime } = props;
-
-    console.log('user', user);
 
     try{
         const reservationDoc = await firebase.firestore().collection('reservations').doc(user.uid)
@@ -31,7 +30,7 @@ export const completeResevation = async (props : AddProps) => {
         .collection('reservations')
         .doc(reservationDoc.id)
         .set({
-            user,
+            user: pick(user, ['displayName', 'email', 'phoneNumber', 'photoURL', 'uid']),
             question,
             reservationTime,
             price,
