@@ -13,7 +13,8 @@ import CancelReservationDialog from '../dialogs/user/CancelReservationDialog';
 import ReservationTimeChangingDialog from '../dialogs/user/ReservationTimeChangingDialog';
 import ExpertReviewDialog from '../dialogs/user/ExpertReviewDialog';
 import PriceCard from '../blocks/expert/PriceCard';
-import { Reservation } from '../models/Reservation';
+import { Reservation, RESERVATION_STATUS } from '../models/Reservation';
+import { ReservationUpdateProps, updateReservationStatus } from '../firebase/reservation';
 
 const Container = styled('div')({
     display: 'flex',
@@ -139,6 +140,9 @@ const ReservedExpert = ({}) => {
 
     const item = useSelector(state => get(state, `firestore.data.reservations[${id}]`));
 
+    //this user is an expert
+    const expertId = useSelector((state: any) => state.firebase.auth.uid);
+
     if(!item){
         return null;
     }
@@ -146,6 +150,21 @@ const ReservedExpert = ({}) => {
     const reservation = new Reservation(item);
 
     const { title, detail, value, unit } = reservation.price;
+
+    const updateStatus = async (status: string, cancelReason?: string) => {
+        try{
+            const ret = await updateReservationStatus({
+                status,
+                expertId,
+                uid: get(reservation, 'user.uid'),
+                reservationId: reservation.id,
+                reservationTime: reservation.dateTime.toDate(),
+                cancelReason
+            });
+        }catch(ex){
+            console.log('updateStatus', ex);
+        }
+    }
 
     return (
         <Container>
@@ -155,7 +174,7 @@ const ReservedExpert = ({}) => {
                 <div style={{position: 'absolute', bottom: -50, textAlign: 'center', width: '100%'}}>
                     <Avatar
                         size={100}
-                        src='/assets/images/profile.png'
+                        src={get(reservation, 'user.photoURL')}
                     />
                 </div>
             </Header>
@@ -227,7 +246,10 @@ const ReservedExpert = ({}) => {
                     </>
                 }
                 <Horizontal>
-                    <ChattingButton style={{flex: 1, marginRight: 12}}>
+                    <ChattingButton
+                        style={{flex: 1, marginRight: 12}}
+                        onClick={() => updateStatus(RESERVATION_STATUS.APPROVE)}
+                    >
                         Approve
                     </ChattingButton>
                     <CancelButton
@@ -239,9 +261,10 @@ const ReservedExpert = ({}) => {
                 </Horizontal>
             </Body>
             <CancelReservationDialog
+                reservation={reservation}
                 open={openCancelDialog}
                 onClose={() => setOpenCancelDialog(false)}
-                onSave={() => {}}
+                onSave={(reason) => updateStatus(RESERVATION_STATUS.CANCEL, reason)}
             />
             <ReservationTimeChangingDialog
                 dateTime={reservation.dateTime}

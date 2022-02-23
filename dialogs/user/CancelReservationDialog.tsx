@@ -14,6 +14,7 @@ import FormLabel from '@mui/material/FormLabel';
 
 import Career from '../../models/Career';
 import { TextField } from '@mui/material';
+import { Reservation } from '../../models/Reservation';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -44,14 +45,17 @@ const CancelButton = styled(Button)({
 })
 
 type Props = {
-  open: boolean;
-  onClose: () => void,
-  onSave: (career: Career) => void
+    reservation: Reservation
+    open: boolean;
+    onClose: () => void,
+    onSave: (reason?: string) => void
 }
 
-const CancelReservationDialog: React.FC<Props> = ({open, onClose, onSave}) => {
+const CancelReservationDialog: React.FC<Props> = ({reservation, open, onClose, onSave}) => {
     const [ selectedReason, setSelectedReason ] = useState();
     const [ etcReason, setEtcReason ] = useState();
+
+    const { user, dateTime } = reservation;
 
     return (
         <BootstrapDialog
@@ -81,11 +85,13 @@ const CancelReservationDialog: React.FC<Props> = ({open, onClose, onSave}) => {
             }}
         >
             <TimeContainer>
-                <span style={{fontWeight: 'bold', marginRight: 4}}>2021.8.11(Tus)</span>
-                <span>am 9:00</span>
+                <span style={{fontWeight: 'bold', marginRight: 4}}>
+                    {dateTime.format('YYYY.MM.DD (ddd)').toString()}
+                </span>
+                <span>{dateTime.format('hh:mm A')}</span>
             </TimeContainer>
             <Title>
-                Do you want to cancel reservation with Jhon?
+                Do you want to cancel reservation with {user.displayName}?
             </Title>
             <FormControl component="fieldset">
                 <FormLabel

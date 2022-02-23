@@ -32,8 +32,9 @@ const ThreadsView = styled.div`
     flex: 1;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
     background-color: #f4f4f4;
+    overflow-y: scroll;
+    height: calc(100vh - 90px);
 `
 
 const ChatView = styled.div`

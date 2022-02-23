@@ -57,6 +57,7 @@ const ReservationItem : React.FC<Props> = ({item, containerStyle={}}) => {
     const pathname = expertId ? '/reservation' : '/reserved_expert';
 
     const [ photoURL, setPhotoURL ] = useState();
+    const [ reservationStatusText, setReservationStatusText ] = useState('');
 
     const expert = expertId && useSelector((state: any) => get(state, `firestore.data.experts[${expertId}]`)); 
     
@@ -68,6 +69,34 @@ const ReservationItem : React.FC<Props> = ({item, containerStyle={}}) => {
         }
     }, [user, expert]);
 
+    useEffect(() => {
+        if(!user && !expert){
+            return;
+        }
+        switch(status){
+            case RESERVATION_STATUS.REQUEST:
+                return setReservationStatusText(
+                    user ? `${user.displayName} request for an appoinment approve` : `Booked with ${expert.displayName}.`
+                )
+            case RESERVATION_STATUS.APPROVE:
+                return setReservationStatusText(
+                    user ? `Approved for ${user.displayName}` : `Booked with ${expert.displayName}.`
+                )
+            case RESERVATION_STATUS.PROGRESS:
+                return setReservationStatusText(
+                    user ? `Meeting with ${user.displayName}` : `Meeting with ${expert.displayName}.`
+                )
+            case RESERVATION_STATUS.COMPLETE:
+                return setReservationStatusText(
+                    user ? `Service was done` : `Completed with ${expert.displayName}.`
+                )
+            case RESERVATION_STATUS.CANCEL:
+                return setReservationStatusText(
+                    user ? `${user.displayName} canceled` : `Canceled with ${expert.displayName}.`
+                )
+        }
+    }, [status, user, expert]);
+
     return (
         <Container style={containerStyle}>
             <Avatar
@@ -78,7 +107,7 @@ const ReservationItem : React.FC<Props> = ({item, containerStyle={}}) => {
             <Body>
                 <span style={{fontWeight: 'bold'}}>{date}</span>
                 <span>{time}</span>
-                {/* <span style={{margin: '16px 0'}}>{detail}</span> */}
+                <span style={{margin: '16px 0'}}>{reservationStatusText}</span>
                 {
                     expertId && status===RESERVATION_STATUS.COMPLETE &&
                     <Link
@@ -111,7 +140,7 @@ const ReservationItem : React.FC<Props> = ({item, containerStyle={}}) => {
                     >
                         <GradientButton
                             text='Approve'
-                            containerStyle={{textAlign: 'center', maxWidth: 200}}
+                            containerStyle={{textAlign: 'center', maxWidth: '40%', marginTop: 16}}
                         />
                     </Link>
                 }

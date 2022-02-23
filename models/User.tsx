@@ -4,18 +4,17 @@ interface IUser {
 }
 
 export default class User{
+    displayName: string;
+    photoURL: string;
+    email: string;
+    phoneNumber: string;
+    uid: string;
+
     constructor(private user: any){
-    }
-
-    get original(){
-        return this.user;
-    }
-
-    get name(){
-        return this.user.displayName;
-    }
-
-    get photoURL(){
-        return this.user.photoURL;
+        this.displayName = user.displayName;
+        this.photoURL = user.photoURL;
+        this.email = user.email;
+        this.phoneNumber = user.phoneNumber;
+        this.uid = user.uid;
     }
 }

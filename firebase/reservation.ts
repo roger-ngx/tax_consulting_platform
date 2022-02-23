@@ -51,39 +51,55 @@ export const completeResevation = async (props : AddProps) => {
     }
 }
 
-type UpdateProps = {
+export type ReservationUpdateProps = {
     status: string,
     expertId: string,
     uid: string,
     reservationId: string,
-    reservationTime: Date
+    reservationTime?: Date,
+    cancelReason?: string
 }
 
-export const updateReservationStatus = async (props: UpdateProps) => {
-    const {status, expertId, uid, reservationId, reservationTime} = props;
+export const updateReservationStatus = async (props: ReservationUpdateProps) => {
+    const {status, expertId, uid, reservationId, reservationTime, cancelReason} = props;
 
     try{
-        await firebase.firestore().collection('reservations').doc(uid)
-        .collection('items')
-        .doc(reservationId)
-        .update({
-            status,
-            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        })
 
-        await firebase.firestore().collection('experts').doc(expertId)
-        .collection('reservations')
-        .doc(reservationId)
-        .update({
-            status,
-            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        })
+        const batch = firebase.firestore().batch();
 
-        status==='CANCEL' && await firebase.firestore().collection('experts').doc(expertId).update({
-            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-            reservedTimes: firebase.firestore.FieldValue.arrayRemove(reservationTime)
-        })
+        batch.update(
+            firebase.firestore().collection('reservations').doc(uid)
+            .collection('items').doc(reservationId),
+            {
+                status,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                cancelReason
+            }
+        )
+
+        batch.update(
+            firebase.firestore().collection('experts').doc(expertId)
+            .collection('reservations').doc(reservationId),
+            {
+                status,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                cancelReason
+            }
+        )
+
+        if(status==='CANCEL'){
+            batch.update(
+                firebase.firestore().collection('experts').doc(expertId),
+                {
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    reservedTimes: firebase.firestore.FieldValue.arrayRemove(reservationTime)
+                }
+            )
+        }
+        await batch.commit();
+        return true;
     }catch(ex){
         console.log('completeResevation', ex);
     }
+    return false;
 }

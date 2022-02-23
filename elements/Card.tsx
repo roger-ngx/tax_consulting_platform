@@ -45,6 +45,8 @@ type Props = {
 const Card: React.FC<Props> = ({data}) => {
     if(!data) return null;
 
+    console.log('data', data);
+
     const { service, price, photoURL, displayName } = data;
 
     const profile = new ExpertProfile(data.profile);

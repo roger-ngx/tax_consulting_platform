@@ -218,7 +218,7 @@ const ReservationView = ({}) => {
                         <TextContainer>
                             <TextTitle>Answer</TextTitle>
                             <TextBox>
-                                {reservation.answer}
+                                {reservation.answer || 'No response yet'}
                             </TextBox>
                         </TextContainer>
                     </>
