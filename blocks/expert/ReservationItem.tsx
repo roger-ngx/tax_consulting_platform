@@ -56,7 +56,7 @@ const ReservationItem : React.FC<Props> = ({item, containerStyle={}}) => {
 
     const pathname = expertId ? '/reservation' : '/reserved_expert';
 
-    const [ photoURL, setPhotoURL ] = useState();
+    const [ photoURL, setPhotoURL ] = useState<string>();
     const [ reservationStatusText, setReservationStatusText ] = useState('');
 
     const expert = expertId && useSelector((state: any) => get(state, `firestore.data.experts[${expertId}]`)); 

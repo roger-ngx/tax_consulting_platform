@@ -91,7 +91,7 @@ const CancelReservationDialog: React.FC<Props> = ({reservation, open, onClose, o
                 <span>{dateTime.format('hh:mm A')}</span>
             </TimeContainer>
             <Title>
-                Do you want to cancel reservation with {user.displayName}?
+                Do you want to cancel reservation with {user && user.displayName}?
             </Title>
             <FormControl component="fieldset">
                 <FormLabel

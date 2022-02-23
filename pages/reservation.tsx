@@ -230,6 +230,7 @@ const ReservationView = ({}) => {
                 </CancelButton>
             </Body>
             <CancelReservationDialog
+                reservation={reservation}
                 open={openCancelDialog}
                 onClose={() => setOpenCancelDialog(false)}
                 onSave={() => {}}

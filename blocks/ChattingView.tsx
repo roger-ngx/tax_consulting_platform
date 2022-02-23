@@ -248,7 +248,7 @@ const ChattingView = () => {
                                 src={chattingUser.photoURL}
                                 size={44}
                             />
-                            <span style={{marginLeft: 8}}>{chattingUser.name}</span>
+                            <span style={{marginLeft: 8}}>{chattingUser.displayName}</span>
                         </Horizontal>
                         <IconButton>
                             <DeleteIcon sx={{color: '#277be8'}}/>

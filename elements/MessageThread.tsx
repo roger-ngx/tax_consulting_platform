@@ -148,7 +148,7 @@ const MessageThread : React.FC<Props> = ({id, desUserId, time, getLastMessage, u
     useEffect(() => {
         if(desUser){
             threadSelected && dispatch(setCurrentDesUser(desUser.original));
-            !lastMessage && setLastMessage(getLastMessage ? getLastMessage(userId, desUser.name): '');
+            !lastMessage && setLastMessage(getLastMessage ? getLastMessage(userId, desUser.displayName): '');
         }
     }, [desUser, threadSelected]);
 
@@ -172,7 +172,7 @@ const MessageThread : React.FC<Props> = ({id, desUserId, time, getLastMessage, u
                 </div>
                 <TextContainer>
                     <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-                        <Name>{desUser?.name}</Name>
+                        <Name>{desUser!.displayName}</Name>
                         <Time>{time}</Time>
                     </div>
                     <div

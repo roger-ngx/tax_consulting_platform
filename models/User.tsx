@@ -17,4 +17,8 @@ export default class User{
         this.phoneNumber = user.phoneNumber;
         this.uid = user.uid;
     }
+
+    get original(){
+        return this.user;
+    }
 }
