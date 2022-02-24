@@ -1,20 +1,19 @@
 import React, { useState } from 'react';
 import { styled } from '@mui/system';
-import Avatar from '../elements/Avatar';
-import { Step, Stepper, StepLabel, Button } from '@mui/material';
+import { Step, Stepper, StepLabel, Button, Input, CircularProgress } from '@mui/material';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import InsertCommentIcon from '@mui/icons-material/InsertComment';
 import { useSelector } from 'react-redux';
-import { get } from 'lodash';
+import { get, isEmpty } from 'lodash';
 import { useRouter } from 'next/router';
 
-import ExpertInfo from '../blocks/expert/Info';
+import Avatar from '../elements/Avatar';
 import CancelReservationDialog from '../dialogs/user/CancelReservationDialog';
 import ReservationTimeChangingDialog from '../dialogs/user/ReservationTimeChangingDialog';
 import ExpertReviewDialog from '../dialogs/user/ExpertReviewDialog';
 import PriceCard from '../blocks/expert/PriceCard';
 import { Reservation, RESERVATION_STATUS } from '../models/Reservation';
-import { ReservationUpdateProps, updateReservationStatus } from '../firebase/reservation';
+import { updateReservationStatus, updateReservationAnswer } from '../firebase/reservation';
 
 const Container = styled('div')({
     display: 'flex',
@@ -129,11 +128,77 @@ const steps = [
     'Complete'
 ]
 
+type AnswerInputProps = {
+    processing: boolean;
+    onSubmit: (answer: string) => void;
+    onCancel: () => void
+}
+
+const AnswerInput = (props: AnswerInputProps) => {
+    const {processing, onSubmit, onCancel} = props;
+
+    const [ answer, setAnswer ] = useState('');
+
+    const cancelAnswer = () => {
+        setAnswer('');
+        onCancel();
+    }
+
+    const submitAnswer = () => onSubmit(answer);
+
+    return (
+        <div style={{marginTop: 24}}>
+            <Input
+                value={answer}
+                onChange={(e: any) => setAnswer(e.target.value)}
+                autoFocus
+                style={{
+                    width: '100%',
+                    marginBottom: 16,
+                    padding: 16
+                }}
+                sx={{
+                    border: 'solid 1px #C7C7C7',
+                }}
+                disableUnderline={true}
+                rows={3}
+                multiline
+            />
+            <Horizontal style={{alignSelf: 'flex-end'}}>
+                <Button
+                    variant='outlined'
+                    color='error'
+                    onClick={cancelAnswer}
+                    disabled={processing}
+                    style={{marginRight: 16}}
+                >
+                    Cancel
+                </Button>
+                <Button
+                    variant='contained'
+                    color='primary'
+                    onClick={submitAnswer}
+                    disabled={isEmpty(answer) || processing}
+                >
+                    {
+                        processing ?
+                        <CircularProgress sx={{color: 'white'}} size={16}/>
+                        :
+                        'Submit'
+                    }
+                </Button>
+            </Horizontal>
+        </div>
+    )
+}
+
 const ReservedExpert = ({}) => {
 
     const [ openCancelDialog, setOpenCancelDialog ] = useState(false);
     const [ openDatetimeChangingDialog, setOpenDatetimeChangingDialog ] = useState(false);
     const [ openReviewDialog, setOpenReviewDialog ] = useState(false);
+    const [ answerInputShow, setAnswerInputShow ] = useState(false);
+    const [ processing, setProcessing ] = useState(false);
 
     const router = useRouter();
     const { isFinished, id } = router.query;
@@ -147,11 +212,12 @@ const ReservedExpert = ({}) => {
         return null;
     }
 
-    const reservation = new Reservation(item);
+    const reservation = new Reservation({id, ...item});
 
     const { title, detail, value, unit } = reservation.price;
 
     const updateStatus = async (status: string, cancelReason?: string) => {
+        setProcessing(true);
         try{
             const ret = await updateReservationStatus({
                 status,
@@ -164,6 +230,27 @@ const ReservedExpert = ({}) => {
         }catch(ex){
             console.log('updateStatus', ex);
         }
+        setProcessing(false);
+    }
+
+    const submitAnswer = async (answer: string) => {
+        setProcessing(true);
+
+        console.log('reservation', reservation);
+
+        try{
+            const ret = await updateReservationAnswer({
+                answer,
+                expertId,
+                uid: get(reservation, 'user.uid'),
+                reservationId: reservation.id
+            });
+            setAnswerInputShow(false);
+        }catch(ex){
+            console.log('submitAnswer', ex);
+            alert('Server error. Plz try again.')
+        }
+        setProcessing(false);
     }
 
     return (
@@ -222,15 +309,24 @@ const ReservedExpert = ({}) => {
                                 {reservation.question}
                             </TextBox>
                             {
-                                !reservation.answer &&
+                                !reservation.answer && !answerInputShow &&
                                 <div style={{textAlign: 'right', marginTop: 8}}>
                                     <Button
                                         variant='outlined'
                                         color='primary'
+                                        onClick={() => setAnswerInputShow(true)}
                                     >
                                         Answer
                                     </Button>
                                 </div>
+                            }
+                            {
+                                answerInputShow &&
+                                <AnswerInput
+                                    processing={processing}
+                                    onSubmit={submitAnswer}
+                                    onCancel={() => setAnswerInputShow(false)}
+                                />
                             }
                         </TextContainer>
 

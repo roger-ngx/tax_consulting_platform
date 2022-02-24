@@ -103,3 +103,45 @@ export const updateReservationStatus = async (props: ReservationUpdateProps) => 
     }
     return false;
 }
+
+export type ReservationAnswerUpdateProps = {
+    expertId: string,
+    uid: string,
+    reservationId: string,
+    answer: string
+}
+
+export const updateReservationAnswer = async (props: ReservationAnswerUpdateProps) => {
+    const {expertId, uid, reservationId, answer} = props;
+
+    console.log(expertId, uid, reservationId, answer);
+
+    try{
+
+        const batch = firebase.firestore().batch();
+
+        batch.update(
+            firebase.firestore().collection('reservations').doc(uid)
+            .collection('items').doc(reservationId),
+            {
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                answer
+            }
+        )
+
+        batch.update(
+            firebase.firestore().collection('experts').doc(expertId)
+            .collection('reservations').doc(reservationId),
+            {
+                answer,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            }
+        )
+
+        await batch.commit();
+        return true;
+    }catch(ex){
+        console.log('completeResevation', ex);
+    }
+    return false;
+}
