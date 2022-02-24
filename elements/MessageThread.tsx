@@ -159,7 +159,7 @@ const MessageThread : React.FC<Props> = ({id, desUserId, time, getLastMessage, u
         }
     }
 
-    console.log('selected', selected);
+    if(!desUser) return null;
 
     return (
         <Container
@@ -168,7 +168,7 @@ const MessageThread : React.FC<Props> = ({id, desUserId, time, getLastMessage, u
         >
             <ThreadContainer selected={selected}>
                 <div style={{minWidth: 44, borderRadius: 22, overflow: 'hidden', fontSize: 0}}>
-                    <Image src={desUser?.photoURL || '/assets/images/profile.png'} width={44} height={44} />
+                    <Image src={desUser!.photoURL || '/assets/images/profile.png'} width={44} height={44} />
                 </div>
                 <TextContainer>
                     <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
