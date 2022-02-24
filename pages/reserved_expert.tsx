@@ -341,20 +341,23 @@ const ReservedExpert = ({}) => {
                         }
                     </>
                 }
-                <Horizontal>
-                    <ChattingButton
-                        style={{flex: 1, marginRight: 12}}
-                        onClick={() => updateStatus(RESERVATION_STATUS.APPROVE)}
-                    >
-                        Approve
-                    </ChattingButton>
-                    <CancelButton
-                        style={{flex: 1}}
-                        onClick={() => setOpenCancelDialog(true)}
-                    >
-                        Cancel
-                    </CancelButton>
-                </Horizontal>
+                {
+                    reservation.status===RESERVATION_STATUS.REQUEST &&
+                    <Horizontal>
+                        <ChattingButton
+                            style={{flex: 1, marginRight: 12}}
+                            onClick={() => updateStatus(RESERVATION_STATUS.APPROVE)}
+                        >
+                            Approve
+                        </ChattingButton>
+                        <CancelButton
+                            style={{flex: 1}}
+                            onClick={() => setOpenCancelDialog(true)}
+                        >
+                            Cancel
+                        </CancelButton>
+                    </Horizontal>
+                }
             </Body>
             <CancelReservationDialog
                 reservation={reservation}
