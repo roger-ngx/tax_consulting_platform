@@ -6,7 +6,7 @@ import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import InsertCommentIcon from '@mui/icons-material/InsertComment';
 import { useRouter } from 'next/router';
 import { useSelector, useDispatch } from 'react-redux';
-import { get, isEmpty } from 'lodash';
+import { get, isEmpty, throttle } from 'lodash';
 
 import ExpertInfo from '../blocks/expert/Info';
 import CancelReservationDialog from '../dialogs/user/CancelReservationDialog';
@@ -194,7 +194,7 @@ const ReservationView = ({}) => {
                     </CalendarButton>
                     <ChattingButton
                         startIcon={<InsertCommentIcon />}
-                        onClick={startChatting}
+                        onClick={throttle(startChatting, 2000, { trailing: false })}
                         disabled={processing}
                     >
                         {

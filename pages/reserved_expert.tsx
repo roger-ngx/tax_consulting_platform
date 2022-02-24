@@ -3,8 +3,8 @@ import { styled } from '@mui/system';
 import { Step, Stepper, StepLabel, Button, Input, CircularProgress } from '@mui/material';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import InsertCommentIcon from '@mui/icons-material/InsertComment';
-import { useSelector } from 'react-redux';
-import { get, isEmpty } from 'lodash';
+import { useSelector, useDispatch } from 'react-redux';
+import { get, isEmpty, throttle } from 'lodash';
 import { useRouter } from 'next/router';
 
 import Avatar from '../elements/Avatar';
@@ -14,6 +14,8 @@ import ExpertReviewDialog from '../dialogs/user/ExpertReviewDialog';
 import PriceCard from '../blocks/expert/PriceCard';
 import { Reservation, RESERVATION_STATUS } from '../models/Reservation';
 import { updateReservationStatus, updateReservationAnswer } from '../firebase/reservation';
+import { createMessageThread } from '../firebase/messageController';
+import { setCurrentThreadId } from '../stores/messageSlide';
 
 const Container = styled('div')({
     display: 'flex',
@@ -200,6 +202,7 @@ const ReservedExpert = ({}) => {
     const [ answerInputShow, setAnswerInputShow ] = useState(false);
     const [ processing, setProcessing ] = useState(false);
 
+    const dispatch = useDispatch();
     const router = useRouter();
     const { isFinished, id } = router.query;
 
@@ -253,6 +256,18 @@ const ReservedExpert = ({}) => {
         setProcessing(false);
     }
 
+    const startChatting = async () => {
+        setProcessing(true);
+        const threadId = await createMessageThread({srcUserId: expertId, desUserId: item.user.uid})
+        setProcessing(false);
+        if(threadId){
+            dispatch(setCurrentThreadId(threadId));
+            router.push('/messages');
+        }else{
+            alert('There are something wrong. See the browser logs');
+        }
+    }
+
     return (
         <Container>
             <Header>
@@ -285,8 +300,15 @@ const ReservedExpert = ({}) => {
                     </CalendarButton>
                     <ChattingButton
                         startIcon={<InsertCommentIcon />}
+                        onClick={throttle(startChatting, 2000, { trailing: false })}
+                        disabled={processing}
                     >
-                        Chatting
+                        {
+                            processing ? 
+                            <CircularProgress size={16} sx={{color: 'white'}} />
+                            :
+                            'Chatting'
+                        }
                     </ChattingButton>
                 </ButtonContainer>
 
