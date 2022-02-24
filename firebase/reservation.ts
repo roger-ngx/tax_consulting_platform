@@ -73,7 +73,7 @@ export const updateReservationStatus = async (props: ReservationUpdateProps) => 
             {
                 status,
                 updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-                cancelReason
+                cancelReason: cancelReason||null
             }
         )
 
@@ -83,7 +83,7 @@ export const updateReservationStatus = async (props: ReservationUpdateProps) => 
             {
                 status,
                 updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-                cancelReason
+                cancelReason: cancelReason||null
             }
         )
 
