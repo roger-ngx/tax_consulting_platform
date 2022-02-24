@@ -1,8 +1,9 @@
+import { useState, useEffect } from 'react';
 import { Grid } from '@mui/material';
 import Link from 'next/link';
 import { useFirestoreConnect } from 'react-redux-firebase';
 import { useSelector } from 'react-redux';
-import { map, size } from 'lodash';
+import { map, size, filter } from 'lodash';
 import styled from 'styled-components';
 
 import Banner from '../blocks/Banner';
@@ -17,12 +18,28 @@ const Container =styled.div`
 `
 
 const Home = () => {
+  const [ selectedMenu, setSelectedMenu ] = useState();
+  const [ selectedExperts, setSelectedExperts ] = useState<any[]>([]);
 
   const experts = useSelector((state: any) => state.firestore.ordered.experts);
 
   useFirestoreConnect([{
     collection: 'experts'
   }])
+
+  useEffect(() => {
+    if(selectedMenu===-1){
+      setSelectedExperts(experts);
+      return;
+    }
+
+    const data = filter(experts, (expert:any) => {
+      const {category} = expert.service;
+      return category.includes(selectedMenu);
+    })
+
+    setSelectedExperts(data);
+  }, [selectedMenu, experts]);
 
   return (
     <div>
@@ -31,7 +48,9 @@ const Home = () => {
       </div>
       <Container>
         <div style={{paddingRight: 12, borderRightColor: '#eee', borderRightWidth:1, borderRightStyle: 'solid'}}>
-          <MainSideMenu />
+          <MainSideMenu
+            onMenuChanged={setSelectedMenu}
+          />
         </div>
         <div style={{flex: 1, marginLeft: 24}}>
           <div style={{margin: '24px 0'}}>
@@ -39,7 +58,7 @@ const Home = () => {
           </div>
           <Grid container spacing={2}>
             {
-              map(experts, expert => (
+              map(selectedExperts, expert => (
                 <Link href={`/expert_detail?id=${expert.id}`}>
                   <Grid item xs={12} sm={6}>
                       <Card data={expert} />
