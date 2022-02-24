@@ -3,7 +3,7 @@ import { Grid } from '@mui/material';
 import Link from 'next/link';
 import { useFirestoreConnect } from 'react-redux-firebase';
 import { useSelector } from 'react-redux';
-import { map, size, filter } from 'lodash';
+import { map, isEmpty, filter, intersection } from 'lodash';
 import styled from 'styled-components';
 
 import Banner from '../blocks/Banner';
@@ -18,8 +18,9 @@ const Container =styled.div`
 `
 
 const Home = () => {
-  const [ selectedMenu, setSelectedMenu ] = useState();
+  const [ selectedMenu, setSelectedMenu ] = useState<number>();
   const [ selectedExperts, setSelectedExperts ] = useState<any[]>([]);
+  const [ selectedStates, setSelectedStates ] = useState<string[]>([]);
 
   const experts = useSelector((state: any) => state.firestore.ordered.experts);
 
@@ -41,6 +42,21 @@ const Home = () => {
     setSelectedExperts(data);
   }, [selectedMenu, experts]);
 
+  useEffect(() => {
+    if(isEmpty(selectedStates)){
+      setSelectedExperts(experts);
+      return;
+    }
+
+    const data = filter(experts, (expert:any) => {
+      const {availableStates} = expert.profile;
+      const stateCodes = map(availableStates, state => state.code);
+      return intersection(selectedStates, stateCodes).length > 0;
+    })
+
+    setSelectedExperts(data);
+  }, [selectedStates, experts]);
+
   return (
     <div>
       <div style={{margin: '0 -10vw'}}>
@@ -54,7 +70,9 @@ const Home = () => {
         </div>
         <div style={{flex: 1, marginLeft: 24}}>
           <div style={{margin: '24px 0'}}>
-            <Filter />
+            <Filter
+              onSearchingStatesChanged={setSelectedStates}
+            />
           </div>
           <Grid container spacing={2}>
             {

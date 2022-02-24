@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { styled } from '@mui/system';
 import CheckIcon from '@mui/icons-material/Check';
 import FmdGoodOutlinedIcon from '@mui/icons-material/FmdGoodOutlined';
@@ -15,11 +15,20 @@ const Container = styled('div')({
     alignItems: 'center'
 })
 
-const Filter = () => {
+type Props = {
+    onSearchingStatesChanged: (states: string[]) => void
+}
+
+const Filter: React.FC<Props> = ({onSearchingStatesChanged}) => {
 
     const [ sortBy, setSortBy ] = useState('1');
     const [ showLocationSelectDialog, setShowLocationSelectDialog ] = useState(false);
     const [ searchingStates, setSearchingStates ] = useState<State []>([]);
+
+    useEffect(() => {
+        const states = map(searchingStates, (state: State) => state.code);
+        onSearchingStatesChanged(states);
+    }, [searchingStates]);
 
     return (
         <Container>
