@@ -30,11 +30,7 @@ const enum TABS {
     COMPLETED
 }
 
-type Props = {
-    isExpert?: boolean
-}
-
-const ReservationsView: React.FC<Props> = ({isExpert}) => {
+const ReservationsView = () => {
 
     const [ selectedTab, setSelectedTab ] = useState(TABS.IN_PROGRESS);
     const [ selectedReservations, setSelectedReservations ] = useState<Reservation[]>([]);
@@ -62,18 +58,6 @@ const ReservationsView: React.FC<Props> = ({isExpert}) => {
         return null;
     }
 
-    console.log(selectedReservations);
-
-    isExpert ? useFirestoreConnect([{
-        collection: 'experts',
-        doc: userId,
-        subcollections: [{
-            collection: 'reservations',
-            orderBy: ['createdAt', 'desc'],
-        }],
-        storeAs: 'reservations',
-    }])
-    :
     useFirestoreConnect([{
         collection: 'reservations',
         doc: userId,
@@ -90,7 +74,7 @@ const ReservationsView: React.FC<Props> = ({isExpert}) => {
 
     return (
         <Container>
-            <Tabs value={selectedTab} onChange={handleTabChange} aria-label="basic tabs example">
+            <Tabs value={selectedTab} onChange={handleTabChange}>
                 <Tab label="In Progress" value={TABS.IN_PROGRESS}/>
                 <Tab label="Completed" value={TABS.COMPLETED}/>
             </Tabs>

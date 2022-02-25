@@ -7,6 +7,7 @@ import InsertCommentIcon from '@mui/icons-material/InsertComment';
 import { useRouter } from 'next/router';
 import { useSelector, useDispatch } from 'react-redux';
 import { get, isEmpty, throttle } from 'lodash';
+import { useFirestoreConnect } from 'react-redux-firebase';
 
 import ExpertInfo from '../blocks/expert/Info';
 import CancelReservationDialog from '../dialogs/user/CancelReservationDialog';
@@ -134,10 +135,20 @@ const ReservationView = ({}) => {
     const router = useRouter();
     const { isFinished, id } = router.query;
 
-    const item = useSelector(state => get(state, `firestore.data.reservations[${id}]`)) || {};
+    const item = useSelector(state => get(state, `firestore.data.reservation-${id}`)) || {};
     const expert = useSelector((state: any) => get(state, `firestore.data.experts[${item.expertId}]`)) || {};
 
     const userId = useSelector(state => get(state, 'firebase.auth.uid'));
+
+    useFirestoreConnect([{
+        collection: 'reservations',
+        doc: userId,
+        subcollections: [{
+            collection: 'items',
+            doc: id as string
+        }],
+        storeAs: `reservation-${id}`,
+    }])
 
     if(isEmpty(item)){
         return null;

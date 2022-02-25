@@ -16,6 +16,7 @@ import { Reservation, RESERVATION_STATUS } from '../models/Reservation';
 import { updateReservationStatus, updateReservationAnswer } from '../firebase/reservation';
 import { createMessageThread } from '../firebase/messageController';
 import { setCurrentThreadId } from '../stores/messageSlide';
+import { useFirestoreConnect } from 'react-redux-firebase';
 
 const Container = styled('div')({
     display: 'flex',
@@ -206,10 +207,20 @@ const ReservedExpert = ({}) => {
     const router = useRouter();
     const { isFinished, id } = router.query;
 
-    const item = useSelector(state => get(state, `firestore.data.reservations[${id}]`));
+    const item = useSelector(state => get(state, `firestore.data.reservation-${id}`));
 
     //this user is an expert
     const expertId = useSelector((state: any) => state.firebase.auth.uid);
+
+    useFirestoreConnect([{
+        collection: 'experts',
+        doc: expertId,
+        subcollections: [{
+            collection: 'reservations',
+            doc: id as string
+        }],
+        storeAs: `reservation-${id}`
+    }]);
 
     if(!item){
         return null;

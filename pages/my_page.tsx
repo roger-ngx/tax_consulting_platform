@@ -6,12 +6,13 @@ import { get } from 'lodash';
 import Button from '@mui/material/Button';
 
 import MyPageSideMenu from '../blocks/MyPage/MyPageSideMenu';
-import ReservationsView from '../blocks/MyPage/ReservationsView';
 import EnrollExpert from '../blocks/MyPage/EnrollExpert';
 import TermsAndConditions from '../blocks/MyPage/TermsAndConditions';
 import QnA from '../blocks/MyPage/QnA';
 import Help from '../blocks/MyPage/Help';
 import AskQuestionDialog from '../dialogs/AskQuestionDialog';
+import ExpertReservationView from '../blocks/MyPage/ExpertReservationView';
+import ReservationView from './reservation';
 
 const Container = styled('div')({
     display: 'flex',
@@ -71,12 +72,14 @@ const MyPage = () => {
                 </Horizontal>
                 {
                     selectedItem === 'Reservation' &&
-                    <ReservationsView isExpert={!!expert}/>
+                    (
+                        expert ? <ExpertReservationView /> : <ReservationView />
+                    )
                 }
 
                 {
                     selectedItem && ['Enroll Expert', 'Expert Profile'].includes(selectedItem) &&
-                    <EnrollExpert expert={expert}/>
+                    <EnrollExpert expert={expert} />
                 }
 
                 {

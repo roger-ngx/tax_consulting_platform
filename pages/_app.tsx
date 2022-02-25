@@ -26,7 +26,8 @@ const MyApp : React.FC<Props> = ({ Component, pageProps }) => {
   // react-redux-firebase config
   const rrfConfig = {
     userProfile: 'users',
-    useFirestoreForProfile: true // Firestore for Profile instead of Realtime DB
+    useFirestoreForProfile: true ,// Firestore for Profile instead of Realtime DB
+    oneListenerPerPath: true
   }
 
   const rrfProps = {
