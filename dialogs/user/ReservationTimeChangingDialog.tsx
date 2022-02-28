@@ -106,7 +106,7 @@ const ReservationTimeChangingDialog: React.FC<Props> = ({open, dateTime, onClose
     useEffect(() => {
         if(dateTime){
             setSelectedDate(dateTime.toDate());
-            setSelectedTime(dateTime.format('HH:mm A'));
+            setSelectedTime(dateTime.format('hh:mm A'));
         }
     }, [dateTime]);
 
@@ -179,6 +179,7 @@ const ReservationTimeChangingDialog: React.FC<Props> = ({open, dateTime, onClose
                             onChange={setSelectedTime}
                             // reserved={reserved}
                             showIcon={false}
+                            time={selectedTime}
                         />
                     }
                     <InfoCard containerStyle={{marginTop: 32, marginBottom: 16, width: '100%'}}/>

@@ -39,7 +39,7 @@ export class Reservation {
     }
 
     get time(){
-        return this.dateTime.format('HH:mm A');
+        return this.dateTime.format('hh:mm A');
     }
 
     get dateTime(){

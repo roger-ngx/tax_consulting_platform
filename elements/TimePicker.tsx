@@ -20,7 +20,7 @@ type TBProps = ButtonProps & {
 }
 
 const TimeButton = styled(Button)<TBProps>(props => ({
-    fontWeight: 'normal',
+    fontWeight: props.selected ? 'bold' : 'normal',
     color: props.selected ? '#0045D1' : '#333'
 }))
 
@@ -32,15 +32,25 @@ const TIMES = {
 type Props = {
     onChange: (time: string) => void,
     reserved?: string[],
-    showIcon?: boolean
+    showIcon?: boolean,
+    time?: string
 }
 
-const TimePicker: React.FC<Props> = ({onChange, showIcon=true, reserved=[]}) => {
-    const [ selectedTime, setSelectedTime ] = useState<string>()
+const TimePicker: React.FC<Props> = ({onChange, time, showIcon=true, reserved=[]}) => {
+    const [ selectedTime, setSelectedTime ] = useState<string>();
+    const [ ampm, setAMPM ] = useState<string>();
 
     useEffect(() => {
-        selectedTime && onChange(selectedTime);
-    }, [selectedTime])
+        selectedTime && ampm && onChange(selectedTime + ' ' + ampm);
+    }, [selectedTime, ampm])
+
+    useEffect(() => {
+        if(time){
+            const [ _time, _ampm ] = time.split(' ');
+            setSelectedTime(_time);
+            setAMPM(_ampm);
+        }
+    }, [time]);
 
     // const onSelectTime = (time: string) => {
     //     const currentSelected = includes(selectedTimes, time);
@@ -53,6 +63,11 @@ const TimePicker: React.FC<Props> = ({onChange, showIcon=true, reserved=[]}) => 
 
     //     setSelectedTimes([...selectedTimes])
     // }
+
+    const setTime = (time: string, ampm: string) => {
+        setSelectedTime(time);
+        setAMPM(ampm)
+    }
 
     return (
         <Column>
@@ -79,7 +94,7 @@ const TimePicker: React.FC<Props> = ({onChange, showIcon=true, reserved=[]}) => 
                             <TimeButton
                                 disabled={reserved.includes(time)}
                                 selected={selectedTime===time}
-                                onClick={() => setSelectedTime(time)}
+                                onClick={() => setTime(time, 'AM')}
                             >
                                 {time}
                             </TimeButton>
@@ -101,7 +116,7 @@ const TimePicker: React.FC<Props> = ({onChange, showIcon=true, reserved=[]}) => 
                             <TimeButton
                                 disabled={reserved.includes(time)}
                                 selected={selectedTime===time}
-                                onClick={() => setSelectedTime(time)}
+                                onClick={() => setTime(time, 'PM')}
                             >
                                 {time}
                             </TimeButton>

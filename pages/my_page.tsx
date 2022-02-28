@@ -12,7 +12,7 @@ import QnA from '../blocks/MyPage/QnA';
 import Help from '../blocks/MyPage/Help';
 import AskQuestionDialog from '../dialogs/AskQuestionDialog';
 import ExpertReservationView from '../blocks/MyPage/ExpertReservationView';
-import ReservationView from './reservation';
+import ReservationView from '../blocks/MyPage/ReservationView';
 
 const Container = styled('div')({
     display: 'flex',
