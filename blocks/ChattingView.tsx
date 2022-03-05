@@ -149,10 +149,10 @@ const MessageList : React.FC<Props> = ({chatId}) => {
 
     const uploads: FileUpload[] = filter(useSelector((state: any) => state.fileTransfer.uploadFiles), file => file.status === 'running');
 
-    const messagesEndRef = useRef<HTMLDivElement>(null);
+    const messagesEndRef = useRef<null | HTMLDivElement>(null); 
 
     const scrollToBottom = () => {
-        messagesEndRef?.current?.scrollIntoView({ behavior: "smooth" })
+        messagesEndRef!.current!.scrollIntoView({ behavior: "smooth" })
     }
     
     useEffect(() => {

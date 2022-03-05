@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect, createRef } from 'react';
 import { styled } from '@mui/system';
 import { useFirestoreConnect } from 'react-redux-firebase';
 import { useSelector } from 'react-redux';
@@ -17,7 +17,7 @@ import ReservationView from '../blocks/MyPage/ReservationView';
 const Container = styled('div')({
     display: 'flex',
     flexDirection: 'row',
-    marginBottom: 200
+    height: 'calc(100vh - 80px)',
 })
 
 const Title = styled('span')({
@@ -38,32 +38,22 @@ const MyPage = () => {
     const [ selectedItem, setSelectedItem ] = useState<string>();
     const uid = useSelector((state: any) => get(state, 'firebase.auth.uid'));
     const [ helpInquiryShow, setHelpInquiryShow ] = useState(false);
+    const contentRef = useRef<null | HTMLDivElement>(null); 
 
-    const handleTabChange = (event: Event, newValue: any) => {
-        setSelectedItem(newValue);
-    };
-
-    // useFirestoreConnect([
-    //     {
-    //         collection: 'experts',
-    //         doc: uid
-    //     },
-    //     {
-    //         collection: 'users',
-    //         doc: uid
-    //     }
-    // ]);
+    useEffect(() => {
+        contentRef!.current!.scrollIntoView();
+    }, [selectedItem]);
 
     const expert = useSelector((state: any) => get(state, `firestore.data.experts.${uid}`));
 
     return (
         <Container>
-            <div style={{height: '100%', overflowY: 'auto'}}>
+            <div style={{height: '100%', overflowY: 'scroll', paddingBottom: 100}}>
                 <MyPageSideMenu
                     onSelectedItemChanged={(item: string) => setSelectedItem(item)}
                 />
             </div>
-            <div style={{flex: 1, marginLeft: 24, overflowY: 'auto', height: '100%'}}>
+            <div ref={contentRef} style={{flex: 1, marginLeft: 24, overflowY: 'auto', height: '100%', paddingBottom: 100}}>
                 <Horizontal>
                     <Title>{selectedItem}</Title>
                     {
