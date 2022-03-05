@@ -1,4 +1,3 @@
-import { Dispatch } from '@reduxjs/toolkit';
 import dayjs from 'dayjs';
 import firebase from './firebaseInit';
 import { setUserCredential, setUserType } from '../stores/userInfoSlide';
@@ -108,3 +107,31 @@ export const updateOnlineStatus = async (uid) => {
         console.log('updateOnlineStatus', ex);
     }
 }
+
+export const logOut = async () => {
+    try{
+        await firebase.auth().signOut();
+        return true;
+    }catch(ex){
+        console.log('logOut', ex);
+    }
+    return false;
+}
+
+export const withdraw = async (uid) => {
+
+    try{
+        await firebase.firestore().collection('users').doc(uid)
+        .update({
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            withdrewAt: firebase.firestore.FieldValue.serverTimestamp(),
+            active: false,
+        });
+
+        await firebase.auth().signOut();
+        return true;
+    }catch(ex){
+        console.log('withdraw', ex);
+    }
+    return false;
+};

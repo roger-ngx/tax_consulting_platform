@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
@@ -9,9 +9,13 @@ import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import { useSelector } from 'react-redux';
-import { get } from 'lodash';
+import { get, throttle } from 'lodash';
 
 import ProfilePhotoUpload from '../elements/ProfilePhotoUpload';
+import { withdraw } from '../firebase/login';
+import { useRouter } from 'next/router';
+import { CircularProgress } from '@mui/material';
+import { updateUser } from '../firebase/firebaseUser';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -35,6 +39,7 @@ type Props = {
 
 const AccountDialog: React.FC<Props> = ({open, onClose}) => {
 
+  const router = useRouter();
   const googleUser = useSelector((state: any) => state.firebase.auth) || {};
 
   const userType = useSelector((state: any) => state.user.userType);
@@ -44,9 +49,38 @@ const AccountDialog: React.FC<Props> = ({open, onClose}) => {
   const [ name, setName ] = useState(user.displayName);
   const [ phoneNumber, setPhoneNumber ] = useState(user.phoneNumber);
   const [ photoURL, setPhotoURL ] = useState(user.photoURL);
+  const [ processing, setProcessing ] = useState(false);
+  const [ isDataChanged, setDataChanged ] = useState(false);
+  const [ saving, setSaving ] = useState(false);
 
-  const saveAccount = () => {
+  useEffect(() => {
+    if(name===user.displayName && phoneNumber===user.phoneNumber && photoURL===user.photoURL){
+      setDataChanged(false);
+    }else{
+      setDataChanged(true);
+    }
+  }, [name, phoneNumber, photoURL]);
 
+  const saveAccount = async() => {
+    setSaving(true);
+    const ret = await updateUser(googleUser.uid, {displayName: name, phoneNumber, photoURL});
+    setSaving(false);
+    if(!ret){
+      alert('There are something wrong. Please try again later');
+    }else{
+      onClose();
+    }
+  }
+
+  const withdrawAccount = async() => {
+    setProcessing(true);
+    const ret = await withdraw(googleUser.uid);
+    setProcessing(false);
+    if(ret){
+      router.replace('/');
+    }else{
+      alert('There are something wrong. Please try again later');
+    }
   }
 
   return (
@@ -73,9 +107,15 @@ const AccountDialog: React.FC<Props> = ({open, onClose}) => {
             <Button
                 variant='contained'
                 color='primary'
-                onClick={saveAccount}
+                onClick={throttle(saveAccount, 2000, {trailing: false})}
+                disabled={saving || !isDataChanged}
             >
-                Save
+              {
+                saving ?
+                <CircularProgress size={16}/>
+                :
+                'Save'
+              }
             </Button>
           </div>
         </DialogTitle>
@@ -83,7 +123,7 @@ const AccountDialog: React.FC<Props> = ({open, onClose}) => {
           <div style={{margin: '24px auto', display: 'flex', justifyContent: 'center'}}>
             <ProfilePhotoUpload
                 photo={photoURL}
-                onFileChanged={url => {}}
+                onFileChanged={setPhotoURL}
             />
           </div>
 
@@ -116,6 +156,20 @@ const AccountDialog: React.FC<Props> = ({open, onClose}) => {
             onChange={(e: any) => setPhoneNumber(e.target.value)}
             value={phoneNumber}
           />
+          <div style={{marginTop: 16}}>
+            <Button
+              variant='text'
+              onClick={throttle(withdrawAccount, 2000, {trailing: false})}
+              disabled={processing}
+            >
+              {
+                processing ?
+                <CircularProgress size={16}/>
+                :
+                'Withdraw'
+              }
+            </Button>
+          </div>
         </DialogContent>
       </BootstrapDialog>
     </div>

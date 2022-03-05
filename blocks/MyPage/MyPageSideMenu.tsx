@@ -13,6 +13,8 @@ import { get } from 'lodash';
 import { styled } from '@mui/system'; 
 import Avatar from '../../elements/Avatar';
 import AccountDialog from '../../dialogs/AccountDialog';
+import { logOut } from '../../firebase/login';
+import { useRouter } from 'next/router';
 
 const HeaderText = styled('div')({
   fontSize: 20,
@@ -23,6 +25,7 @@ export default function MyPageSideMenu({onSelectedItemChanged} : {onSelectedItem
 
   const [ selectedItem, setSelectedItem ] = React.useState('Reservation');
   const [ accountDialogShow, setAccountDialogShow ] = React.useState(false);
+  const router = useRouter();
 
   const userType = useSelector((state: any) => state.user.userType);
   const uid = useSelector((state: any) => state.firebase.auth.uid);
@@ -35,6 +38,15 @@ export default function MyPageSideMenu({onSelectedItemChanged} : {onSelectedItem
   React.useEffect(() => {
     onSelectedItemChanged(selectedItem);
   }, [selectedItem])
+
+  const _logOut = async () => {
+    const ret = await logOut();
+    if(ret){
+      router.replace('/');
+    }else{
+      alert('There are something wrong. Please try again later');
+    }
+  }
 
   return (
     <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
@@ -120,7 +132,7 @@ export default function MyPageSideMenu({onSelectedItemChanged} : {onSelectedItem
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton sx={{backgroundColor: '#EAEDF2'}}>
+            <ListItemButton sx={{backgroundColor: '#EAEDF2'}} onClick={_logOut}>
               <ListItemText primary="Logout" />
             </ListItemButton>
           </ListItem>
