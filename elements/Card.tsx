@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { styled } from '@mui/system';
 import { IconButton } from '@mui/material';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import { throttle } from 'lodash';
 
 import Profile from './Card/Profile';
 import Tag from './Card/Tag';
@@ -10,6 +11,8 @@ import Location from './Card/Location';
 import AvailableTime from './Card/AvailableTime';
 import { SERVICE_CATEGORIES } from '../models/EnrollService';
 import ExpertProfile from '../models/ExpertProfile';
+import { useSelector } from 'react-redux';
+import { likeExpert, dislikeExpert } from '../firebase/firebaseUser';
 
 const Container = styled('div')({
     display: 'flex',
@@ -49,10 +52,32 @@ const Card: React.FC<Props> = ({data}) => {
     if(!data) return null;
 
     const { service, price, photoURL, displayName } = data;
+    const userType = useSelector((state: any) => state.user.userType);
+    const user = useSelector((state: any) => state.firestore.ordered.users[0]);
+
+    const [ isFavoriteExpert, setFavoriteExpert ] = useState(false);
 
     const profile = new ExpertProfile(data.profile);
 
     const {value, unit} = price.options[0];
+
+    useEffect(() => {
+        if(user && user.favoriteExperts){
+            setFavoriteExpert(user.favoriteExperts.includes(data.id))
+        }
+    }, [user, data])
+
+    const addExpertToFavoriteList = (e: any) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        let favExperts = user.favoriteExperts;
+        if(favExperts && favExperts.includes(data.id)){
+            dislikeExpert(user.id, data.id);
+        }else{
+            likeExpert(user.id, data.id);
+        }
+    }
 
     return (
         <Container style={{width: '100%', cursor: 'pointer'}}>
@@ -88,9 +113,19 @@ const Card: React.FC<Props> = ({data}) => {
                             />
                         }
                     </Horizontal>
-                    <IconButton>
-                        <FavoriteBorderIcon />
-                    </IconButton>
+                    {
+                        userType==='user' &&
+                        <IconButton
+                            onClick={throttle(addExpertToFavoriteList, 2000, {trailing: false})}
+                        >
+                            {
+                                isFavoriteExpert ?
+                                <FavoriteIcon style={{color: '#FF4B4B'}}/>
+                                :
+                                <FavoriteBorderIcon style={{color: '#C7C7C7'}}/>
+                            }
+                        </IconButton>
+                    }
                 </Horizontal>
                 <Horizontal style={{marginBottom: 8}}>
                     <Location location={profile.locationsString} containerStyle={{marginRight: 12}}/>

@@ -42,16 +42,16 @@ const MyPage = () => {
         setSelectedItem(newValue);
     };
 
-    useFirestoreConnect([
-        {
-            collection: 'experts',
-            doc: uid
-        },
-        {
-            collection: 'users',
-            doc: uid
-        }
-    ]);
+    // useFirestoreConnect([
+    //     {
+    //         collection: 'experts',
+    //         doc: uid
+    //     },
+    //     {
+    //         collection: 'users',
+    //         doc: uid
+    //     }
+    // ]);
 
     const expert = useSelector((state: any) => get(state, `firestore.data.experts.${uid}`));
 

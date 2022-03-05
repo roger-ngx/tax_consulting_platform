@@ -3,7 +3,7 @@ import { Grid } from '@mui/material';
 import Link from 'next/link';
 import { useFirestoreConnect } from 'react-redux-firebase';
 import { useSelector } from 'react-redux';
-import { map, isEmpty, filter, intersection } from 'lodash';
+import { map, isEmpty, filter, intersection, get } from 'lodash';
 import styled from 'styled-components';
 
 import Banner from '../blocks/Banner';
@@ -23,10 +23,18 @@ const Home = () => {
   const [ selectedStates, setSelectedStates ] = useState<string[]>([]);
 
   const experts = useSelector((state: any) => state.firestore.ordered.experts);
+  const uid = useSelector((state: any) => get(state, 'firebase.auth.uid'));
 
   useFirestoreConnect([{
     collection: 'experts'
   }])
+
+  useFirestoreConnect(uid ? [
+    {
+        collection: 'users',
+        doc: uid
+    }
+  ] : []);
 
   useEffect(() => {
     if(selectedMenu===-1){
