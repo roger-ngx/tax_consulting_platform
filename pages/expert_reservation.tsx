@@ -21,7 +21,8 @@ import { setOpenLoginModal } from '../stores/userInfoSlide';
 
 const Container = styled('div')({
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    marginBottom: 200
 })
 
 const Horizontal = styled('div')({
