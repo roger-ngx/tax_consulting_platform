@@ -3,7 +3,7 @@ import { styled } from '@mui/system';
 import { IconButton } from '@mui/material';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import { throttle } from 'lodash';
+import { throttle, get } from 'lodash';
 
 import Profile from './Card/Profile';
 import Tag from './Card/Tag';
@@ -53,7 +53,7 @@ const Card: React.FC<Props> = ({data}) => {
 
     const { service, price, photoURL, displayName } = data;
     const userType = useSelector((state: any) => state.user.userType);
-    const user = useSelector((state: any) => state.firestore.ordered.users[0]);
+    const user = useSelector((state: any) => get(state, 'firestore.ordered.users[0]'));
 
     const [ isFavoriteExpert, setFavoriteExpert ] = useState(false);
 

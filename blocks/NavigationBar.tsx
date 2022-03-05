@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import Login from '../dialogs/Login';
 import Avatar from '../elements/Avatar';
 import { setOpenLoginModal } from '../stores/userInfoSlide';
+import { get } from 'lodash';
 
 const Horizontal = styled.div`
     display: flex;
@@ -33,7 +34,9 @@ const Anchor = styled.a<A>`
 
 const NavigationBar = () => {
     const openLoginModal = useSelector((state: any) => state.user.openLoginModal);
-    const user = useSelector((state: any) => state.firebase.auth);
+    const authUser = useSelector((state: any) => state.firebase.auth);
+
+    const user = useSelector((state: any) => get(state, `firestore.ordered.users[0]`));
 
     const dispatch = useDispatch();
     const router = useRouter();
@@ -54,7 +57,7 @@ const NavigationBar = () => {
             </Horizontal>
             <Horizontal>
                 {
-                    user!.isEmpty ? 
+                    authUser!.isEmpty ? 
                     <a onClick={() => dispatch(setOpenLoginModal(true))}>
                         <Anchor>Login</Anchor>
                     </a>
@@ -67,7 +70,7 @@ const NavigationBar = () => {
                             <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', cursor: 'pointer'}}>
                                 <Anchor selected={router.pathname==='/my_page'} style={{marginRight: 4}}>My</Anchor>
                                 <Avatar
-                                    src={user.photoURL}
+                                    src={user && user.photoURL}
                                     size={32}
                                 />
                             </div>

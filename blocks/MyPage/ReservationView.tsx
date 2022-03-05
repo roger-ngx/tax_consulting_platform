@@ -54,11 +54,7 @@ const ReservationsView = () => {
         }
     }, [selectedTab, reservations]);
 
-    if(!userId){
-        return null;
-    }
-
-    useFirestoreConnect([{
+    useFirestoreConnect(userId ? [{
         collection: 'reservations',
         doc: userId,
         subcollections: [{
@@ -66,7 +62,7 @@ const ReservationsView = () => {
             orderBy: ['updatedAt', 'desc'],
         }],
         storeAs: `reservations`,
-    }])
+    }] : [])
 
     const handleTabChange = (event: any, newValue: TABS) => {
         setSelectedTab(newValue);
