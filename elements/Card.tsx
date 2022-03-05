@@ -1,6 +1,8 @@
 import React from 'react';
 import { styled } from '@mui/system';
-import { map } from 'lodash';
+import { IconButton } from '@mui/material';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 import Profile from './Card/Profile';
 import Tag from './Card/Tag';
@@ -21,21 +23,22 @@ const Container = styled('div')({
 const Horizontal = styled('div')({
     display: 'flex',
     flexDirection: 'row',
-    marginBottom: 8
 })
 
 const Body = styled('div')({
     display: 'flex',
     flexDirection: 'column',
-    marginLeft: 16
-})
-
-const BodyContent = styled('span')({
+    marginLeft: 16,
     flex: 1
 })
 
-const Price = styled('span')({
+const BodyContent = styled('span')({
+    flex: 1,
+    marginBottom: 16
+})
 
+const Price = styled('div')({
+    fontWeight: 'bolder'
 })
 
 type Props = {
@@ -53,36 +56,43 @@ const Card: React.FC<Props> = ({data}) => {
 
     return (
         <Container style={{width: '100%', cursor: 'pointer'}}>
-            <Profile
-                src={photoURL}
-                name={displayName}
-            />
+            <div style={{width: '25%', height: 'auto'}}>
+                <Profile
+                    src={photoURL}
+                    name={displayName}
+                />
+            </div>
             <Body>
-                <Horizontal>
-                    {
-                        service.category.includes(SERVICE_CATEGORIES.TAX) &&
-                        <Tag
-                            text='Tax'
-                            colors={['#0045D1', '#5185EE']}
-                        />
-                    }
-                    {
-                        service.category.includes(SERVICE_CATEGORIES.FUND) &&
-                        <Tag
-                            text='Fund'
-                            colors={['#0075FF', '#74B4FF']}
-                            containerStyle={{margin: '0 4px'}}
-                        />
-                    }
-                    {
-                        service.category.includes(SERVICE_CATEGORIES.ACCOUNTANCY) &&
-                        <Tag
-                            text='Accountancy'
-                            colors={['#990002', '#E80000']}
-                        />
-                    }
+                <Horizontal style={{flex: 1, justifyContent: 'space-between', alignItems: 'center', marginBottom: 8}}>
+                    <Horizontal>
+                        {
+                            service.category.includes(SERVICE_CATEGORIES.TAX) &&
+                            <Tag
+                                text='Tax'
+                                colors={['#0045D1', '#5185EE']}
+                            />
+                        }
+                        {
+                            service.category.includes(SERVICE_CATEGORIES.FUND) &&
+                            <Tag
+                                text='Fund'
+                                colors={['#0075FF', '#74B4FF']}
+                                containerStyle={{margin: '0 4px'}}
+                            />
+                        }
+                        {
+                            service.category.includes(SERVICE_CATEGORIES.ACCOUNTANCY) &&
+                            <Tag
+                                text='Accountancy'
+                                colors={['#990002', '#E80000']}
+                            />
+                        }
+                    </Horizontal>
+                    <IconButton>
+                        <FavoriteBorderIcon />
+                    </IconButton>
                 </Horizontal>
-                <Horizontal>
+                <Horizontal style={{marginBottom: 8}}>
                     <Location location={profile.locationsString} containerStyle={{marginRight: 12}}/>
                     <AvailableTime contactTime={profile.contactTimeString}/>
                 </Horizontal>

@@ -10,7 +10,12 @@ const Container = styled('div')({
 })
 
 const Name = styled('span')({
-    fontSize: 16
+    width: '100%',
+    fontSize: 16,
+    whiteSpace: 'nowrap',
+    overflowX: 'hidden',
+    textOverflow: 'ellipsis',
+    textAlign: 'center'
 })
 
 const Rate = styled('span')({
@@ -30,11 +35,10 @@ const Profile: React.FC<Props> = ({src='/assets/images/profile.png', name='Roger
 
     return (
         <Container>
-            <div style={{borderRadius: '30px', overflow: 'hidden', fontSize: 0}}>
-                <Image
+            <div style={{overflow: 'hidden', fontSize: 0, textAlign: 'center'}}>
+                <img
                     src={src}
-                    width={60}
-                    height={60}
+                    style={{borderRadius: '50%', width: '60%', height: 'auto'}}
                 />
             </div>
             <Name>{name}</Name>
