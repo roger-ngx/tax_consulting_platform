@@ -14,7 +14,9 @@ import Card from '../elements/Card';
 const Container =styled.div`
   display: flex;
   flex-direction: row;
-  height: 100vh;
+  height: calc(100vh - 72px);
+  position: sticky;
+  top: 120px;
 `
 
 const Home = () => {

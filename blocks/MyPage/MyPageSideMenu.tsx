@@ -100,6 +100,7 @@ export default function MyPageSideMenu({onSelectedItemChanged} : {onSelectedItem
         <List>
           <ListItem disablePadding sx={{marginBottom: 0}}>
             <ListItemButton
+              selected={selectedItem==='QnA'} 
               sx={{backgroundColor: '#EAEDF2'}}
               onClick={() => setSelectedItem('QnA')}
             >
@@ -111,6 +112,7 @@ export default function MyPageSideMenu({onSelectedItemChanged} : {onSelectedItem
               component="a"
               onClick={() => setSelectedItem('Help')}
               sx={{backgroundColor: '#EAEDF2'}}
+              selected={selectedItem==='Help'} 
             >
               <ListItemText primary="Help" />
             </ListItemButton>
@@ -118,6 +120,7 @@ export default function MyPageSideMenu({onSelectedItemChanged} : {onSelectedItem
           <ListItem disablePadding sx={{marginBottom: 0}}>
             <ListItemButton
               sx={{backgroundColor: '#EAEDF2'}}
+              selected={selectedItem==='Notice'} 
               onClick={() => setSelectedItem('Notice')}
             >
               <ListItemText primary="Notice" />
@@ -127,6 +130,7 @@ export default function MyPageSideMenu({onSelectedItemChanged} : {onSelectedItem
             <ListItemButton
               sx={{backgroundColor: '#EAEDF2'}}
               onClick={() => setSelectedItem('Terms and conditions')}
+              selected={selectedItem==='Terms and conditions'}
             >
               <ListItemText primary="Terms and conditions" />
             </ListItemButton>

@@ -16,7 +16,8 @@ import ReservationView from '../blocks/MyPage/ReservationView';
 
 const Container = styled('div')({
     display: 'flex',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    marginBottom: 200
 })
 
 const Title = styled('span')({
@@ -57,12 +58,12 @@ const MyPage = () => {
 
     return (
         <Container>
-            <div>
+            <div style={{height: '100%', overflowY: 'auto'}}>
                 <MyPageSideMenu
                     onSelectedItemChanged={(item: string) => setSelectedItem(item)}
                 />
             </div>
-            <div style={{flex: 1, marginLeft: 24}}>
+            <div style={{flex: 1, marginLeft: 24, overflowY: 'auto', height: '100%'}}>
                 <Horizontal>
                     <Title>{selectedItem}</Title>
                     {

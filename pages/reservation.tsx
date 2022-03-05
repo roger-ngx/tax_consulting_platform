@@ -22,7 +22,8 @@ const Container = styled('div')({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    width: '100%'
+    width: '100%',
+    marginBottom: 200
 })
 
 const ButtonContainer = styled('div')({
