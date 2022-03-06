@@ -15,6 +15,7 @@ const Container = styled.div`
   flex-direction: column;
   padding: 0 10%;
   overflow: hidden;
+  min-width: 800px
 `
 
 type Props = {
@@ -43,7 +44,7 @@ const MyApp : React.FC<Props> = ({ Component, pageProps }) => {
       <ReactReduxFirebaseProvider {...rrfProps}>
         <PersistGate loading={null} persistor={persistor}>
           <div style={{display: 'flex', flexDirection: 'column', maxHeight: '100vh'}}>
-            <div style={{padding: '24px 10%', position: 'sticky', top: 0, backgroundColor: 'white', zIndex: 1000}}>
+            <div style={{minWidth: 800, padding: '24px 10%', position: 'sticky', top: 0, backgroundColor: 'white', zIndex: 1000}}>
               <NavigationBar />
             </div>
             <Container>

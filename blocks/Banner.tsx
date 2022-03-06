@@ -11,7 +11,7 @@ const Banner = () => {
                 backgroundImage: 'linear-gradient(to bottom right, #002B87, #0045D1)'
             }}
         >
-            <img style={{height: 72, marginTop: 50}} src='/assets/images/header_text.png' />
+            <img style={{maxHeight: 72, marginTop: 50, maxWidth: '80%'}} src='/assets/images/header_text.png' />
         </div>
     )
 }
