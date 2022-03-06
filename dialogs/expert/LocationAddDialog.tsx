@@ -10,9 +10,11 @@ import CloseIcon from '@mui/icons-material/Close';
 import { map, findIndex, size } from 'lodash';
 
 import SearchBox from '../../elements/SearchBox';
-import { State, US_STATES } from '../../utils/Constants';
+import { State, US_STATES, COUNTRIES } from '../../utils/Constants';
 import StateCheckbox from '../../elements/StateCheckbox';
 import LocationChip from '../../elements/LocationChip';
+import { Box } from '@mui/system';
+import { Tabs, Tab } from '@mui/material';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -41,6 +43,7 @@ type Props = {
 const LocationAddDialog : React.FC<Props> = ({open, states=[], onClose, onSave, limit=2}) => {
 
   const [ selectedStates, setSelectedStates ] = useState<State[]>(states);
+  const [ countryTab, setCountryTab ] = useState(0);
 
   const checkState = (state: State) => {
     const index = findIndex(selectedStates, selectedState => state.name === selectedState.name);
@@ -52,12 +55,17 @@ const LocationAddDialog : React.FC<Props> = ({open, states=[], onClose, onSave, 
     setSelectedStates([...selectedStates]);
   }
 
+  const handleTabChange = (event: any, value: number) => {
+    setCountryTab(value);
+  }
+
   return (
     <div>
         <BootstrapDialog
           onClose={onClose}
           aria-labelledby="customized-dialog-title"
           open={open}
+          fullWidth
         >
           <DialogTitle style={{padding: 8}}>
             <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
@@ -86,20 +94,37 @@ const LocationAddDialog : React.FC<Props> = ({open, states=[], onClose, onSave, 
           <DialogContent dividers style={{display: 'flex', flexDirection: 'column'}}>
             <SearchBox />
             <Horizontal>
-              <div style={{height: '100%', display: 'inline-block', overflow: 'scroll', paddingRight: 12}}>
-                {
-                  map(US_STATES, (state) => (
-                    <StateCheckbox
-                      key={state.code}
-                      code={state.code}
-                      name={state.name}
-                      onClick={() => checkState(state)}
-                      checked={findIndex(selectedStates, selectedState => state.name === selectedState.name)>=0}
-                    />
-                  ))
-                }
+              <div style={{flex: 1}}>
+                <Tabs value={countryTab} onChange={handleTabChange} aria-label="basic tabs example">
+                  <Tab label="USA" />
+                  <Tab label="Others" />
+                </Tabs>
+                <div style={{height: '100%', display: 'inline-block', overflow: 'scroll', paddingRight: 12}}>
+                  {
+                    countryTab === 0 ?
+                    map(US_STATES, (state) => (
+                      <StateCheckbox
+                        key={state.code}
+                        code={state.code}
+                        name={state.name}
+                        onClick={() => checkState(state)}
+                        checked={findIndex(selectedStates, selectedState => state.name === selectedState.name)>=0}
+                      />
+                    ))
+                    :
+                    map(COUNTRIES, (cntr) => (
+                      <StateCheckbox
+                        key={cntr.code}
+                        code={cntr.code}
+                        name={cntr.name}
+                        onClick={() => checkState(cntr)}
+                        checked={findIndex(selectedStates, selectedState => cntr.name === selectedState.name)>=0}
+                      />
+                    ))
+                  }
+                </div>
               </div>
-              <div style={{height: '100%',minWidth: 220, backgroundColor: '#F0F2F5', padding: 16, display: 'inline-block', overflow: 'scroll'}}>
+              <div style={{flex: 1, height: '100%',minWidth: 220, backgroundColor: '#F0F2F5', padding: 16, display: 'inline-block', overflow: 'scroll'}}>
                 {
                   map(selectedStates, state => (
                     <div style={{marginBottom: 4}} key={state.code}>

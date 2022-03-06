@@ -3,6 +3,13 @@ export type State = {
     code: string
 }
 
+export const COUNTRIES = [
+    {"name":"Korea","code":"KR"},
+    {"name":"China","code":"CHN"},
+    {"name":"Japan","code":"JPN"},
+    {"name":"Spain","code":"SPN"}
+]
+
 export const US_STATES : State[] = [
     {"name":"Alabama","code":"AL"},
     {"name":"Alaska","code":"AK"},
