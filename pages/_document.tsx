@@ -4,6 +4,7 @@ class TaxFunDocument extends Document {
     return (
       <Html>
         <Head>
+          <title>Happy tax & bookkeeping life</title>
           <link
             href="https://fonts.googleapis.com/css2?family=Noto+Sans"
             rel="stylesheet"
