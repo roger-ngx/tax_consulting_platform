@@ -1,7 +1,7 @@
 export const enum SERVICE_CATEGORIES {
-    TAX,
-    FUND,
-    ACCOUNTANCY
+    TAX, FUND, ACCOUNTANCY,
+    BOOKKEEPING,
+    SPAIN, KOREA, JAPAN, CHINA
 }
 
 interface IEnrollService {

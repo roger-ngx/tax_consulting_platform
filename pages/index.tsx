@@ -10,6 +10,7 @@ import Banner from '../blocks/Banner';
 import Filter from '../blocks/Filter';
 import MainSideMenu from '../blocks/MainSideMenu';
 import Card from '../elements/Card';
+import { SERVICE_CATEGORIES } from '../models/EnrollService';
 
 const Container =styled.div`
   display: flex;
@@ -46,7 +47,29 @@ const Home = () => {
 
     const data = filter(experts, (expert:any) => {
       const {category} = expert.service;
-      return category.includes(selectedMenu);
+
+      const { availableCountries } = expert.profile;
+      const contries = map(availableCountries, country => country.code);
+
+      switch(selectedMenu){
+        case SERVICE_CATEGORIES.TAX:
+        return category.includes(selectedMenu);
+
+        case SERVICE_CATEGORIES.BOOKKEEPING:
+        return category.includes(SERVICE_CATEGORIES.FUND) || category.includes(SERVICE_CATEGORIES.ACCOUNTANCY);
+
+        case SERVICE_CATEGORIES.JAPAN:
+          return contries.includes('JPN');
+
+        case SERVICE_CATEGORIES.KOREA:
+          return contries.includes('KR');
+
+        case SERVICE_CATEGORIES.CHINA:
+          return contries.includes('CHN');
+
+        case SERVICE_CATEGORIES.SPAIN:
+          return contries.includes('SPN');
+      }
     })
 
     setSelectedExperts(data);

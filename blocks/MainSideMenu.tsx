@@ -44,18 +44,42 @@ const MainSideMenu : React.FC<Props> = ({onMenuChanged}) => {
                     </ListItem>
                     <ListItem disablePadding sx={{marginBottom: 0}}>
                         <ListItemButton
-                            selected={selectedMenu===SERVICE_CATEGORIES.FUND}
-                            onClick={() => setSelectedMenu(SERVICE_CATEGORIES.FUND)}
+                            selected={selectedMenu===SERVICE_CATEGORIES.BOOKKEEPING}
+                            onClick={() => setSelectedMenu(SERVICE_CATEGORIES.BOOKKEEPING)}
                         >
-                            <ListItemText primary="Fund" />
+                            <ListItemText primary="Bookkeeping" />
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
                         <ListItemButton
-                            selected={selectedMenu===SERVICE_CATEGORIES.ACCOUNTANCY}
-                            onClick={() => setSelectedMenu(SERVICE_CATEGORIES.ACCOUNTANCY)}
+                            selected={selectedMenu===SERVICE_CATEGORIES.KOREA}
+                            onClick={() => setSelectedMenu(SERVICE_CATEGORIES.KOREA)}
                         >
-                            <ListItemText primary="Acountancy" />
+                            <ListItemText primary="Korea" />
+                        </ListItemButton>
+                    </ListItem>
+                    <ListItem disablePadding>
+                        <ListItemButton
+                            selected={selectedMenu===SERVICE_CATEGORIES.CHINA}
+                            onClick={() => setSelectedMenu(SERVICE_CATEGORIES.CHINA)}
+                        >
+                            <ListItemText primary="China" />
+                        </ListItemButton>
+                    </ListItem>
+                    <ListItem disablePadding>
+                        <ListItemButton
+                            selected={selectedMenu===SERVICE_CATEGORIES.JAPAN}
+                            onClick={() => setSelectedMenu(SERVICE_CATEGORIES.JAPAN)}
+                        >
+                            <ListItemText primary="Japan" />
+                        </ListItemButton>
+                    </ListItem>
+                    <ListItem disablePadding>
+                        <ListItemButton
+                            selected={selectedMenu===SERVICE_CATEGORIES.SPAIN}
+                            onClick={() => setSelectedMenu(SERVICE_CATEGORIES.SPAIN)}
+                        >
+                            <ListItemText primary="Spain" />
                         </ListItemButton>
                     </ListItem>
                 </List>
