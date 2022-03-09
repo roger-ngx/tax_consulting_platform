@@ -62,7 +62,7 @@ const Profile: React.FC<Props> = ({data, onChange}) => {
     }, [data]);
 
     useEffect(() => {
-        if(isEmpty(introduction) || isEmpty(states)){
+        if(isEmpty(states)){
             //https://stackoverflow.com/questions/60689528/issue-with-lodashs-isempty-when-dealing-with-files
             return;
         }
