@@ -16,19 +16,31 @@ const Container = styled('div')({
 })
 
 type Props = {
-    onSearchingStatesChanged: (states: string[]) => void
+    onSearchingStatesChanged: (states: string[]) => void,
+    onSelectOnlineState: (online: boolean) => void,
+    onSelectRecentlyActiveState: (recentlyActive: boolean) => void
 }
 
-const Filter: React.FC<Props> = ({onSearchingStatesChanged}) => {
+const Filter: React.FC<Props> = ({onSearchingStatesChanged, onSelectOnlineState, onSelectRecentlyActiveState}) => {
 
     const [ sortBy, setSortBy ] = useState('1');
     const [ showLocationSelectDialog, setShowLocationSelectDialog ] = useState(false);
     const [ searchingStates, setSearchingStates ] = useState<State []>([]);
+    const [ recentlyActive, setRecentlyActive ] = useState(false);
+    const [ online, setOnline ] = useState(false);
 
     useEffect(() => {
         const states = map(searchingStates, (state: State) => state.code);
         onSearchingStatesChanged(states);
     }, [searchingStates]);
+
+    useEffect(() => {
+        onSelectRecentlyActiveState(recentlyActive);
+    }, [recentlyActive, online]);
+
+    useEffect(() => {
+        onSelectOnlineState(online);
+    }, [online]);
 
     return (
         <Container>
@@ -42,13 +54,16 @@ const Filter: React.FC<Props> = ({onSearchingStatesChanged}) => {
             <FilterButton
                 text='Immediately'
                 activeIcon={<CheckIcon />}
-                active={true}
+                active={recentlyActive}
                 containerStyle={{marginRight: 8}}
+                onClick={() => setRecentlyActive(!recentlyActive)}
             />
             <FilterButton
                 text='Online'
+                active={online}
                 activeIcon={<CheckIcon />}
                 containerStyle={{marginRight: 8}}
+                onClick={() => setOnline(!online)}
             />
             <Select
                 value={sortBy}

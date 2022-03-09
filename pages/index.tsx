@@ -5,6 +5,7 @@ import { useFirestoreConnect } from 'react-redux-firebase';
 import { useSelector } from 'react-redux';
 import { map, isEmpty, filter, intersection, get } from 'lodash';
 import styled from 'styled-components';
+import dayjs from 'dayjs';
 
 import Banner from '../blocks/Banner';
 import Filter from '../blocks/Filter';
@@ -24,7 +25,10 @@ const Container =styled.div`
 const Home = () => {
   const [ selectedMenu, setSelectedMenu ] = useState<number>();
   const [ selectedExperts, setSelectedExperts ] = useState<any[]>([]);
+
   const [ selectedStates, setSelectedStates ] = useState<string[]>([]);
+  const [ recentlyActive, setRecentlyActive ] = useState(false);
+  const [ online, setOnline ] = useState(false);
 
   const experts = useSelector((state: any) => state.firestore.ordered.experts);
   const uid = useSelector((state: any) => get(state, 'firebase.auth.uid'));
@@ -101,6 +105,34 @@ const Home = () => {
     setSelectedExperts(data);
   }, [selectedStates, experts]);
 
+  useEffect(() => {
+    if(online){
+      const data = filter(selectedExperts, (expert:any) => {
+        const {lastAccessAt} = expert;
+
+        return lastAccessAt && ((dayjs().unix() - lastAccessAt.seconds) < 300); //last access in 5 minutes 
+      });
+
+      setSelectedExperts(data);
+    }else{
+      setSelectedExperts(experts);
+    }
+  }, [online]);
+
+  useEffect(() => {
+    if(recentlyActive){
+      const data = filter(selectedExperts, (expert:any) => {
+        const {lastAccessAt} = expert;
+
+        return lastAccessAt && ((dayjs().unix() - lastAccessAt.seconds) < 3600); //last access in an hour
+      });
+
+      setSelectedExperts(data);
+    }else{
+      setSelectedExperts(experts);
+    }
+  }, [recentlyActive]);
+
   return (
     <div>
       <div style={{margin: '0 -10vw'}}>
@@ -116,6 +148,8 @@ const Home = () => {
           <div style={{margin: '24px 0'}}>
             <Filter
               onSearchingStatesChanged={setSelectedStates}
+              onSelectRecentlyActiveState={setRecentlyActive}
+              onSelectOnlineState={setOnline}
             />
           </div>
           <Grid container spacing={2}>
