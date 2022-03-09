@@ -13,17 +13,6 @@ const Container =styled.div`
 `
 
 const Messages = () => {
-
-  const uid = useSelector((state: any) => state.firebase.auth.uid);
-
-  useEffect(() => {
-    if(uid){
-      const timer = setInterval(() => updateOnlineStatus(uid), 60000);
-
-      return () => clearInterval(timer);
-    }
-  }, [uid]);
-
   return (
     <ChattingView />
   )

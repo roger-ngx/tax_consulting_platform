@@ -39,7 +39,7 @@ const MainSideMenu : React.FC<Props> = ({onMenuChanged}) => {
                             selected={selectedMenu===SERVICE_CATEGORIES.TAX}
                             onClick={() => setSelectedMenu(SERVICE_CATEGORIES.TAX)}
                         >
-                            <ListItemText primary="Tax" />
+                            <ListItemText primary="Tax experts" />
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding sx={{marginBottom: 0}}>
@@ -47,7 +47,7 @@ const MainSideMenu : React.FC<Props> = ({onMenuChanged}) => {
                             selected={selectedMenu===SERVICE_CATEGORIES.BOOKKEEPING}
                             onClick={() => setSelectedMenu(SERVICE_CATEGORIES.BOOKKEEPING)}
                         >
-                            <ListItemText primary="Bookkeeping" />
+                            <ListItemText primary="Bookkeeping experts" />
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
@@ -55,7 +55,7 @@ const MainSideMenu : React.FC<Props> = ({onMenuChanged}) => {
                             selected={selectedMenu===SERVICE_CATEGORIES.KOREA}
                             onClick={() => setSelectedMenu(SERVICE_CATEGORIES.KOREA)}
                         >
-                            <ListItemText primary="Korea" />
+                            <ListItemText primary="Korea (US tax experts)" />
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
@@ -63,7 +63,7 @@ const MainSideMenu : React.FC<Props> = ({onMenuChanged}) => {
                             selected={selectedMenu===SERVICE_CATEGORIES.CHINA}
                             onClick={() => setSelectedMenu(SERVICE_CATEGORIES.CHINA)}
                         >
-                            <ListItemText primary="China" />
+                            <ListItemText primary="China (US tax experts)" />
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
@@ -71,7 +71,7 @@ const MainSideMenu : React.FC<Props> = ({onMenuChanged}) => {
                             selected={selectedMenu===SERVICE_CATEGORIES.JAPAN}
                             onClick={() => setSelectedMenu(SERVICE_CATEGORIES.JAPAN)}
                         >
-                            <ListItemText primary="Japan" />
+                            <ListItemText primary="Japan (US tax experts)" />
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
@@ -79,7 +79,7 @@ const MainSideMenu : React.FC<Props> = ({onMenuChanged}) => {
                             selected={selectedMenu===SERVICE_CATEGORIES.SPAIN}
                             onClick={() => setSelectedMenu(SERVICE_CATEGORIES.SPAIN)}
                         >
-                            <ListItemText primary="Spain" />
+                            <ListItemText primary="Spain (US tax experts)" />
                         </ListItemButton>
                     </ListItem>
                 </List>

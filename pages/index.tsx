@@ -11,6 +11,7 @@ import Filter from '../blocks/Filter';
 import MainSideMenu from '../blocks/MainSideMenu';
 import Card from '../elements/Card';
 import { SERVICE_CATEGORIES } from '../models/EnrollService';
+import { updateOnlineStatus } from '../firebase/login';
 
 const Container =styled.div`
   display: flex;
@@ -28,6 +29,8 @@ const Home = () => {
   const experts = useSelector((state: any) => state.firestore.ordered.experts);
   const uid = useSelector((state: any) => get(state, 'firebase.auth.uid'));
 
+  const userType = useSelector((state: any) => state.user.userType);
+
   useFirestoreConnect([{
     collection: 'experts'
   }])
@@ -38,6 +41,14 @@ const Home = () => {
         doc: uid
     }
   ] : []);
+
+  useEffect(() => {
+    if(uid){
+      const timer = setInterval(() => updateOnlineStatus(uid, userType), 60000);
+
+      return () => clearInterval(timer);
+    }
+  }, [uid, userType]);
 
   useEffect(() => {
     if(selectedMenu===-1){

@@ -97,10 +97,10 @@ export const loginWithGoogle = ({dispatch}) => {
     })
 }
 
-export const updateOnlineStatus = async (uid) => {
+export const updateOnlineStatus = async (uid, userType) => {
 
     try{
-        await firebase.firestore().collection('users').doc(uid).update({
+        await firebase.firestore().collection(userType==='user' ? 'users' : 'experts').doc(uid).update({
             lastAccessAt: firebase.firestore.FieldValue.serverTimestamp()
         })
     }catch(ex){
