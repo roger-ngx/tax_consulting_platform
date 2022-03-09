@@ -48,8 +48,8 @@ const Home = () => {
     const data = filter(experts, (expert:any) => {
       const {category} = expert.service;
 
-      const { availableCountries } = expert.profile;
-      const contries = map(availableCountries, country => country.code);
+      const { availableStates } = expert.profile;
+      const contries = map(availableStates, country => country.code);
 
       switch(selectedMenu){
         case SERVICE_CATEGORIES.TAX:
