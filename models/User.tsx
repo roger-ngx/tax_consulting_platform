@@ -1,6 +1,9 @@
-interface IUser {
+export interface IUser {
     displayName: string,
-    photoURL: string
+    photoURL: string,
+    email: string;
+    phoneNumber: string;
+    uid: string;
 }
 
 export default class User{

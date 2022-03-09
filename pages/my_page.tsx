@@ -13,6 +13,7 @@ import Help from '../blocks/MyPage/Help';
 import AskQuestionDialog from '../dialogs/AskQuestionDialog';
 import ExpertReservationView from '../blocks/MyPage/ExpertReservationView';
 import ReservationView from '../blocks/MyPage/ReservationView';
+import Customers from '../blocks/MyPage/Customers';
 
 const Container = styled.div`
     display: flex;
@@ -88,6 +89,11 @@ const MyPage = () => {
                 {
                     selectedItem === 'Terms and conditions' &&
                     <TermsAndConditions />
+                }
+
+                {
+                    selectedItem === 'Customers' &&
+                    <Customers />
                 }
 
                 {

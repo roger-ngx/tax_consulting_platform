@@ -1,7 +1,6 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document'
 class TaxFunDocument extends Document {
-  render() {
-    return (
+  render() {    return (
       <Html>
         <Head>
           <title>Happy tax & bookkeeping life</title>

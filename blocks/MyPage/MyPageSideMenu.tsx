@@ -15,6 +15,8 @@ import Avatar from '../../elements/Avatar';
 import AccountDialog from '../../dialogs/AccountDialog';
 import { logOut } from '../../firebase/login';
 import { useRouter } from 'next/router';
+import ContactPageIcon from '@mui/icons-material/ContactPage';
+import PersonIcon from '@mui/icons-material/Person';
 
 const HeaderText = styled('div')({
   fontSize: 20,
@@ -78,12 +80,24 @@ export default function MyPageSideMenu({onSelectedItemChanged} : {onSelectedItem
               onClick={() => setSelectedItem(expertProfileMenu)}
             >
               <ListItemIcon>
-                <DraftsIcon />
+                <PersonIcon />
               </ListItemIcon>
               <ListItemText primary={expertProfileMenu} />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
+            {
+              userType === 'expert' ?
+            <ListItemButton
+              selected={selectedItem==='Customers'}          
+              onClick={() => setSelectedItem('Customers')}
+            >
+              <ListItemIcon>
+                <ContactPageIcon />
+              </ListItemIcon>
+              <ListItemText primary="Customers" />
+            </ListItemButton>
+            :
             <ListItemButton
               selected={selectedItem==='Like'}          
               onClick={() => setSelectedItem('Like')}
@@ -93,6 +107,7 @@ export default function MyPageSideMenu({onSelectedItemChanged} : {onSelectedItem
               </ListItemIcon>
               <ListItemText primary="Like" />
             </ListItemButton>
+            }
           </ListItem>
         </List>
       </nav>

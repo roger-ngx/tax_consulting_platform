@@ -124,3 +124,13 @@ export const getAllExperts = async () => {
 
     return experts;
 }
+
+export const getExpertReservations = async (expertId: string) => {
+    try{
+        const query = await firebase.firestore().collection('experts').doc(expertId).collection('reservations').get();
+
+        return map(query.docs, doc => doc.data());
+    }catch(ex){
+        console.log('getExpertReservations', ex);
+    }
+}

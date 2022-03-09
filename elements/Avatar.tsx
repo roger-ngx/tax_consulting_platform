@@ -50,10 +50,11 @@ type Props = {
     src?: string;
     active?: boolean;
     name?: string,
-    containerStyle?: object
+    containerStyle?: object,
+    nameTextStyle?: object
 }
 
-const Avatar: React.FC<Props> = ({src='/assets/images/profile.png', size, active, name, containerStyle}) => {
+const Avatar: React.FC<Props> = ({src='/assets/images/profile.png', size, active, name, nameTextStyle, containerStyle}) => {
 
     return (
         <Container style={containerStyle}>
@@ -68,7 +69,7 @@ const Avatar: React.FC<Props> = ({src='/assets/images/profile.png', size, active
             </Div>
             {
                 name &&
-                <Name>{name}</Name>
+                <Name style={nameTextStyle}>{name}</Name>
             }
         </Container>
     )
