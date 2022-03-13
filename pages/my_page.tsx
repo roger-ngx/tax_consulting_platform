@@ -17,6 +17,7 @@ import ReservationView from '../blocks/MyPage/ReservationView';
 import Customers from '../blocks/MyPage/Customers';
 import PhoneVerification from '../blocks/expert/PhoneVerification';
 import ExpertSubscription from '../blocks/expert/ExpertSubscription';
+import FavoriteExpert from '../blocks/MyPage/FavoriteExperts';
 
 const Container = styled.div`
     display: flex;
@@ -120,6 +121,11 @@ const MyPage = () => {
                     selectedItem === 'Customers' &&
                     <Customers />
                 }
+
+                {
+                    selectedItem === 'Like' &&
+                    <FavoriteExpert />
+                }       
 
                 {
                     selectedItem === 'QnA' &&
