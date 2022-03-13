@@ -49,8 +49,8 @@ const EnrollExpert = () => {
     const expert = useSelector((state: any) => state.firestore.ordered.enrollExpert[0]);
 
     useEffect(() => {
-        if(expert){
-            console.log('profile', expert.profile);
+        if(expert.active){
+            // console.log('profile', expert.profile);
             setProfile(new ExpertProfile(expert.profile));
             setService(new ExpertService(expert.service));
 
