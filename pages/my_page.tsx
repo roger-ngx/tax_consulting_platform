@@ -14,6 +14,8 @@ import AskQuestionDialog from '../dialogs/AskQuestionDialog';
 import ExpertReservationView from '../blocks/MyPage/ExpertReservationView';
 import ReservationView from '../blocks/MyPage/ReservationView';
 import Customers from '../blocks/MyPage/Customers';
+import PhoneVerification from '../blocks/expert/PhoneVerification';
+import ExpertSubscription from '../blocks/expert/ExpertSubscription';
 
 const Container = styled.div`
     display: flex;
@@ -53,6 +55,8 @@ const MyPage = () => {
     const [ helpInquiryShow, setHelpInquiryShow ] = useState(false);
     const contentRef = useRef<null | HTMLDivElement>(null); 
 
+    const [ isPaymentFinish,  setPaymentFinish ] = useState(false);
+
     useEffect(() => {
         contentRef!.current!.scrollIntoView();
     }, [selectedItem]);
@@ -83,7 +87,12 @@ const MyPage = () => {
 
                 {
                     selectedItem && ['Enroll Expert', 'Expert Profile'].includes(selectedItem) &&
-                    <EnrollExpert expert={expert} />
+                    (
+                        isPaymentFinish ?
+                        <EnrollExpert expert={expert} />
+                        :
+                        <ExpertSubscription onFinish={() => setPaymentFinish(true)}/>
+                    )
                 }
 
                 {

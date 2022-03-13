@@ -36,7 +36,8 @@ const Home = () => {
   const userType = useSelector((state: any) => state.user.userType);
 
   useFirestoreConnect([{
-    collection: 'experts'
+    collection: 'experts',
+    where: ['active', '==', true]
   }])
 
   useFirestoreConnect(uid ? [

@@ -5,6 +5,9 @@ import { createFirestoreInstance } from 'redux-firestore';
 import { PersistGate } from 'redux-persist/integration/react'
 import styled from 'styled-components';
 
+import * as Sentry from "@sentry/react";
+import { BrowserTracing } from "@sentry/tracing";
+
 import '../styles/globals.css'
 import NavigationBar from '../blocks/NavigationBar';
 import firebase from '../firebase/firebaseInit';
@@ -16,6 +19,16 @@ const Container = styled.div`
   padding: 0 10%;
   min-width: 800px
 `
+
+Sentry.init({
+  dsn: "https://32940fccc5cd44f6a22556527f4f26c3@o938042.ingest.sentry.io/5888186",
+  integrations: [new BrowserTracing()],
+
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // We recommend adjusting this value in production
+  tracesSampleRate: 1.0,
+});
 
 type Props = {
   Component: any,
