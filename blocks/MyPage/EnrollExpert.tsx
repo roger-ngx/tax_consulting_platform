@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { styled } from '@mui/system';
 import { Step, StepLabel, Stepper, Tabs, Tab } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
-import { map } from 'lodash';
+import { map, get } from 'lodash';
 
 import Profile from './Profile';
 import Service from './Service';
@@ -46,7 +46,7 @@ const EnrollExpert = () => {
 
     const [ processing, setProcessing ] = useState(false);
     
-    const expert = useSelector((state: any) => state.firestore.ordered.enrollExpert[0]);
+    const expert = useSelector((state: any) => get(state,'firestore.ordered.enrollExpert.0'));
 
     useEffect(() => {
         if(expert.active){

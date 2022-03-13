@@ -59,7 +59,7 @@ const MyPage = () => {
 
     const [ isPaymentFinish,  setPaymentFinish ] = useState(false);
     
-    const expert = useSelector((state: any) => state.firestore.ordered.enrollExpert[0]);
+    const expert = useSelector((state: any) => get(state,'firestore.ordered.enrollExpert.0'));
 
     useFirestoreConnect(uid ? [{
         collection: 'experts',

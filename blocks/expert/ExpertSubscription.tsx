@@ -3,6 +3,7 @@ import { styled } from '@mui/system';
 import PhoneVerification from './PhoneVerification';
 import Payment from './Payment';
 import { useSelector } from 'react-redux';
+import { get } from 'lodash';
 
 const Container = styled('div')({
     backgroundColor: '#F6F8FB',
@@ -21,7 +22,7 @@ type ExpertSubscriptionProps = {
 const ExpertSubscription : React.FC<ExpertSubscriptionProps> = ({onFinish}) => {
     const [ step, setStep ] = useState(STEPS.PHONE_VERIFICATION);
 
-    const expert = useSelector((state: any) => state.firestore.ordered.enrollExpert[0]);
+    const expert = useSelector((state: any) => get(state,'firestore.ordered.enrollExpert.0'));
 
     useEffect(() => {
         if(expert && expert.phoneNumberVerified){
