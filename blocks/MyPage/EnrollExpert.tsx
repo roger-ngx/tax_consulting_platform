@@ -33,11 +33,7 @@ const StepperContainer = styled('div')({
 
 const STEPS = [ 'Profile', 'Service', 'Price' ]
 
-type Props = {
-    expert: any
-}
-
-const EnrollExpert: React.FC<Props> = ({expert}) => {
+const EnrollExpert = () => {
 
     const dispatch = useDispatch();
 
@@ -50,6 +46,7 @@ const EnrollExpert: React.FC<Props> = ({expert}) => {
 
     const [ processing, setProcessing ] = useState(false);
     
+    const expert = useSelector((state: any) => state.firestore.ordered.enrollExpert[0]);
 
     useEffect(() => {
         if(expert){

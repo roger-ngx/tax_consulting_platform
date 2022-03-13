@@ -1,7 +1,8 @@
-    import React, { useState } from 'react';
+    import React, { useState, useEffect } from 'react';
 import { styled } from '@mui/system';
 import PhoneVerification from './PhoneVerification';
 import Payment from './Payment';
+import { useSelector } from 'react-redux';
 
 const Container = styled('div')({
     backgroundColor: '#F6F8FB',
@@ -14,11 +15,19 @@ enum STEPS {
 }
 
 type ExpertSubscriptionProps = {
-    onFinish: () => void
+    onFinish: () => void,
 }
 
 const ExpertSubscription : React.FC<ExpertSubscriptionProps> = ({onFinish}) => {
     const [ step, setStep ] = useState(STEPS.PHONE_VERIFICATION);
+
+    const expert = useSelector((state: any) => state.firestore.ordered.enrollExpert[0]);
+
+    useEffect(() => {
+        if(expert && expert.phoneNumberVerified){
+            setStep(STEPS.PAYMENT);
+        }
+    }, [expert])
 
     return (
         <Container>

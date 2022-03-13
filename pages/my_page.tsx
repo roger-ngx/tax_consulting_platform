@@ -4,6 +4,7 @@ import { useFirestoreConnect } from 'react-redux-firebase';
 import { useSelector } from 'react-redux';
 import { get } from 'lodash'; 
 import Button from '@mui/material/Button';
+import dayjs from 'dayjs';
 
 import MyPageSideMenu from '../blocks/MyPage/MyPageSideMenu';
 import EnrollExpert from '../blocks/MyPage/EnrollExpert';
@@ -56,12 +57,27 @@ const MyPage = () => {
     const contentRef = useRef<null | HTMLDivElement>(null); 
 
     const [ isPaymentFinish,  setPaymentFinish ] = useState(false);
+    
+    const expert = useSelector((state: any) => state.firestore.ordered.enrollExpert[0]);
 
+    useFirestoreConnect(uid ? [{
+        collection: 'experts',
+        doc: uid,
+        storeAs: 'enrollExpert'
+    }] : []);
+    
     useEffect(() => {
         contentRef!.current!.scrollIntoView();
     }, [selectedItem]);
 
-    const expert = useSelector((state: any) => get(state, `firestore.data.experts.${uid}`));
+    useEffect(() => {
+        if(!expert) return;
+
+        const { subscribedUntil } = expert;
+        if(subscribedUntil){
+            dayjs().isBefore(expert.subscribedUntil.seconds * 1000) && setPaymentFinish(true);
+        }
+    }, [expert]);
 
     return (
         <Container>
@@ -81,7 +97,7 @@ const MyPage = () => {
                 {
                     selectedItem === 'Reservation' &&
                     (
-                        expert ? <ExpertReservationView /> : <ReservationView />
+                        expert.active ? <ExpertReservationView /> : <ReservationView />
                     )
                 }
 
@@ -89,9 +105,9 @@ const MyPage = () => {
                     selectedItem && ['Enroll Expert', 'Expert Profile'].includes(selectedItem) &&
                     (
                         isPaymentFinish ?
-                        <EnrollExpert expert={expert} />
+                        <EnrollExpert />
                         :
-                        <ExpertSubscription onFinish={() => setPaymentFinish(true)}/>
+                        <ExpertSubscription onFinish={() => setPaymentFinish(true)} />
                     )
                 }
 

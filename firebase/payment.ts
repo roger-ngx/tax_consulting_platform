@@ -29,7 +29,7 @@ export const handleSuccessfulPayment = async ({uid, orderId, subscribedUntil, pa
             }
         )
 
-        batch.set(
+        batch.update(
             firebase.firestore().collection('experts').doc(uid),
             {
                 updatedAt: firebase.firestore.FieldValue.serverTimestamp(),

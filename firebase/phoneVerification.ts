@@ -4,7 +4,8 @@ import { random } from 'lodash';
 const createCode = () => {
     const value = random(999999);
 
-    return ('00000' + value).slice(-6); 
+    // return ('00000' + value).slice(-6); 
+    return '000000';
 }
 
 type CreateVerificationRequest = {
