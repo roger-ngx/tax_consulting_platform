@@ -98,7 +98,7 @@ const MyPage = () => {
                 {
                     selectedItem === 'Reservation' &&
                     (
-                        expert.active ? <ExpertReservationView /> : <ReservationView />
+                        expert?.active ? <ExpertReservationView /> : <ReservationView />
                     )
                 }
 
